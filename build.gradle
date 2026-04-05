@@ -121,11 +121,6 @@ tasks.register('copyJar', Copy) {
 
 build.finalizedBy copyJar
 
-// Resource filtering
-processResources {
-    inputs.properties project.properties
-    filteringCharset = 'UTF-8'
-}
 tasks {
     runServer {
         downloadPlugins {
