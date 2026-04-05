@@ -97,7 +97,46 @@ tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
 }
 
-tasks.shadowJar {
+jar {
+    manifest {
+        attributes(
+                'Main-Class': project.findProperty("mainClass") ?: "your.Main"
+        )
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('') // replaces default "-all"
+
+    relocate 'net.byteflux.libby', 'fr.snipertvmc.essentialsxgui.libraries.libby'
+    relocate 'net.wesjd.anvilgui', 'fr.snipertvmc.essentialsxgui.libraries.anvilgui'
+    relocate 'net.kyori.adventure', 'fr.snipertvmc.essentialsxgui.libraries.adventure'
+    relocate 'dev.faststats', 'fr.snipertvmc.essentialsxgui.libraries.faststats'
+
+    mergeServiceFiles() // equivalent to ServicesResourceTransformer
+
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+}
+
+build.dependsOn shadowJar
+
+// Equivalent of maven-antrun-plugin (copy after build)
+tasks.register('copyJar', Copy) {
+    dependsOn shadowJar
+    from layout.buildDirectory.file("libs/${project.name}-${project.version}.jar")
+    into ".builds"
+}
+
+build.finalizedBy copyJar
+
+// Resource filtering
+processResources {
+    inputs.properties project.properties
+    filteringCharset = 'UTF-8'
+
+    filesMatching('**/*.yml', '**/*.properties') {
+        expand(project.properties)
+    }
 }
 tasks {
     runServer {
