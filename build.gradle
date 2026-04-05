@@ -133,10 +133,6 @@ build.finalizedBy copyJar
 processResources {
     inputs.properties project.properties
     filteringCharset = 'UTF-8'
-
-    filesMatching('**/*.yml', '**/*.properties') {
-        expand(project.properties)
-    }
 }
 tasks {
     runServer {
