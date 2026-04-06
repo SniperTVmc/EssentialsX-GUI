@@ -1,23 +1,54 @@
-# Tests files
+# ==========================================
+# 1. Build Files (Build Artifacts)
+# ==========================================
 target/
-!.mvn/wrapper/maven-wrapper.jar
+build/
+bin/
+out/
+.gradle/
+.gradletasknamecache
+
+# Exceptions to ensure that specific outputs are not ignored when necessary
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# ==========================================
+# 2. PACKAGES & ARCHIVES
+# ==========================================
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# CRUCIAL EXCEPTION: We keep the wrappers for portability
+!**/gradle-wrapper.jar
+!**/.mvn/wrapper/maven-wrapper.jar
+
+# ==========================================
+# 3. DEVELOPMENT ENVIRONMENTS (IDEs)
+# ==========================================
 
 # IntelliJ IDEA
 .idea/
 *.iws
 *.iml
 *.ipr
+out/
+cmake-build-*/
 
 # Eclipse
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
 .sts4-cache
+
+# VS Code
+.vscode/
 
 # NetBeans
 /nbproject/private/
@@ -25,45 +56,30 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-# VS Code
-.vscode/
-
-# Mac OS
-.DS_Store
-
-# Other
-.gitattributes
-
-# Compiled class file
-*.class
-
-# Log file
+# ==========================================
+# 4. SYSTEM FILES & LOGS
+# ==========================================
 *.log
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Java Crash Logs
 hs_err_pid*
 replay_pid*
 
-# Directories
-/.build/
-/.out/
+# ==========================================
+# 5. MINECRAFT-SPECIFIC/TEST SERVER
+# ==========================================
 /run/
+/plugins/
+/world/
+/logs/
+eula.txt
+server.properties
+banned-ips.json
+banned-players.json
+ops.json
+usercache.json
+whitelist.json
