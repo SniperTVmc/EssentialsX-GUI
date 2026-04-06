@@ -1,5 +1,3 @@
-import xyz.jpenilla.runtask.pluginsapi.DownloadPluginsSpec
-
 plugins {
     id("java")
     id("com.gradleup.shadow") version "9.3.1"
@@ -12,7 +10,7 @@ plugins {
 group = "fr.snipertvmc.essentialsxgui"
 version = "1.4.2"
 description = "EssentialsX-GUI"
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenLocal()
