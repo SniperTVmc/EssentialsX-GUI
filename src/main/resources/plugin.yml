@@ -7,7 +7,7 @@ website: https://github.com/SniperTVmc/EssentialsX-GUI/
 author: Sniper_TVmc
 
 
-version: ${project.version}
+version: ${version}
 api-version: 1.13
 
 

@@ -126,3 +126,13 @@ tasks.register<Copy>("copyJar") {
     from(tasks.named("shadowJar"))
     into(layout.buildDirectory.dir("libs"))
 }
+
+tasks.processResources {
+    val props = mapOf("version" to project.version)
+    inputs.properties(props)
+    filteringCharset = "UTF-8"
+
+    filesMatching("plugin.yml") {
+        expand(props)
+    }
+}
