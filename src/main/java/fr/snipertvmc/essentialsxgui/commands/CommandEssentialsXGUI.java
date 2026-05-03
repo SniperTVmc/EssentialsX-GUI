@@ -166,3 +166,5 @@ public class CommandEssentialsXGUI implements CommandExecutor, TabCompleter {
 
 	// -------------------------------------------------- //
 }
+
+

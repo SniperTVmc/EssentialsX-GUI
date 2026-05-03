@@ -19,6 +19,7 @@ package fr.snipertvmc.essentialsxgui;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.libs.kyori.adventure.platform.bukkit.BukkitAudiences;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.faststats.core.ErrorTracker;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.MCServerVersion;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGServer;
@@ -26,6 +27,11 @@ import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFil
 import fr.snipertvmc.essentialsxgui.libraries.bstats.Metrics;
 import fr.snipertvmc.essentialsxgui.managers.*;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventOwner;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -110,6 +116,20 @@ public class Main extends JavaPlugin {
 		// Must be done after loading configuration file
 		databaseManager = new DatabaseManager();
 
+		// COMMAND REGISTRATION
+		LiteralCommandNode<CommandSourceStack> buildCommand = Commands.literal("essentialsxgui")
+				.then(Commands.literal("debug"))
+				.then(Commands.literal("reload"))
+				.then(Commands.literal("about"))
+				.then(Commands.literal("help"))
+				.build();
+			this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+				// register your commands here ...
+				commands.registrar().register(buildCommand);
+		});
+
+
+
 
 		// LOAD PLUGIN
 		boolean successfullyLoaded = loadingManager.loadPlugin(filesManager.getConfiguration().isDetailedLoading());
@@ -134,6 +154,10 @@ public class Main extends JavaPlugin {
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7The plugin has been §floaded §7correctly in §f" + loadingTime + "ms§7.");
 		ConsoleLogger.console("");
 	}
+
+	private <O extends LifecycleEventOwner> LifecycleEventManager<O> getLifecycleManager() {
+        return null;
+    }
 
 
 	// -------------------------------------------------- //

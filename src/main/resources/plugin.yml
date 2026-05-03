@@ -17,11 +17,11 @@ softdepend:
   - PlaceholderAPI
 
 
-commands:
+#commands:
 
-  essentialsxgui:
-    description: Main command for management of the plugin.
-    aliases: [exg, egui, essentialsgui]
+# essentialsxgui:
+#    description: Main command for management of the plugin.
+#    aliases: [exg, egui, essentialsgui]
 
 
 permissions:
