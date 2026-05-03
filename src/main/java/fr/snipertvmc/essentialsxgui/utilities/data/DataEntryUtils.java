@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 public class DataEntryUtils {
 
@@ -86,7 +87,9 @@ public class DataEntryUtils {
 
 		if (entrySettings.getCharactersListPath() != null) {
 			String charactersList = Main.getInstance().getConfiguration().getCharacterList(entrySettings.getCharactersListPath());
-			return getCharactersAnalysisResult(charactersList, value);
+			if (!charactersList.isEmpty()) {
+				return getCharactersAnalysisResult(charactersList, value);
+			}
 		}
 
 		return new Pair<>(value, EXGEntryResult.SUCCESS);
@@ -217,12 +220,12 @@ public class DataEntryUtils {
 
 		if (characterListString.startsWith("regex:")) {
 			String regex = characterListString.substring("regex:".length());
-			if (!value.matches(regex)) {
+			Pattern pattern = Pattern.compile(regex);
+			if (!pattern.matcher(value).matches()) {
 				return new Pair<>(value, EXGEntryResult.INVALID_CHARACTER);
 			}
 
 		} else {
-
 			for (String character : value.split("")) {
 				if (!characterListString.contains(character)) {
 					return new Pair<>(value, EXGEntryResult.INVALID_CHARACTER);

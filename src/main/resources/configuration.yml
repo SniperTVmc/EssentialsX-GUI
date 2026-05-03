@@ -135,6 +135,7 @@ homes:
   #   => Without regex: Just list the allowed characters in the string. For example, "abc123" will allow only letters a, b, c and numbers 1, 2, 3.
   #   => With regex, start the string with "regex:" followed by the regex pattern.
   #      For example, "regex:^[a-zA-Z0-9_ ]+$" will allow only letters, numbers, underscores and spaces.
+  #   => Blank field: If you want to allow all characters, just leave this field blank.
   changeHomeDisplayNameCharacterList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a home.
@@ -184,6 +185,7 @@ kits:
   #   => Without regex: Just list the allowed characters in the string. For example, "abc123" will allow only letters a, b, c and numbers 1, 2, 3.
   #   => With regex, start the string with "regex:" followed by the regex pattern.
   #      For example, "regex:^[a-zA-Z0-9_ ]+$" will allow only letters, numbers, underscores and spaces.
+  #   => Blank field: If you want to allow all characters, just leave this field blank.
   changeKitDisplayNameCharacterList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a kit.
@@ -229,6 +231,7 @@ warps:
   #   => Without regex: Just list the allowed characters in the string. For example, "abc123" will allow only letters a, b, c and numbers 1, 2, 3.
   #   => With regex, start the string with "regex:" followed by the regex pattern.
   #      For example, "regex:^[a-zA-Z0-9_ ]+$" will allow only letters, numbers, underscores and spaces.
+  #   => Blank field: If you want to allow all characters, just leave this field blank.
   changeWarpDisplayNameCharacterList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a warp.

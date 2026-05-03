@@ -30,8 +30,8 @@
 ############################################################
 
 # Please do not change this value as it may cause the file to be reset.
-# Default: "1.7"
-messages-version: "1.7"
+# Default: "1.8"
+messages-version: "1.8"
 
 # Change the prefix sent at the beginning of most sent messages.
 # TIP: Use {prefix} in any message to include the prefix.
