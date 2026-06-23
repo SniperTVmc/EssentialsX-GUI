@@ -53,6 +53,14 @@ public class EXGBalanceTop {
 
 
 	public void startUpdateTask() {
+		if (!Main.getInstance().getConfiguration().isEconomyBalanceTopModuleEnabled()) {
+			return;
+		}
+
+		if (isUpdateTaskRunning()) {
+			return;
+		}
+
 		long updateInterval = Main.getInstance().getConfiguration().getBalanceTopUpdateInterval() * 20L;
 		updateTask = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), this::forceUpdate, 0, updateInterval);
 	}

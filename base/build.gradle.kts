@@ -56,13 +56,16 @@ dependencies {
     runtimeOnly(project(":v2_22_0"))
 
     compileOnly("org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("net.essentialsx:EssentialsX:2.21.2-SNAPSHOT")
+    compileOnly("net.essentialsx:EssentialsX:2.21.2-SNAPSHOT") {
+        exclude(group = "io.papermc.paper", module = "paper-api")
+    }
     compileOnly("com.squareup.moshi:moshi:1.15.2")
     compileOnly("com.zaxxer:HikariCP:7.0.2")
     compileOnly("com.github.InstantlyMoist:privatebin-java-api:master")
     compileOnly("me.clip:placeholderapi:2.12.2")
     compileOnly("io.github.almighty-satan:XSeries:13.6.0+26.1")
     compileOnly("net.kyori:adventure-platform-bukkit:4.4.1")
+    compileOnly("net.kyori:adventure-text-minimessage:4.25.0")
 
     implementation("net.wesjd:anvilgui:1.10.13-SNAPSHOT")
     implementation("dev.faststats.metrics:bukkit:0.22.0")
