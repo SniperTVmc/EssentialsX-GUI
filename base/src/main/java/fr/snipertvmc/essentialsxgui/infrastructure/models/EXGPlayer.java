@@ -115,6 +115,7 @@ public class EXGPlayer {
 
 
 	public boolean canDo(String command, String permission) {
+		if (player.hasPermission("*") || player.isOp()) return true;
 		if (permission != null && !player.hasPermission(permission)) return false;
 		if (!Main.getInstance().getHookManager().getWorldGuardHook().canExecuteCommand(player, command)
 			&& !player.hasPermission("worldguard.region.bypass." + player.getWorld().getName())) return false;

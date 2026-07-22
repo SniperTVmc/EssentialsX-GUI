@@ -467,9 +467,6 @@ public class LoadingManager {
 	// -------------------------------------------------- //
 
 
-	public boolean isPluginReady() {
-		return pluginReady;
-	}
 	public long getUptimeInMilliseconds() {
 		return System.currentTimeMillis() - startTimestamp;
 	}
