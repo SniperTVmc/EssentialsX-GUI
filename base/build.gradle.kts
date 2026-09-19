@@ -56,7 +56,6 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly(project(":v2_21_2"))
     runtimeOnly(project(":v2_22_0"))
 
     compileOnly("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
