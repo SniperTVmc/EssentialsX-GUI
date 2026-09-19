@@ -10,40 +10,30 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConfigurationFile {
-
-
-	// -------------------------------------------------- //
-
-
-	private final YamlConfiguration yamlConfiguration;
+public class ConfigurationFile extends BaseFile {
 
 
 	// -------------------------------------------------- //
 
 
 	public ConfigurationFile(YamlConfiguration yamlConfiguration) {
-		this.yamlConfiguration = yamlConfiguration;
+		super(yamlConfiguration, "configuration.yml");
 	}
 
 
 	// -------------------------------------------------- //
 
 
-	public String getConfigVersion() {
-		return yamlConfiguration.getString("general.configVersion", "Config version not found");
-	}
-
 	public boolean isDetailedLoading() {
-		return yamlConfiguration.getBoolean("general.detailedLoading", true);
+		return getYamlConfiguration().getBoolean("general.detailedLoading", true);
 	}
 
 	public boolean checkForUpdates() {
-		return yamlConfiguration.getBoolean("general.checkForUpdates", true);
+		return getYamlConfiguration().getBoolean("general.checkForUpdates", true);
 	}
 
 	public ZoneId getDateTimezone() {
-		String zoneIdString = yamlConfiguration.getString("general.timezone", ZoneId.systemDefault().toString());
+		String zoneIdString = getYamlConfiguration().getString("general.timezone", ZoneId.systemDefault().toString());
 		try {
 			return ZoneId.of(zoneIdString);
 
@@ -58,32 +48,32 @@ public class ConfigurationFile {
 
 
 	public boolean isHomesModuleEnabled() {
-		return yamlConfiguration.getBoolean("homes.enabled", false);
+		return getYamlConfiguration().getBoolean("homes.enabled", false);
 	}
 
 	public boolean isKitsModuleEnabled() {
-		return yamlConfiguration.getBoolean("kits.enabled", false);
+		return getYamlConfiguration().getBoolean("kits.enabled", false);
 	}
 
 	public boolean isWarpsModuleEnabled() {
-		return yamlConfiguration.getBoolean("warps.enabled", false);
+		return getYamlConfiguration().getBoolean("warps.enabled", false);
 	}
 
 	public boolean isWhoisModuleEnabled() {
-		return yamlConfiguration.getBoolean("whois.enabled", false);
+		return getYamlConfiguration().getBoolean("whois.enabled", false);
 	}
 
 	public boolean isEconomyBalanceTopModuleEnabled() {
-		return yamlConfiguration.getBoolean("economy.balanceTop.enabled", false);
+		return getYamlConfiguration().getBoolean("economy.balanceTop.enabled", false);
 	}
 	public boolean isEconomyWorthModuleEnabled() {
-		return yamlConfiguration.getBoolean("economy.worth.enabled", false);
+		return getYamlConfiguration().getBoolean("economy.worth.enabled", false);
 	}
 	public boolean isEconomyEcoModuleEnabled() {
-		return yamlConfiguration.getBoolean("economy.eco.enabled", false);
+		return getYamlConfiguration().getBoolean("economy.eco.enabled", false);
 	}
 	public boolean isEconomySellModuleEnabled() {
-		return yamlConfiguration.getBoolean("economy.sell.enabled", false);
+		return getYamlConfiguration().getBoolean("economy.sell.enabled", false);
 	}
 
 
@@ -91,7 +81,7 @@ public class ConfigurationFile {
 
 
 	public EXGEntryType getEntryType(String module, String entry) {
-		String typeString = yamlConfiguration.getString(module + "." + entry, "CHAT");
+		String typeString = getYamlConfiguration().getString(module + "." + entry, "CHAT");
 		try {
 			return EXGEntryType.valueOf(typeString);
 		} catch (IllegalArgumentException exception) {
@@ -102,7 +92,7 @@ public class ConfigurationFile {
 
 	public List<Pair<XMaterial, Byte>> getMaterialsList(String path) {
 
-		List<String> materialsStringList = yamlConfiguration.getStringList(path);
+		List<String> materialsStringList = getYamlConfiguration().getStringList(path);
 		List<Pair<XMaterial, Byte>> materialsList = new ArrayList<>();
 
 		for (String materialString : materialsStringList) {
@@ -131,7 +121,7 @@ public class ConfigurationFile {
 
 	public String getCharacterList(String path) {
 		if (path == null) return null;
-		return yamlConfiguration.getString(path, "regex:^[a-zA-Z0-9_ ]+$");
+		return getYamlConfiguration().getString(path, "regex:^[a-zA-Z0-9_ ]+$");
 	}
 
 
@@ -139,41 +129,41 @@ public class ConfigurationFile {
 
 
 	public int getMinNameLength() {
-		return yamlConfiguration.getInt("general.minNameLength", 3);
+		return getYamlConfiguration().getInt("general.minNameLength", 3);
 	}
 
 	public int getMaxNameLength() {
-		return yamlConfiguration.getInt("general.maxNameLength", 32);
+		return getYamlConfiguration().getInt("general.maxNameLength", 32);
 	}
 
 	public boolean mustOpenKitAdminViewByDefault() {
-		return yamlConfiguration.getBoolean("general.openKitAdminViewByDefault", false);
+		return getYamlConfiguration().getBoolean("general.openKitAdminViewByDefault", false);
 	}
 
 	public boolean mustOpenWarpAdminViewByDefault() {
-		return yamlConfiguration.getBoolean("general.openWarpAdminViewByDefault", false);
+		return getYamlConfiguration().getBoolean("general.openWarpAdminViewByDefault", false);
 	}
 
 
 	public int getDelayForTypingInChat() {
-		return yamlConfiguration.getInt("general.delayForTypingInChat", 10);
+		return getYamlConfiguration().getInt("general.delayForTypingInChat", 10);
 	}
 
 	public boolean skipDataEntryProcess() {
-		return yamlConfiguration.getBoolean("general.skipDataEntryProcess", false);
+		return getYamlConfiguration().getBoolean("general.skipDataEntryProcess", false);
 	}
 
 	public String getInstantCreationDefaultHomeName() {
-		return yamlConfiguration.getString("general.instantCreationDefaultValues.home_name", "home_%number%");
+		return getYamlConfiguration().getString("general.instantCreationDefaultValues.home_name", "home_%number%");
 	}
 	public String getInstantCreationDefaultKitName() {
-		return yamlConfiguration.getString("general.instantCreationDefaultValues.kit_name", "kit_%number%");
+		return getYamlConfiguration().getString("general.instantCreationDefaultValues.kit_name", "kit_%number%");
 	}
 	public long getInstantCreationDefaultKitDelay() {
-		return yamlConfiguration.getLong("general.instantCreationDefaultValues.kit_delay", 3600L);
+		return getYamlConfiguration().getLong("general.instantCreationDefaultValues.kit_delay", 3600L);
 	}
 	public String getInstantCreationDefaultWarpName() {
-		return yamlConfiguration.getString("general.instantCreationDefaultValues.warp_name", "warp_%number%");
+		return getYamlConfiguration().getString("general.instantCreationDefaultValues.warp_name", "warp_%number%");
 	}
 
 
@@ -181,7 +171,7 @@ public class ConfigurationFile {
 
 
 	public int getBalanceTopUpdateInterval() {
-		return yamlConfiguration.getInt("economy.balanceTop.updateInterval", 60);
+		return getYamlConfiguration().getInt("economy.balanceTop.updateInterval", 60);
 	}
 
 
@@ -189,11 +179,11 @@ public class ConfigurationFile {
 
 
 	public boolean areSoundsEnabled() {
-		return yamlConfiguration.getBoolean("sounds.enabled", true);
+		return getYamlConfiguration().getBoolean("sounds.enabled", true);
 	}
 
 	public String getSound(String path) {
-		return yamlConfiguration.getString("sounds." + path, null);
+		return getYamlConfiguration().getString("sounds." + path, null);
 	}
 
 
@@ -201,44 +191,44 @@ public class ConfigurationFile {
 
 
 	public String getStorageType() {
-		return yamlConfiguration.getString("storage.type", "SQLite");
+		return getYamlConfiguration().getString("storage.type", "SQLite");
 	}
 
 	public String getStorageHost() {
-		return yamlConfiguration.getString("storage.mysql.host", "Host not found");
+		return getYamlConfiguration().getString("storage.mysql.host", "Host not found");
 	}
 	public String getStoragePort() {
-		return yamlConfiguration.getString("storage.mysql.port", "Port not found");
+		return getYamlConfiguration().getString("storage.mysql.port", "Port not found");
 	}
 	public String getStorageDatabase() {
-		return yamlConfiguration.getString("storage.mysql.database", "Database not found");
+		return getYamlConfiguration().getString("storage.mysql.database", "Database not found");
 	}
 	public String getStorageUsername() {
-		return yamlConfiguration.getString("storage.mysql.username", "Username not found");
+		return getYamlConfiguration().getString("storage.mysql.username", "Username not found");
 	}
 	public String getStoragePassword() {
-		return yamlConfiguration.getString("storage.mysql.password", "Password not found");
+		return getYamlConfiguration().getString("storage.mysql.password", "Password not found");
 	}
 	public String getStorageSettings() {
-		return yamlConfiguration.getString("storage.mysql.settings", "Settings not found");
+		return getYamlConfiguration().getString("storage.mysql.settings", "Settings not found");
 	}
 	public long getStorageMaximumPoolSize() {
-		return yamlConfiguration.getLong("storage.mysql.connectionPool.maximumPoolSize", 10L);
+		return getYamlConfiguration().getLong("storage.mysql.connectionPool.maximumPoolSize", 10L);
 	}
 	public long getStorageMinimumIdle() {
-		return yamlConfiguration.getLong("storage.mysql.connectionPool.minimumIdle", 10L);
+		return getYamlConfiguration().getLong("storage.mysql.connectionPool.minimumIdle", 10L);
 	}
 	public long getStorageMaxLifetime() {
-		return yamlConfiguration.getLong("storage.mysql.connectionPool.maxLifetime", 1800000L);
+		return getYamlConfiguration().getLong("storage.mysql.connectionPool.maxLifetime", 1800000L);
 	}
 	public long getStorageKeepaliveTime() {
-		return yamlConfiguration.getLong("storage.mysql.connectionPool.keepaliveTime", 0L);
+		return getYamlConfiguration().getLong("storage.mysql.connectionPool.keepaliveTime", 0L);
 	}
 	public long getStorageConnectionTimeout() {
-		return yamlConfiguration.getLong("storage.mysql.connectionPool.connectionTimeout", 5000L);
+		return getYamlConfiguration().getLong("storage.mysql.connectionPool.connectionTimeout", 5000L);
 	}
 	public String getStorageTablePrefix() {
-		return yamlConfiguration.getString("storage.mysql.tablePrefix", "exg_");
+		return getYamlConfiguration().getString("storage.mysql.tablePrefix", "exg_");
 	}
 
 

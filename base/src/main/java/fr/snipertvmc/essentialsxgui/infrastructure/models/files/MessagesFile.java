@@ -2,32 +2,14 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.files;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class MessagesFile {
-
-
-	// -------------------------------------------------- //
-
-
-	private final YamlConfiguration yamlConfiguration;
+public class MessagesFile extends BaseFile {
 
 
 	// -------------------------------------------------- //
 
 
 	public MessagesFile(YamlConfiguration yamlConfiguration) {
-		this.yamlConfiguration = yamlConfiguration;
-	}
-
-
-	// -------------------------------------------------- //
-
-
-	public String getMessagesVersion() {
-		String version = yamlConfiguration.getString("messages-version");
-		if (version != null) {
-			return version;
-		}
-		return "0.0";
+		super(yamlConfiguration, "messages.yml");
 	}
 
 
@@ -35,7 +17,7 @@ public class MessagesFile {
 
 
 	public String getPrefix() {
-		return yamlConfiguration.getString("prefix");
+		return getYamlConfiguration().getString("prefix");
 	}
 
 
@@ -43,32 +25,25 @@ public class MessagesFile {
 
 
 	public String getString(String path) {
-		return yamlConfiguration.getString(path);
+		return getYamlConfiguration().getString(path);
 	}
-
-
 	public String getString(String path, String defaultValue) {
-		return yamlConfiguration.getString(path, defaultValue);
+		return getYamlConfiguration().getString(path, defaultValue);
 	}
 
 
 	public double getNumber(String path) {
-		return yamlConfiguration.getDouble(path);
+		return getYamlConfiguration().getDouble(path);
 	}
-
-
 	public double getNumber(String path, double defaultValue) {
-		return yamlConfiguration.getDouble(path, defaultValue);
+		return getYamlConfiguration().getDouble(path, defaultValue);
 	}
-
 
 	public boolean getBoolean(String path) {
-		return yamlConfiguration.getBoolean(path);
+		return getYamlConfiguration().getBoolean(path);
 	}
-
-
 	public boolean getBoolean(String path, boolean defaultValue) {
-		return yamlConfiguration.getBoolean(path, defaultValue);
+		return getYamlConfiguration().getBoolean(path, defaultValue);
 	}
 
 
