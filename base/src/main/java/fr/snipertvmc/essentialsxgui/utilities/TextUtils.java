@@ -1,13 +1,11 @@
 package fr.snipertvmc.essentialsxgui.utilities;
 
 import fr.snipertvmc.essentialsxgui.Main;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Set;
@@ -26,40 +24,29 @@ public class TextUtils {
 
 	public static void sendMessageToCommandSender(Set<CommandSender> commandSenders, String formattedMessage) {
 		if (formattedMessage == null || formattedMessage.isEmpty() || commandSenders.isEmpty()) return;
-
-		CommandSender firstSender = commandSenders.stream().findFirst().orElse(null);
-		Component component = convertFormattedMessageToComponent(firstSender, formattedMessage);
-
+		Component component = parseAsComponent(formattedMessage);
 		for (CommandSender sender : commandSenders) {
 			getAudience(sender).sendMessage(component);
 		}
 	}
 
 
-	public static String convertFormattedMessageToText(String formattedMessage) {
+	public static String parseAsString(String formattedMessage) {
 		if (formattedMessage == null || formattedMessage.isEmpty()) return "";
-		Component component = convertFormattedMessageToComponent(null, formattedMessage);
-		return LegacyComponentSerializer.legacySection().serialize(component);
+		return LegacyComponentSerializer.legacySection().serialize(parseAsComponent(formattedMessage));
 	}
 
 
-	public static List<String> convertFormattedMessagesToText(List<String> formattedMessages) {
+	public static List<String> parseAsString(List<String> formattedMessages) {
 		if (formattedMessages == null) return List.of();
-		return formattedMessages.stream().map(TextUtils::convertFormattedMessageToText).toList();
+		return formattedMessages.stream().map(TextUtils::parseAsString).toList();
 	}
 
 
-	// -------------------------------------------------- //
-
-
-	private static Component convertFormattedMessageToComponent(CommandSender commandSender, String formattedMessage) {
-		if (Main.getInstance().getHookManager().getPlaceholderAPIHook().isSupported() && commandSender instanceof Player player) {
-			formattedMessage = PlaceholderAPI.setPlaceholders(player, formattedMessage);
-		}
-
-		if (hasLegacyFormat(formattedMessage)) {
-			String sectionMessage = replaceAmpersand(formattedMessage);
-			return LegacyComponentSerializer.legacySection().deserialize(sectionMessage);
+	public static Component parseAsComponent(String formattedMessage) {
+		if (TextUtils.hasLegacyFormat(formattedMessage)) {
+			String convertedDisplayName = TextUtils.replaceAmpersand(formattedMessage);
+			return LegacyComponentSerializer.legacySection().deserialize(convertedDisplayName);
 		} else {
 			return MiniMessage.miniMessage().deserialize(formattedMessage);
 		}

@@ -1,19 +1,18 @@
 package fr.snipertvmc.essentialsxgui.managers;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.MessagesFile;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
-import fr.snipertvmc.essentialsxgui.utilities.config.EXGInventoryConfigParser;
-import fr.snipertvmc.essentialsxgui.utilities.type.MapUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FilesManager {
 
@@ -23,77 +22,10 @@ public class FilesManager {
 
 	private ConfigurationFile configurationFile;
 	private MessagesFile messagesFile;
-	private final Map<String, InventoryFile> inventoriesFiles = new HashMap<>();
+	private final Set<InventoryFile> inventoriesFiles = new HashSet<>();
 
-
-	private final Map<String, String> filesPaths = new HashMap<>() {{
-		put("configuration", "configuration");
-		put("messages", "messages");
-
-		put("homeEditing", "inventories/homes/homeEditing");
-		put("homes", "inventories/homes/homes");
-
-		put("kitsAdminView", "inventories/kits/kitsAdminView");
-		put("kitsPlayerView", "inventories/kits/kitsPlayerView");
-		put("kitPreview", "inventories/kits/kitPreview");
-		put("kitPlayerGive", "inventories/kits/kitPlayerGive");
-		put("kitEditing", "inventories/kits/kitEditing");
-		put("kitEditor", "inventories/kits/kitEditor");
-
-		put("dataEntryGUI", "inventories/others/dataEntryGUI");
-
-		put("warpEditing", "inventories/warps/warpEditing");
-		put("warpPlayerTeleport", "inventories/warps/warpPlayerTeleport");
-		put("warpsAdminView", "inventories/warps/warpsAdminView");
-		put("warpsPlayerView", "inventories/warps/warpsPlayerView");
-
-		put("whoisPlayers", "inventories/whois/whoisPlayers");
-		put("whoisView", "inventories/whois/whoisView");
-
-		put("balanceTop", "inventories/economy/balanceTop");
-		put("ecoAction", "inventories/economy/ecoAction");
-		put("ecoAmount", "inventories/economy/ecoAmount");
-		put("ecoPlayers", "inventories/economy/ecoPlayers");
-		put("sell", "inventories/economy/sell");
-		put("worth", "inventories/economy/worth");
-		put("worthAll", "inventories/economy/worthAll");
-		put("worthInventory", "inventories/economy/worthInventory");
-	}};
-
-
-	private final Map<String, String> filesVersions = new HashMap<>() {{
-		put("configuration", "1.8"); // Updated for version: 1.5.0
-		put("messages", "1.9"); // Updated for version: 1.5.0
-
-		put("homeEditing", "1.1"); // Updated for version: 1.0.2
-		put("homes", "1.3"); // Updated for version: 1.1.0
-
-		put("kitsAdminView", "1.2"); // Updated for version: 1.1.0
-		put("kitsPlayerView", "1.2"); // Updated for version: 1.1.0
-		put("kitPreview", "1.1"); // Updated for version: 1.5.0
-		put("kitPlayerGive", "1.0");
-		put("kitEditing", "1.2"); // Updated for version: 1.1.0
-		put("kitEditor", "1.0");
-
-		put("dataEntryGUI", "1.0");
-
-		put("warpEditing", "1.0");
-		put("warpPlayerTeleport", "1.0");
-		put("warpsAdminView", "1.0");
-		put("warpsPlayerView", "1.0");
-
-		put("whoisPlayers", "1.0");
-		put("whoisView", "1.1"); // Updated for version: 1.4.1
-
-		put("balanceTop", "1.0");
-		put("ecoAction", "1.0");
-		put("ecoAmount", "1.0");
-		put("ecoPlayers", "1.0");
-		put("sell", "1.0");
-		put("worth", "1.0");
-		put("worthAll", "1.0");
-		put("worthInventory", "1.0");
-	}};
+	private final String configurationFileVersion = "2.0";
+	private final String messagesFileVersion = "2.0";
 
 
 	// -------------------------------------------------- //
@@ -125,52 +57,50 @@ public class FilesManager {
 	// -------------------------------------------------- //
 
 
-	private int loadYAMLFile(String fileName) {
+	private int loadYAMLFile(String filePath) {
 
 		try {
-			String filePath = filesPaths.get(fileName);
-			File file = new File(Main.getInstance().getDataFolder(), filePath + ".yml");
+			File file = new File(Main.getInstance().getDataFolder(), filePath);
 
 			if (!file.exists()) {
 				file.getParentFile().mkdirs();
-				Main.getInstance().saveResource(filePath + ".yml", false);
+				Main.getInstance().saveResource(filePath, false);
 			}
 
 			YamlConfiguration yamlFile = YamlConfiguration.loadConfiguration(file);
 
-			switch (fileName) {
-
-				case "configuration" -> configurationFile = new ConfigurationFile(yamlFile);
-				case "messages" -> messagesFile = new MessagesFile(yamlFile);
-				default -> inventoriesFiles.put(fileName, new InventoryFile(yamlFile, fileName));
+			switch (filePath) {
+				case "configuration.yml" -> configurationFile = new ConfigurationFile(yamlFile);
+				case "messages.yml" -> messagesFile = new MessagesFile(yamlFile);
+				default -> inventoriesFiles.add(new InventoryFile(yamlFile, filePath));
 			}
 
 			return 0;
 
 		} catch (Exception e) {
-			ConsoleLogger.console("\t§6EssentialsX-GUI: §cError while loading " + fileName + ".yml: " + e.getMessage());
+			ConsoleLogger.console("\t§6EssentialsX-GUI: §cError while loading " + filePath + ": " + e.getMessage());
 			return 1;
 		}
 	}
 
 
-	private boolean createBackupYAMLFile(String fileName) {
+	private boolean createBackupYAMLFile(String filePath) {
 		Date currentDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String formattedDate = dateFormat.format(currentDate);
 
-		String filePath = filesPaths.get(fileName);
-		File fileToBackup = new File(Main.getInstance().getDataFolder(), filePath + ".yml");
+		File fileToBackup = new File(Main.getInstance().getDataFolder(), filePath);
 		if (fileToBackup.exists()) {
 
-			File backupFile = new File(fileToBackup.getParent(), formattedDate + "_" + fileName + ".yml");
+			String fileName = filePath.split("/")[filePath.split("/").length - 1];
+			File backupFile = new File(fileToBackup.getParent(), formattedDate + "_" + fileName);
 			if (!backupFile.exists()) {
 
 				try {
 					boolean success = fileToBackup.renameTo(backupFile);
 
 					if (success) {
-						loadYAMLFile(fileName);
+						loadYAMLFile(filePath);
 						return true;
 					}
 
@@ -180,7 +110,7 @@ public class FilesManager {
 			}
 
 		} else {
-			loadYAMLFile(fileName);
+			loadYAMLFile(filePath);
 		}
 		return false;
 	}
@@ -189,18 +119,29 @@ public class FilesManager {
 	// -------------------------------------------------- //
 
 
-	public void checkUpdateForFile(String fileName) {
+	public void checkUpdateForFile(String filePath) {
 
-		String latestVersion = filesVersions.get(fileName);
+		String fileVersion;
+		String latestVersion;
 
-		String fileVersion = switch (fileName) {
-			case "configuration" -> getConfiguration().getConfigVersion();
-			case "messages" -> getMessages().getMessagesVersion();
-			default -> getInventory(fileName).getInventoryVersion();
+		switch (filePath) {
+			case "configuration.yml" -> {
+				fileVersion = getConfigurationFile().getFileVersion();
+				latestVersion = configurationFileVersion;
+			}
+			case "messages.yml" -> {
+				fileVersion = getMessagesFile().getFileVersion();
+				latestVersion = messagesFileVersion;
+			}
+			default -> {
+				EXGInventory inventory = EXGInventory.getByPath(filePath);
+				fileVersion = getInventoryFile(inventory).getFileVersion();
+				latestVersion = inventory.getFileVersion();
+			}
 		};
 
-		if (!latestVersion.equals(fileVersion)) {
-			Main.getInstance().getFilesManager().createBackupYAMLFile(fileName);
+		if (!fileVersion.equals(latestVersion)) {
+			Main.getInstance().getFilesManager().createBackupYAMLFile(filePath);
 		}
 	}
 
@@ -209,8 +150,8 @@ public class FilesManager {
 
 
 	public int loadAndCheckConfiguration(boolean reload) {
-		int errors = loadYAMLFile("configuration");
-		checkUpdateForFile("configuration");
+		int errors = loadYAMLFile("configuration.yml");
+		checkUpdateForFile("configuration.yml");
 		String label = reload ? "Reloaded" : "Loaded";
 		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fconfiguration.yml: §a" + label);
 		return errors;
@@ -218,8 +159,8 @@ public class FilesManager {
 
 
 	public int loadAndCheckMessages(boolean reload) {
-		int errors = loadYAMLFile("messages");
-		checkUpdateForFile("messages");
+		int errors = loadYAMLFile("messages.yml");
+		checkUpdateForFile("messages.yml");
 		String label = reload ? "Reloaded" : "Loaded";
 		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fmessages.yml: §a" + label);
 		return errors;
@@ -230,21 +171,22 @@ public class FilesManager {
 
 		int errors = 0;
 
-		for (String inventoryName : Main.getInstance().getInventoriesManager().getInventoryNames()) {
-			if (loadYAMLFile(inventoryName) == 1) {
+		for (String inventoryPath : EXGInventory.getAllPaths()) {
+			if (loadYAMLFile(inventoryPath) == 1) {
 				errors++;
 				continue;
 			}
-			checkUpdateForFile(inventoryName);
-			int inventoryErrors = EXGInventoryConfigParser.isEXGInventoryConfigValid(getInventory(inventoryName));
-			inventoryErrors += Main.getInstance().getInventoriesManager().loadInventory(inventoryName);
+			checkUpdateForFile(inventoryPath);
+//			int inventoryErrors = EXGInventoryConfigParser.isEXGInventoryConfigValid(getInventoryFile(inventoryPath));
 
 			String label = reload ? "Reloaded" : "Loaded";
-			label = inventoryErrors == 0 ? label : "§4Not valid, please resolve the above errors";
+//			label = inventoryErrors == 0 ? label : "§4Not valid, please resolve the above errors";
 
-			if (inventoryErrors > 0) errors += inventoryErrors;
-			if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + inventoryName + ".yml: §a" + label);
+//			if (inventoryErrors > 0) errors += inventoryErrors;
+			if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + inventoryPath + ".yml: §a" + label);
 		}
+
+		Main.getInstance().getInventoriesManager().loadInventories();
 
 		return errors;
 	}
@@ -253,19 +195,17 @@ public class FilesManager {
 	// -------------------------------------------------- //
 
 
-	public ConfigurationFile getConfiguration() {
+	public ConfigurationFile getConfigurationFile() {
 		return configurationFile;
 	}
-	public MessagesFile getMessages() {
+	public MessagesFile getMessagesFile() {
 		return messagesFile;
 	}
-	public InventoryFile getInventory(String inventoryName) {
-		return inventoriesFiles.get(inventoryName);
-	}
-
-
-	public String getInventoryName(InventoryFile inventoryFile) {
-		return MapUtils.getKeyWithValue(inventoriesFiles, inventoryFile).toString();
+	public InventoryFile getInventoryFile(EXGInventory inventory) {
+		return inventoriesFiles.stream()
+				.filter(inventoryFile -> inventoryFile.getFilePath().equals(inventory.getFilePath()))
+				.findFirst()
+				.orElse(null);
 	}
 
 

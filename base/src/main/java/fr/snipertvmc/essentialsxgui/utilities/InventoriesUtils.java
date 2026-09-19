@@ -1,12 +1,10 @@
 package fr.snipertvmc.essentialsxgui.utilities;
 
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGHome;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGWarp;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGPaginatedInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGIcon;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurablePaginatedInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.InventoryScheme;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
@@ -24,21 +22,18 @@ public class InventoriesUtils {
 	// -------------------------------------------------- //
 
 
-	public static void initializeBorderItem(Player player, EXGInventoryConfig config, FastInv inv) {
-
-		if (config.getBorderItem().isEnabled()) {
-			inv.setItems(config.getBorderSlots(), config.getBorderItem().build(player));
+	public static void insertBorderItems(Player player, ConfigurableInventory config, FastInv inv) {
+		if (!config.getBorderItems().isEmpty()) {
+			config.getBorderItems().forEach(borderItem -> {
+				inv.setItem(borderItem.getSlot(), borderItem.build(player));
+			});
 		}
 	}
 
 
-	public static void initializeInventoryWithClose(Player player, EXGInventoryConfig config, FastInv inv, EXGItemConfig closeItem) {
-
-		initializeBorderItem(player, config, inv);
-
-		if (closeItem.isEnabled()) {
+	public static void insertCloseItem(Player player, ConfigurableItem closeItem, FastInv inv) {
+		if (closeItem != null) {
 			inv.setItem(closeItem.getSlot(), closeItem.build(player), e -> {
-
 				e.getWhoClicked().closeInventory();
 				SoundsUtils.playSound(player, EXGSound.GUI_CLOSE);
 			});
@@ -49,40 +44,40 @@ public class InventoriesUtils {
 	// -------------------------------------------------- //
 
 
-	public static void initializePaginatedInventory(Player player, EXGPaginatedInventoryConfig config, PaginatedFastInv inv, InventoryScheme scheme) {
+
+	public static void initializePaginatedInventory(Player player, ConfigurablePaginatedInventory config, PaginatedFastInv inv, InventoryScheme scheme) {
 		scheme.apply(inv);
-
-		if (config.getPreviousPageItem().isEnabled()) {
-			inv.previousPageItem(config.getPreviousPageItem().getSlot(), p -> config.getPreviousPageItem().duplicate()
-					.updateVariables(
-							Map.of("currentPage", String.valueOf(p + 1),
-									"previousPage", String.valueOf(p)))
-					.build(player));
-		}
-
-
-		if (config.getNextPageItem().isEnabled()) {
-			inv.nextPageItem(config.getNextPageItem().getSlot(), p -> config.getNextPageItem().duplicate()
-					.updateVariables(
-							Map.of("currentPage", String.valueOf(p - 1),
-									"nextPage", String.valueOf(p)))
-					.build(player));
-		}
-
+		insertPaginationItems(player, config, inv);
 		updateCurrentPageItem(player, config, inv);
 	}
 
 
-	public static void updateCurrentPageItem(Player player, EXGPaginatedInventoryConfig config, PaginatedFastInv inv) {
+	public static void insertPaginationItems(Player player, ConfigurablePaginatedInventory config, PaginatedFastInv inv) {
+		if (config.getPreviousPageItem() != null) {
+			inv.previousPageItem(config.getPreviousPageItem().getSlot(), p -> config.getPreviousPageItem()
+					.build(player, Map.of(
+							"currentPage", String.valueOf(p + 1),
+							"previousPage", String.valueOf(p))
+					));
+		}
+		if (config.getNextPageItem() != null) {
+			inv.nextPageItem(config.getNextPageItem().getSlot(), p -> config.getNextPageItem()
+					.build(player, Map.of(
+							"currentPage", String.valueOf(p - 1),
+							"nextPage", String.valueOf(p))
+					));
+		}
+	}
 
-		if (config.getCurrentPageItem().isEnabled()) {
+
+	public static void updateCurrentPageItem(Player player, ConfigurablePaginatedInventory config, PaginatedFastInv inv) {
+		if (config.getCurrentPageItem() != null) {
 			inv.setItem(config.getCurrentPageItem().getSlot(), config.getCurrentPageItem()
-					.updateVariables(
-							Map.of("currentPage", String.valueOf(inv.currentPage()),
-									"totalPages", String.valueOf(inv.lastPage()),
-									"previousPage", String.valueOf(inv.currentPage() - 1),
-									"nextPage", String.valueOf(inv.currentPage() + 1)))
-					.build(player));
+					.build(player, Map.of("currentPage", String.valueOf(inv.currentPage()),
+							"totalPages", String.valueOf(inv.lastPage()),
+							"previousPage", String.valueOf(inv.currentPage() - 1),
+							"nextPage", String.valueOf(inv.currentPage() + 1))
+					));
 		}
 	}
 
@@ -90,104 +85,40 @@ public class InventoriesUtils {
 	// -------------------------------------------------- //
 
 
-	public static ItemStack getHomeItemStack(EXGItemConfig homeItem, EXGHome home, Player player) {
+	public static ItemStack getCustomItemStack(ConfigurableItem configurableItem, EXGIcon target, String nameKey, Player player) {
 
-		homeItem.setMaterial(home.getMaterial().name());
-		homeItem.setData(home.getData());
+		configurableItem.setMaterial(target.getMaterial().name());
+		configurableItem.setData(target.getData());
 
-		ItemStack homeItemStack;
+		String placeholderDisplayName = "{" + nameKey + "DisplayName}";
+		String placeholderName = "{" + nameKey + "Name}";
 
-		if (home.getCustomItemStack() != null) {
-			homeItemStack = home.getCustomItemStack().clone();
-			ItemMeta meta = homeItemStack.getItemMeta();
+		if (target.getCustomItemStack() != null) {
+			ItemStack itemStack = target.getCustomItemStack().clone();
+			ItemMeta meta = itemStack.getItemMeta();
 
-			meta.setDisplayName(homeItem.getDisplayName()
-					.replace("{homeDisplayName}", home.getDisplayName())
-					.replace("{homeName}", home.getName()));
+			if (meta != null) {
+				meta.setDisplayName(configurableItem.getDisplayName()
+						.replace(placeholderDisplayName, target.getDisplayName())
+						.replace(placeholderName, target.getName()));
 
-			meta.setLore(homeItem.getLore().stream()
-					.map(line -> line
-							.replace("{homeDisplayName}", home.getDisplayName())
-							.replace("{homeName}", home.getName()))
-					.collect(Collectors.toList()));
+				meta.setLore(configurableItem.getLore().stream()
+						.map(line -> line
+								.replace(placeholderDisplayName, target.getDisplayName())
+								.replace(placeholderName, target.getName()))
+						.collect(Collectors.toList()));
 
-			homeItemStack.setItemMeta(meta);
-			return homeItemStack;
-
-		} else {
-			return homeItem
-					.updateVariables(
-							Map.of("homeDisplayName", home.getDisplayName(),
-									"homeName", home.getName()))
-					.build(player);
-		}
-	}
-
-
-	public static ItemStack getKitItemStack(EXGItemConfig kitItem, EXGKit kit, Player player) {
-
-		kitItem.setMaterial(kit.getMaterial().name());
-		kitItem.setData(kit.getData());
-
-		ItemStack kitItemStack;
-
-		if (kit.getCustomItemStack() != null) {
-			kitItemStack = kit.getCustomItemStack().clone();
-			ItemMeta meta = kitItemStack.getItemMeta();
-
-			meta.setDisplayName(kitItem.getDisplayName()
-					.replace("{kitDisplayName}", kit.getDisplayName())
-					.replace("{kitName}", kit.getName()));
-
-			meta.setLore(kitItem.getLore().stream()
-					.map(line -> line
-							.replace("{kitDisplayName}", kit.getDisplayName())
-							.replace("{kitName}", kit.getName()))
-					.collect(Collectors.toList()));
-
-			kitItemStack.setItemMeta(meta);
-			return kitItemStack;
+				itemStack.setItemMeta(meta);
+			}
+			return itemStack;
 
 		} else {
-			return kitItem
-					.updateVariables(
-							Map.of("kitDisplayName", kit.getDisplayName(),
-									"kitName", kit.getName()))
-					.build(player);
-		}
-	}
+			Map<String, String> variables = Map.of(
+					nameKey + "DisplayName", target.getDisplayName(),
+					nameKey + "Name", target.getName()
+			);
 
-
-	public static ItemStack getWarpItemStack(EXGItemConfig warpItem, EXGWarp warp, Player player) {
-
-		warpItem.setMaterial(warp.getMaterial().name());
-		warpItem.setData(warp.getData());
-
-		ItemStack warpItemStack;
-
-		if (warp.getCustomItemStack() != null) {
-			warpItemStack = warp.getCustomItemStack().clone();
-			ItemMeta meta = warpItemStack.getItemMeta();
-
-			meta.setDisplayName(warpItem.getDisplayName()
-					.replace("{warpDisplayName}", warp.getDisplayName())
-					.replace("{warpName}", warp.getName()));
-
-			meta.setLore(warpItem.getLore().stream()
-					.map(line -> line
-							.replace("{warpDisplayName}", warp.getDisplayName())
-							.replace("{warpName}", warp.getName()))
-					.collect(Collectors.toList()));
-
-			warpItemStack.setItemMeta(meta);
-			return warpItemStack;
-
-		} else {
-			return warpItem
-					.updateVariables(
-							Map.of("warpDisplayName", warp.getDisplayName(),
-									"warpName", warp.getName()))
-					.build(player);
+			return configurableItem.build(player, variables);
 		}
 	}
 

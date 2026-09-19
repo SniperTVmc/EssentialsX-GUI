@@ -69,7 +69,7 @@ public class DataEntryUtils {
 		}
 
 		if ( (entrySettings.getMinLength() != -1 && value.length() < entrySettings.getMinLength())
-			|| (entrySettings.getMaxLength() != -1 && value.length() > entrySettings.getMaxLength()) ) {
+				|| (entrySettings.getMaxLength() != -1 && value.length() > entrySettings.getMaxLength()) ) {
 
 			return new Pair<>(value, EXGEntryResult.LENGTH_LIMIT.setMessageVariables(
 					Map.of("min", String.valueOf(entrySettings.getMinLength()),

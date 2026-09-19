@@ -81,7 +81,7 @@ public class FastInv implements InventoryHolder {
      * @see Bukkit#createInventory(InventoryHolder, int, String)
      */
     public FastInv(int size, String title) {
-        this(owner -> Bukkit.createInventory(owner, size, TextUtils.convertFormattedMessageToText(title)));
+        this(owner -> Bukkit.createInventory(owner, size, TextUtils.parseAsString(title)));
     }
 
     /**
@@ -102,7 +102,7 @@ public class FastInv implements InventoryHolder {
      * @see Bukkit#createInventory(InventoryHolder, InventoryType, String)
      */
     public FastInv(InventoryType type, String title) {
-        this(owner -> Bukkit.createInventory(owner, type, TextUtils.convertFormattedMessageToText(title)));
+        this(owner -> Bukkit.createInventory(owner, type, TextUtils.parseAsString(title)));
     }
 
     public FastInv(Function<FastInv, Inventory> inventoryFunction) {

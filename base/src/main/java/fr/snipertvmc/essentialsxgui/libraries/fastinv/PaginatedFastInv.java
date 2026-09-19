@@ -82,7 +82,7 @@ public class PaginatedFastInv extends FastInv {
      * @see Bukkit#createInventory(InventoryHolder, int, String)
      */
     public PaginatedFastInv(int size, String title) {
-        this(owner -> Bukkit.createInventory(owner, size, TextUtils.convertFormattedMessageToText(title)));
+        this(owner -> Bukkit.createInventory(owner, size, TextUtils.parseAsString(title)));
     }
 
     /**

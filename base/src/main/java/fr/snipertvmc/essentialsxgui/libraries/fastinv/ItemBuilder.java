@@ -2,6 +2,7 @@
  * This file is part of FastInv, licensed under the MIT License.
  *
  * Copyright (c) 2018-2021 MrMicky
+ *
  * Contributors: Sniper_TVmc (adaptation for EssentialsX-GUI)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,11 +25,10 @@
  */
 package fr.snipertvmc.essentialsxgui.libraries.fastinv;
 
-import com.cryptomorin.xseries.XEnchantment;
-import com.cryptomorin.xseries.XItemFlag;
-import com.cryptomorin.xseries.XMaterial;
 import fr.snipertvmc.essentialsxgui.utilities.TextUtils;
 import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -53,8 +53,8 @@ public class ItemBuilder {
         return new ItemBuilder(item.clone());
     }
 
-    public ItemBuilder(XMaterial material) {
-        this(new ItemStack(material.get()));
+    public ItemBuilder(Material material) {
+        this(new ItemStack(material));
     }
 
     public ItemBuilder(ItemStack item) {
@@ -85,8 +85,8 @@ public class ItemBuilder {
         });
     }
 
-    public ItemBuilder type(XMaterial material) {
-        return edit(item -> item.setType(material.get()));
+    public ItemBuilder type(Material material) {
+        return edit(item -> item.setType(material));
     }
 
     public ItemBuilder data(int data) {
@@ -102,16 +102,16 @@ public class ItemBuilder {
         return edit(item -> item.setAmount(amount));
     }
 
-    public ItemBuilder enchant(XEnchantment enchantment) {
+    public ItemBuilder enchant(Enchantment enchantment) {
         return enchant(enchantment, 1);
     }
 
-    public ItemBuilder enchant(XEnchantment enchantment, int level) {
-        return meta(meta -> meta.addEnchant(enchantment.get(), level, true));
+    public ItemBuilder enchant(Enchantment enchantment, int level) {
+        return meta(meta -> meta.addEnchant(enchantment, level, true));
     }
 
-    public ItemBuilder removeEnchant(XEnchantment enchantment) {
-        return meta(meta -> meta.removeEnchant(enchantment.get()));
+    public ItemBuilder removeEnchant(Enchantment enchantment) {
+        return meta(meta -> meta.removeEnchant(enchantment));
     }
 
     public ItemBuilder removeEnchants() {
@@ -119,7 +119,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder name(String name) {
-        return meta(meta -> meta.setDisplayName(TextUtils.convertFormattedMessageToText(name)));
+        return meta(meta -> meta.setDisplayName(TextUtils.parseAsString(name)));
     }
 
     public ItemBuilder lore(String lore) {
@@ -131,7 +131,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder lore(List<String> lore) {
-        return meta(meta -> meta.setLore(TextUtils.convertFormattedMessagesToText(lore)));
+        return meta(meta -> meta.setLore(TextUtils.parseAsString(lore)));
     }
 
     public ItemBuilder addLore(String line) {
@@ -139,12 +139,12 @@ public class ItemBuilder {
             List<String> lore = meta.getLore();
 
             if (lore == null) {
-                meta.setLore(TextUtils.convertFormattedMessagesToText(Collections.singletonList(line)));
+                meta.setLore(TextUtils.parseAsString(Collections.singletonList(line)));
                 return;
             }
 
             lore.add(line);
-            meta.setLore(TextUtils.convertFormattedMessagesToText(lore));
+            meta.setLore(TextUtils.parseAsString(lore));
         });
     }
 
@@ -157,29 +157,29 @@ public class ItemBuilder {
             List<String> lore = meta.getLore();
 
             if (lore == null) {
-                meta.setLore(TextUtils.convertFormattedMessagesToText(lines));
+                meta.setLore(TextUtils.parseAsString(lines));
                 return;
             }
 
             lore.addAll(lines);
-            meta.setLore(TextUtils.convertFormattedMessagesToText(lore));
+            meta.setLore(TextUtils.parseAsString(lore));
         });
     }
 
-    public ItemBuilder flags(XItemFlag... flags) {
-        return meta(meta -> meta.addItemFlags(Arrays.stream(flags).map(XItemFlag::get).toArray(ItemFlag[]::new)));
+    public ItemBuilder flags(ItemFlag... flags) {
+        return meta(meta -> meta.addItemFlags(flags));
     }
 
     public ItemBuilder flags() {
-        return flags(XItemFlag.values());
+        return flags(ItemFlag.values());
     }
 
-    public ItemBuilder removeFlags(XItemFlag... flags) {
-        return meta(meta -> meta.removeItemFlags(Arrays.stream(flags).map(XItemFlag::get).toArray(ItemFlag[]::new)));
+    public ItemBuilder removeFlags(ItemFlag... flags) {
+        return meta(meta -> meta.removeItemFlags(flags));
     }
 
     public ItemBuilder removeFlags() {
-        return removeFlags(XItemFlag.values());
+        return removeFlags(ItemFlag.values());
     }
 
     public ItemBuilder armorColor(Color color) {
