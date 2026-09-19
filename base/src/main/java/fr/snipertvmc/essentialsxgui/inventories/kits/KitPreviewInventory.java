@@ -1,9 +1,10 @@
 package fr.snipertvmc.essentialsxgui.inventories.kits;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.EXGKitPreviewInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.ConfigurableKitPreviewInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
@@ -19,7 +20,7 @@ public class KitPreviewInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGKitPreviewInventoryConfig config = Main.getInstance().getInventoriesManager().getKitPreviewInventoryConfig().copy();
+	private final ConfigurableKitPreviewInventory config = (ConfigurableKitPreviewInventory) Main.getInstance().getInventory(EXGInventory.KIT_PREVIEW);
 
 
 	// -------------------------------------------------- //
@@ -27,20 +28,18 @@ public class KitPreviewInventory extends PaginatedFastInv {
 
 	public KitPreviewInventory(Player player, EXGKit kit) {
 		super(
-				Main.getInstance().getInventoriesManager().getKitPreviewInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getKitPreviewInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(Map.of(
+				Main.getInstance().getInventory(EXGInventory.KIT_PREVIEW).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.KIT_PREVIEW).getTitle()
+						.build(player, Map.of(
 								"kitName", kit.getName(),
 								"kitDisplayName", kit.getDisplayName()))
-						.getTitle(player)
 		);
 
 
 		Main.getInstance().getServerDataManager().updateServerKits();
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -70,7 +69,7 @@ public class KitPreviewInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

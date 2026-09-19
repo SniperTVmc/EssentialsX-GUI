@@ -1,14 +1,11 @@
 package fr.snipertvmc.essentialsxgui.inventories.kits;
 
 import fr.snipertvmc.essentialsxgui.Main;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGPermission;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.*;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.EXGKitsPlayerViewInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.ConfigurableKitsPlayerViewInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -30,7 +27,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGKitsPlayerViewInventoryConfig config = Main.getInstance().getInventoriesManager().getKitsPlayerViewInventoryConfig().copy();
+	private final ConfigurableKitsPlayerViewInventory config = (ConfigurableKitsPlayerViewInventory) Main.getInstance().getInventory(EXGInventory.KITS_PLAYER_VIEW);
 
 
 	// -------------------------------------------------- //
@@ -38,16 +35,15 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 	public KitsPlayerViewInventory(Player player, String kitSearch, Set<EXGKit> definedKits) {
 		super(
-				Main.getInstance().getInventoriesManager().getKitsPlayerViewInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getKitsPlayerViewInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.KITS_PLAYER_VIEW).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.KITS_PLAYER_VIEW).getTitle()
+						.build(player, Map.of(
+								"player", player.getName()))
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -66,8 +62,8 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 		defineSwitchToAdminModeItem(player);
 		defineSearchKitItem(player, kitSearch, kits);
 
-		if (config.getKitItem().hasUpdateItemInterval()) {
-			startRefreshTask(config.getKitItem().getUpdateItemInterval() * 20L);
+		if (config.getKitItem().getExtra().hasUpdateItemInterval()) {
+			startRefreshTask(config.getKitItem().getExtra().getUpdateItemInterval() * 20L);
 		}
 	}
 
@@ -79,7 +75,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 		for (EXGKit kit : kits) {
 
-			AtomicReference<EXGItemConfig> atomicKitItemConfig = new AtomicReference<>(config.getKitItem());
+			AtomicReference<ConfigurableItem> atomicKitItemConfig = new AtomicReference<>(config.getKitItem());
 
 			Supplier<ItemStack> supplierKitItem = () -> {
 
@@ -94,21 +90,19 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 					}
 				}
 
-				atomicKitItemConfig.set(config.getKitItem().duplicate().updateVariables(Map.of(
-						"kitDelay", kitDelay
-				)));
-				return InventoriesUtils.getKitItemStack(atomicKitItemConfig.get(), kit, player);
+				atomicKitItemConfig.set(config.getKitItem().get().addVariable("kitDelay", kitDelay));
+				return InventoriesUtils.getCustomItemStack(atomicKitItemConfig.get(), kit, "kit", player);
 			};
 
-			EXGItemConfig kitItemConfig = atomicKitItemConfig.get();
+			ConfigurableItem kitItemConfig = atomicKitItemConfig.get();
 
 			addDynamicContent(supplierKitItem, e -> {
 
-				if (kitItemConfig.isCorrectClick(e.getClick(), "receiveKit")) {
+				if (kitItemConfig.getExtra().isCorrectClick(e.getClick(), "receiveKit")) {
 					player.performCommand("essentials:kit " + kit.getName());
 					SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 
-				} else if (kitItemConfig.isCorrectClick(e.getClick(), "previewKit")) {
+				} else if (kitItemConfig.getExtra().isCorrectClick(e.getClick(), "previewKit")) {
 					new KitPreviewInventory(player, kit).open(player);
 					SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				}
@@ -123,9 +117,8 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 			} else {
 				addContent(config.getNoSearchKitResultsItem()
-						.updateVariables(
-								Map.of("kitSearch", kitSearch))
-						.build(player));
+						.build(player, Map.of(
+								"kitSearch", kitSearch)));
 			}
 		}
 	}
@@ -177,7 +170,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "searchKitEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "searchKitEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.SEARCH_KIT_CHAT));
@@ -221,7 +214,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

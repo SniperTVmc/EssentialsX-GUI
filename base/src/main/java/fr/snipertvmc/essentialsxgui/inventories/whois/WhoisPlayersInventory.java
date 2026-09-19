@@ -1,9 +1,10 @@
 package fr.snipertvmc.essentialsxgui.inventories.whois;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois.EXGWhoisPlayersInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois.ConfigurableWhoisPlayersInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
@@ -20,7 +21,7 @@ public class WhoisPlayersInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWhoisPlayersInventoryConfig config = Main.getInstance().getInventoriesManager().getWhoisPlayersInventoryConfig().copy();
+	private final ConfigurableWhoisPlayersInventory config = (ConfigurableWhoisPlayersInventory) Main.getInstance().getInventory(EXGInventory.WHOIS_PLAYERS);
 
 
 	// -------------------------------------------------- //
@@ -28,14 +29,14 @@ public class WhoisPlayersInventory extends PaginatedFastInv {
 
 	public WhoisPlayersInventory(Player player) {
 		super(
-				Main.getInstance().getInventoriesManager().getWhoisPlayersInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWhoisPlayersInventoryConfig().getEXGTitle()
-						.duplicate()
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WHOIS_PLAYERS).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WHOIS_PLAYERS).getTitle()
+						.build(player)
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -46,11 +47,11 @@ public class WhoisPlayersInventory extends PaginatedFastInv {
 
 		for (Player onlinePlayer : onlinePlayers) {
 
-			EXGItemConfig playerItem = config.getPlayerItem().duplicate();
+			ConfigurableItem playerItem = config.getPlayerItem().get();
 			addContent(playerItem
-					.updateVariables(Map.of(
-							"targetName", onlinePlayer.getName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"targetName", onlinePlayer.getName()
+					)), e -> {
 
 				new WhoisViewInventory(player, onlinePlayer).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
@@ -64,7 +65,7 @@ public class WhoisPlayersInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

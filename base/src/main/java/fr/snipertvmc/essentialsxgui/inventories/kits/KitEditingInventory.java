@@ -2,12 +2,13 @@ package fr.snipertvmc.essentialsxgui.inventories.kits;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.EXGKitEditingInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.ConfigurableKitEditingInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -29,7 +30,7 @@ public class KitEditingInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGKitEditingInventoryConfig config = Main.getInstance().getInventoriesManager().getKitEditingInventoryConfig().copy();
+	private final ConfigurableKitEditingInventory config = (ConfigurableKitEditingInventory) Main.getInstance().getInventory(EXGInventory.KIT_EDITING);
 
 
 	// -------------------------------------------------- //
@@ -37,23 +38,21 @@ public class KitEditingInventory extends FastInv {
 
 	public KitEditingInventory(Player player, EXGKit kit) {
 		super(
-				Main.getInstance().getInventoriesManager().getKitEditingInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getKitEditingInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName(),
-										"kitName", kit.getName(),
-										"kitDisplayName", kit.getDisplayName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.KIT_EDITING).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.KIT_EDITING).getTitle()
+						.build(player, Map.of(
+								"player", player.getName(),
+								"kitName", kit.getName(),
+								"kitDisplayName", kit.getDisplayName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		if (config.getPreviewKitItem().isEnabled()) {
 
-			EXGItemConfig previewKitItem = config.getPreviewKitItem().duplicate();
+			ConfigurableItem previewKitItem = config.getPreviewKitItem().get();
 			previewKitItem.setMaterial(kit.getMaterial().name());
 			previewKitItem.setData(kit.getData());
 
@@ -76,11 +75,9 @@ public class KitEditingInventory extends FastInv {
 				previewKitItemStack.setItemMeta(meta);
 
 			} else {
-				previewKitItemStack = previewKitItem
-						.updateVariables(
-								Map.of("kitDisplayName", kit.getDisplayName(),
-										"kitName", kit.getName()))
-						.build(player);
+				previewKitItemStack = previewKitItem.build(player, Map.of(
+								"kitDisplayName", kit.getDisplayName(),
+								"kitName", kit.getName()));
 			}
 
 			setItem(config.getPreviewKitItem().getSlot(), previewKitItemStack);
@@ -89,10 +86,10 @@ public class KitEditingInventory extends FastInv {
 
 		if (config.getChangeDisplayNameItem().isEnabled()) {
 			setItem(config.getChangeDisplayNameItem().getSlot(), config.getChangeDisplayNameItem()
-					.updateVariables(
-							Map.of("kitName", kit.getName(),
-									"kitDisplayName", kit.getDisplayName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"kitName", kit.getName(),
+							"kitDisplayName", kit.getDisplayName()
+					)), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				changeKitDisplayName(player, kit);
@@ -102,9 +99,9 @@ public class KitEditingInventory extends FastInv {
 
 		if (config.getChangeIconItem().isEnabled()) {
 			setItem(config.getChangeIconItem().getSlot(), config.getChangeIconItem()
-					.updateVariables(
-							Map.of("kitName", kit.getName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"kitName", kit.getName()
+					)), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				changeKitIcon(player, kit);
@@ -113,10 +110,10 @@ public class KitEditingInventory extends FastInv {
 
 		if (config.getDeleteKitItem().isEnabled()) {
 			setItem(config.getDeleteKitItem().getSlot(), config.getDeleteKitItem()
-					.updateVariables(
-							Map.of("kitName", kit.getName(),
-									"kitDisplayName", kit.getDisplayName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"kitName", kit.getName(),
+							"kitDisplayName", kit.getDisplayName()
+					)), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				deleteKit(player, kit);
@@ -153,7 +150,7 @@ public class KitEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "changeKitDisplayNameEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "changeKitDisplayNameEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_DISPLAY_NAME_CHAT));
@@ -188,7 +185,7 @@ public class KitEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "changeKitIconEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "changeKitIconEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_ICON_NAME_CHAT));
@@ -241,7 +238,7 @@ public class KitEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "deleteKitEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "deleteKitEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.CONFIRM_DELETE_KIT_CHAT, Map.of("kitName", kit.getName())));

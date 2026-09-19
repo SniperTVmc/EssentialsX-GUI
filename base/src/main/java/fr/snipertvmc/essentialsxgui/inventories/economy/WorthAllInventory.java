@@ -4,10 +4,11 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGWorthAllInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableWorthAllInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -28,7 +29,7 @@ public class WorthAllInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWorthAllInventoryConfig config = Main.getInstance().getInventoriesManager().getWorthAllInventoryConfig().copy();
+	private final ConfigurableWorthAllInventory config = (ConfigurableWorthAllInventory) Main.getInstance().getInventory(EXGInventory.WORTH_ALL);
 
 
 	// -------------------------------------------------- //
@@ -36,16 +37,14 @@ public class WorthAllInventory extends PaginatedFastInv {
 
 	public WorthAllInventory(Player player, String worthSearch, Map<String, BigDecimal> itemsWorth) {
 		super(
-				Main.getInstance().getInventoriesManager().getWorthAllInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWorthAllInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WORTH_ALL).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WORTH_ALL).getTitle()
+						.build(player, Map.of(
+								"player", player.getName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -89,14 +88,13 @@ public class WorthAllInventory extends PaginatedFastInv {
 				String itemWorth = NumberUtil.displayCurrency(itemPrice, Main.getInstance().getEssentials());
 
 				addContent(config.getWorthItem()
-						.duplicate()
 						.setMaterial(material.name())
 						.setData(data)
-						.updateVariables(Map.of(
+						.build(player, Map.of(
 								"worthItemMaterial", material.name(),
 								"worthItemData", dataValue,
-								"itemWorth", itemWorth))
-						.build(player));
+								"itemWorth", itemWorth)
+						));
 			}
 
 			// Without data
@@ -111,12 +109,11 @@ public class WorthAllInventory extends PaginatedFastInv {
 				String itemWorth = NumberUtil.displayCurrency(itemPrice, Main.getInstance().getEssentials());
 
 				addContent(config.getWorthItem()
-						.duplicate()
 						.setMaterial(material.name())
-						.updateVariables(Map.of(
+						.build(player, Map.of(
 								"worthItemMaterial", material.name(),
-								"itemWorth", itemWorth))
-						.build(player));
+								"itemWorth", itemWorth)
+						));
 			}
 		}
 
@@ -128,9 +125,9 @@ public class WorthAllInventory extends PaginatedFastInv {
 
 			} else {
 				addContent(config.getNoSearchWorthItemsItem()
-						.updateVariables(
-								Map.of("worthSearch", worthSearch))
-						.build(player));
+						.build(player, Map.of
+								("worthSearch", worthSearch)
+						));
 			}
 		}
 	}
@@ -170,7 +167,7 @@ public class WorthAllInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("economy.worth", "searchWorthEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("economy.worth", "searchWorthEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.SEARCH_WORTH_CHAT));
@@ -211,7 +208,7 @@ public class WorthAllInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

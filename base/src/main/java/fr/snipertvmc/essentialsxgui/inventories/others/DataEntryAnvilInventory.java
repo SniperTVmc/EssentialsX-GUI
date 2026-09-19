@@ -32,7 +32,7 @@ public class DataEntryAnvilInventory {
 		new AnvilGUI.Builder()
 
 				.text(MessagesUtils.getString(EXGMessage.TYPE_HERE))
-				.title(TextUtils.convertFormattedMessageToText(entrySettings.getEntryDisplayName()))
+				.title(TextUtils.parseAsString(entrySettings.getEntryDisplayName()))
 
 				.onClick((slot, stateSnapshot) -> {
 

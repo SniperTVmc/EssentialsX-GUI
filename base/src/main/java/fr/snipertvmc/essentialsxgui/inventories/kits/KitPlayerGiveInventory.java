@@ -1,10 +1,11 @@
 package fr.snipertvmc.essentialsxgui.inventories.kits;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.EXGKitPlayerGiveInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.ConfigurableKitPlayerGiveInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
@@ -21,7 +22,7 @@ public class KitPlayerGiveInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGKitPlayerGiveInventoryConfig config = Main.getInstance().getInventoriesManager().getKitPlayerGiveInventoryConfig().copy();
+	private final ConfigurableKitPlayerGiveInventory config = (ConfigurableKitPlayerGiveInventory) Main.getInstance().getInventory(EXGInventory.KIT_PLAYER_GIVE);
 
 
 	// -------------------------------------------------- //
@@ -29,20 +30,18 @@ public class KitPlayerGiveInventory extends PaginatedFastInv {
 
 	public KitPlayerGiveInventory(Player player, EXGKit kit) {
 		super(
-				Main.getInstance().getInventoriesManager().getKitPlayerGiveInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getKitPlayerGiveInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(Map.of(
+				Main.getInstance().getInventory(EXGInventory.KIT_PLAYER_GIVE).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.KIT_PLAYER_GIVE).getTitle()
+						.build(player, Map.of(
 								"kitName", kit.getName(),
 								"kitDisplayName", kit.getDisplayName()))
-						.getTitle(player)
 		);
 
 
 		Main.getInstance().getServerDataManager().updateServerKits();
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -53,13 +52,13 @@ public class KitPlayerGiveInventory extends PaginatedFastInv {
 
 		for (Player target : targets) {
 
-			EXGItemConfig playerItem = config.getPlayerItem().duplicate();
+			ConfigurableItem playerItem = config.getPlayerItem().get();
 			addContent(playerItem
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"targetName", target.getName(),
 							"kitName", kit.getName(),
-							"kitDisplayName", kit.getDisplayName()))
-					.build(player), e -> {
+							"kitDisplayName", kit.getDisplayName())
+					), e -> {
 
 				player.performCommand("essentials:kit " + kit.getName() + " " + target.getName());
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
@@ -81,7 +80,7 @@ public class KitPlayerGiveInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

@@ -2,11 +2,12 @@ package fr.snipertvmc.essentialsxgui.inventories.economy;
 
 import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGBalanceTop;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGBalanceTopInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableBalanceTopInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
@@ -28,7 +29,7 @@ public class BalanceTopInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGBalanceTopInventoryConfig config = Main.getInstance().getInventoriesManager().getBalanceTopInventoryConfig().copy();
+	private final ConfigurableBalanceTopInventory config = (ConfigurableBalanceTopInventory) Main.getInstance().getInventory(EXGInventory.BALANCE_TOP);
 
 
 	// -------------------------------------------------- //
@@ -36,22 +37,20 @@ public class BalanceTopInventory extends FastInv {
 
 	public BalanceTopInventory(Player player) {
 		super(
-				Main.getInstance().getInventoriesManager().getBalanceTopInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getBalanceTopInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.BALANCE_TOP).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.BALANCE_TOP).getTitle()
+						.build(player, Map.of("player", player.getName()))
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 
 
 		if (config.getForceUpdateItem().isEnabled()) {
 
-			if (config.getForceUpdateItem().hasUpdateItemInterval()) {
-				long updateInterval = config.getForceUpdateItem().getUpdateItemInterval() * 20L;
+			if (config.getForceUpdateItem().getExtra().hasUpdateItemInterval()) {
+				long updateInterval = config.getForceUpdateItem().getExtra().getUpdateItemInterval() * 20L;
 				setDynamicItem(config.getForceUpdateItem().getSlot(), () -> getForceUpdateItem(player),
 						updateInterval, e -> forceUpdate(player)
 				);
@@ -88,13 +87,11 @@ public class BalanceTopInventory extends FastInv {
 					: MessagesUtils.getString(EXGMessage.NOT_RANKED);
 
 			setItem(config.getPlayerRankingItem().getSlot(), config.getPlayerRankingItem()
-					.duplicate()
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"playerName", player.getName(),
 							"playerRank", playerRank,
 							"playerBalance", playerBalance
-					))
-					.build(player));
+					)));
 		}
 	}
 
@@ -103,8 +100,8 @@ public class BalanceTopInventory extends FastInv {
 
 		Map<String, String> placeholders = getBalanceTopPlaceholders();
 
-		for (EXGItemConfig rankingItem : config.getRankingItems()) {
-			rankingItem = rankingItem.duplicate();
+		for (ConfigurableItem rankingItem : config.getRankingItems()) {
+			rankingItem = rankingItem.get();
 
 			String displayName = rankingItem.getDisplayName();
 			List<String> lore = rankingItem.getLore();
@@ -182,12 +179,10 @@ public class BalanceTopInventory extends FastInv {
 		String nextUpdate = TimeUtils.formatInTime(secondesBeforeNextUpdate);
 
 		return config.getForceUpdateItem()
-				.duplicate()
-				.updateVariables(Map.of(
+				.build(player, Map.of(
 						"lastUpdate", lastUpdate,
 						"nextUpdate", nextUpdate
-				))
-				.build(player);
+				));
 	}
 
 

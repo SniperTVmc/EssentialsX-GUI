@@ -1,14 +1,11 @@
 package fr.snipertvmc.essentialsxgui.inventories.warps;
 
 import fr.snipertvmc.essentialsxgui.Main;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGPermission;
-import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.*;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGWarp;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.EXGWarpsPlayerViewInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpsPlayerViewInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -27,7 +24,7 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWarpsPlayerViewInventoryConfig config = Main.getInstance().getInventoriesManager().getWarpsPlayerViewInventoryConfig().copy();
+	private final ConfigurableWarpsPlayerViewInventory config = (ConfigurableWarpsPlayerViewInventory) Main.getInstance().getInventory(EXGInventory.WARPS_PLAYER_VIEW);
 
 
 	// -------------------------------------------------- //
@@ -35,16 +32,15 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 	public WarpsPlayerViewInventory(Player player, String warpSearch, Set<EXGWarp> definedWarps) {
 		super(
-				Main.getInstance().getInventoriesManager().getWarpsPlayerViewInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWarpsPlayerViewInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WARPS_PLAYER_VIEW).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WARPS_PLAYER_VIEW).getTitle()
+						.build(player, Map.of(
+								"player", player.getName()))
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -72,8 +68,8 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 		for (EXGWarp warp : warps) {
 
-			EXGItemConfig warpItem = config.getWarpItem().duplicate();
-			ItemStack warpItemStack = InventoriesUtils.getWarpItemStack(warpItem, warp, player);
+			ConfigurableItem warpItem = config.getWarpItem().get();
+			ItemStack warpItemStack = InventoriesUtils.getCustomItemStack(warpItem, warp, "warp", player);
 
 			addContent(warpItemStack, e -> {
 				e.getWhoClicked().closeInventory();
@@ -89,9 +85,9 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 			} else {
 				addContent(config.getNoSearchWarpResultsItem()
-						.updateVariables(
-								Map.of("warpSearch", warpSearch))
-						.build(player));
+						.build(player, Map.of(
+								"warpSearch", warpSearch
+						)));
 			}
 		}
 	}
@@ -143,7 +139,7 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("warps", "searchWarpEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("warps", "searchWarpEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.SEARCH_WARP_CHAT));
@@ -187,7 +183,7 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

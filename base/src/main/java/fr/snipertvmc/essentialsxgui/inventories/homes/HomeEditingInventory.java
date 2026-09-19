@@ -2,12 +2,13 @@ package fr.snipertvmc.essentialsxgui.inventories.homes;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGHome;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.EXGHomeEditingInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.ConfigurableHomeEditingInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -29,7 +30,7 @@ public class HomeEditingInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGHomeEditingInventoryConfig config = Main.getInstance().getInventoriesManager().getHomeEditingInventoryConfig().copy();
+	private final ConfigurableHomeEditingInventory config = (ConfigurableHomeEditingInventory) Main.getInstance().getInventory(EXGInventory.HOME_EDITING);
 
 
 	// -------------------------------------------------- //
@@ -37,23 +38,21 @@ public class HomeEditingInventory extends FastInv {
 
 	public HomeEditingInventory(Player player, EXGHome home) {
 		super(
-				Main.getInstance().getInventoriesManager().getHomeEditingInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getHomeEditingInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName(),
-										"homeName", home.getName(),
-										"homeDisplayName", home.getDisplayName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.HOME_EDITING).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.HOME_EDITING).getTitle()
+						.build(player, Map.of(
+								"player", player.getName(),
+								"homeName", home.getName(),
+								"homeDisplayName", home.getDisplayName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		if (config.getPreviewHomeItem().isEnabled()) {
 
-			EXGItemConfig previewHomeItem = config.getPreviewHomeItem().duplicate();
+			ConfigurableItem previewHomeItem = config.getPreviewHomeItem().get();
 			previewHomeItem.setMaterial(home.getMaterial().name());
 			previewHomeItem.setData(home.getData());
 
@@ -76,11 +75,9 @@ public class HomeEditingInventory extends FastInv {
 				previewHomeItemStack.setItemMeta(meta);
 
 			} else {
-				previewHomeItemStack = previewHomeItem
-						.updateVariables(
-								Map.of("homeDisplayName", home.getDisplayName(),
-										"homeName", home.getName()))
-						.build(player);
+				previewHomeItemStack = previewHomeItem.build(player, Map.of(
+						"homeDisplayName", home.getDisplayName(),
+						"homeName", home.getName()));
 			}
 
 			setItem(config.getPreviewHomeItem().getSlot(), previewHomeItemStack);
@@ -89,10 +86,10 @@ public class HomeEditingInventory extends FastInv {
 
 		if (config.getChangeDisplayNameItem().isEnabled()) {
 			setItem(config.getChangeDisplayNameItem().getSlot(), config.getChangeDisplayNameItem()
-					.updateVariables(
-							Map.of("homeName", home.getName(),
-									"homeDisplayName", home.getDisplayName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"homeName", home.getName(),
+							"homeDisplayName", home.getDisplayName())
+					), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				changeHomeDisplayName(player, home);
@@ -101,9 +98,9 @@ public class HomeEditingInventory extends FastInv {
 
 		if (config.getChangeIconItem().isEnabled()) {
 			setItem(config.getChangeIconItem().getSlot(), config.getChangeIconItem()
-					.updateVariables(
-							Map.of("homeName", home.getName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"homeName", home.getName())
+					), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				changeHomeIcon(player, home);
@@ -112,10 +109,10 @@ public class HomeEditingInventory extends FastInv {
 
 		if (config.getDeleteHomeItem().isEnabled()) {
 			setItem(config.getDeleteHomeItem().getSlot(), config.getDeleteHomeItem()
-					.updateVariables(
-							Map.of("homeName", home.getName(),
-									"homeDisplayName", home.getDisplayName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"homeName", home.getName(),
+							"homeDisplayName", home.getDisplayName())
+					), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				deleteHome(player, home);
@@ -142,7 +139,7 @@ public class HomeEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("homes", "changeHomeDisplayNameEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("homes", "changeHomeDisplayNameEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_DISPLAY_NAME_CHAT));
@@ -177,7 +174,7 @@ public class HomeEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("homes", "changeHomeIconEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("homes", "changeHomeIconEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_ICON_NAME_CHAT));
@@ -230,7 +227,7 @@ public class HomeEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("homes", "deleteHomeEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("homes", "deleteHomeEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.CONFIRM_DELETE_HOME_CHAT, Map.of("homeName", home.getName())));

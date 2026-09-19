@@ -3,9 +3,10 @@ package fr.snipertvmc.essentialsxgui.inventories.economy;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGWorthInventoryInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableWorthInventoryInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -25,7 +26,7 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWorthInventoryInventoryConfig config = Main.getInstance().getInventoriesManager().getWorthInventoryInventoryConfig().copy();
+	private final ConfigurableWorthInventoryInventory config = (ConfigurableWorthInventoryInventory) Main.getInstance().getInventory(EXGInventory.WORTH_INVENTORY);
 
 
 	// -------------------------------------------------- //
@@ -33,16 +34,14 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 
 	public WorthInventoryInventory(Player player) {
 		super(
-				Main.getInstance().getInventoriesManager().getWorthInventoryInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWorthInventoryInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WORTH_INVENTORY).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WORTH_INVENTORY).getTitle()
+						.build(player, Map.of(
+								"player", player.getName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 		for (ItemStack itemStack : player.getInventory().getContents()) {
@@ -77,12 +76,10 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 			}
 
 			addContent(config.getWorthItem()
-					.duplicate()
 					.setMaterial(materialName)
 					.setAmount(itemStack.getAmount())
 					.setData((byte) itemStack.getDurability())
-					.updateVariables(variables)
-					.build(player));
+					.build(player, variables));
 		}
 
 
@@ -110,7 +107,7 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

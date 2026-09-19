@@ -3,10 +3,11 @@ package fr.snipertvmc.essentialsxgui.inventories.others;
 import com.cryptomorin.xseries.XMaterial;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryResult;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.others.EXGDataEntryGUInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.others.ConfigurableDataEntryGUI;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.ItemBuilder;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
@@ -25,7 +26,7 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGDataEntryGUInventoryConfig config = Main.getInstance().getInventoriesManager().getDataEntryGUIInventoryConfig().copy();
+	ConfigurableDataEntryGUI config = (ConfigurableDataEntryGUI) Main.getInstance().getInventory(EXGInventory.DATA_ENTRY_GUI);
 
 
 	// -------------------------------------------------- //
@@ -35,16 +36,13 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 	                             Consumer<Pair<String, EXGEntryResult>> onSuccess,
 	                             Consumer<Pair<String, EXGEntryResult>> onFailure) {
 		super(
-				Main.getInstance().getInventoriesManager().getDataEntryGUIInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getDataEntryGUIInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("entryDisplayName", entrySettings.getEntryDisplayName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.DATA_ENTRY_GUI).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.DATA_ENTRY_GUI).getTitle().build(player, Map.of(
+						"entryDisplayName", entrySettings.getEntryDisplayName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -73,7 +71,7 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 
 		if (materialList.isEmpty()) {
 
-			addContent(new ItemBuilder(XMaterial.BARRIER)
+			addContent(new ItemBuilder(XMaterial.BARRIER.get())
 					.name("<dark_red><bold>No materials found")
 					.lore(
 							"<red>Please contact an administrator and inform them of the following details:",
@@ -87,15 +85,14 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 
 		for (Pair<XMaterial, Byte> materialPair : materialList) {
 
-			EXGItemConfig materialIconItem = config.getMaterialIconItem().duplicate();
+			ConfigurableItem materialIconItem = config.getMaterialIconItem();
 			materialIconItem.setMaterial(materialPair.getLeft().name());
 			materialIconItem.setData(materialPair.getRight());
 
 			addContent(materialIconItem
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"materialName", materialPair.getLeft().name()
-					))
-					.build(player), e -> {
+					)), e -> {
 
 				String completeMaterial = materialPair.getLeft() + ":" + materialPair.getRight();
 				Pair<Pair<XMaterial, Byte>, EXGEntryResult> result = DataEntryUtils.checkMaterialEntry(completeMaterial);
@@ -117,7 +114,7 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

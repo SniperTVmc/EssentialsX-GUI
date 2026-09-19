@@ -2,9 +2,10 @@ package fr.snipertvmc.essentialsxgui.inventories.economy;
 
 import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGWorthInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableWorthInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -22,7 +23,7 @@ public class WorthInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWorthInventoryConfig config = Main.getInstance().getInventoriesManager().getWorthInventoryConfig().copy();
+	private final ConfigurableWorthInventory config = (ConfigurableWorthInventory) Main.getInstance().getInventory(EXGInventory.WORTH);
 
 
 	// -------------------------------------------------- //
@@ -30,14 +31,14 @@ public class WorthInventory extends FastInv {
 
 	public WorthInventory(Player player) {
 		super(
-				Main.getInstance().getInventoriesManager().getWorthInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWorthInventoryConfig().getEXGTitle()
-						.duplicate()
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WORTH).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WORTH).getTitle()
+						.build(player)
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 
 
 		if (config.getAllItem().isEnabled()) {
@@ -81,16 +82,15 @@ public class WorthInventory extends FastInv {
 
 		if (config.getHandItem().isEnabled()) {
 			setItem(config.getHandItem().getSlot(), config.getHandItem()
-					.duplicate()
 					.setMaterial(handItemMaterialName)
 					.setData(handItemData)
 					.setAmount(handItemAmount)
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"handItemMaterial", handItemMaterialName,
 							"handItemUnitWorth", handItemUnitWorth,
 							"handItemTotalWorth", handItemTotalWorth,
-							"handItemAmount", String.valueOf(handItemAmount)))
-					.build(player));
+							"handItemAmount", String.valueOf(handItemAmount)
+					)));
 		}
 
 
@@ -99,9 +99,9 @@ public class WorthInventory extends FastInv {
 
 		if (config.getInventoryItem().isEnabled()) {
 			setItem(config.getInventoryItem().getSlot(), config.getInventoryItem()
-					.updateVariables(Map.of(
-							"inventoryWorth", inventoryWorth))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"inventoryWorth", inventoryWorth)
+					), e -> {
 
 				new WorthInventoryInventory(player).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);

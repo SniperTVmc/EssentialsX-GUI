@@ -1,10 +1,11 @@
 package fr.snipertvmc.essentialsxgui.inventories.kits;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGPlayerInventoryData;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.EXGKitEditorInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.ConfigurableKitEditorInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.data.InventoryBackupUtils;
@@ -14,10 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KitEditorInventory extends FastInv {
 
@@ -25,9 +23,9 @@ public class KitEditorInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGKitEditorInventoryConfig config = Main.getInstance().getInventoriesManager().getKitEditorInventoryConfig().copy();
+	private final ConfigurableKitEditorInventory config = (ConfigurableKitEditorInventory) Main.getInstance().getInventory(EXGInventory.KIT_EDITOR);
 
-	private final List<Integer> reservedSlots = new ArrayList<>();
+	private final Set<Integer> reservedSlots = new HashSet<>(config.getBorderSlots());
 
 
 	// -------------------------------------------------- //
@@ -35,25 +33,20 @@ public class KitEditorInventory extends FastInv {
 
 	public KitEditorInventory(Player player, EXGKit kit) {
 		super(
-				Main.getInstance().getInventoriesManager().getKitEditorInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getKitEditorInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName(),
-										"kitName", kit.getName(),
-										"kitDisplayName", kit.getDisplayName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.KIT_EDITOR).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.KIT_EDITOR).getTitle()
+						.build(player, Map.of(
+								"player", player.getName(),
+								"kitName", kit.getName(),
+								"kitDisplayName", kit.getDisplayName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		if (config.getSaveKitItem().isEnabled()) reservedSlots.add(config.getSaveKitItem().getSlot());
 		if (config.getCancelChangesItem().isEnabled()) reservedSlots.add(config.getCancelChangesItem().getSlot());
-		for (int borderSlot : config.getBorderSlots()) {;
-			reservedSlots.add(borderSlot);
-		}
 
 
 		if (config.getSaveKitItem().isEnabled()) {

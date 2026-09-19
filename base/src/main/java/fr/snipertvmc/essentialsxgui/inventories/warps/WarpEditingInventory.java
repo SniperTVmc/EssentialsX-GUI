@@ -2,12 +2,13 @@ package fr.snipertvmc.essentialsxgui.inventories.warps;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGWarp;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.EXGWarpEditingInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpEditingInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -29,7 +30,7 @@ public class WarpEditingInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWarpEditingInventoryConfig config = Main.getInstance().getInventoriesManager().getWarpEditingInventoryConfig().copy();
+	private final ConfigurableWarpEditingInventory config = (ConfigurableWarpEditingInventory) Main.getInstance().getInventory(EXGInventory.WARP_EDITING);
 
 
 	// -------------------------------------------------- //
@@ -37,23 +38,21 @@ public class WarpEditingInventory extends FastInv {
 
 	public WarpEditingInventory(Player player, EXGWarp warp) {
 		super(
-				Main.getInstance().getInventoriesManager().getWarpEditingInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWarpEditingInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName(),
-										"warpName", warp.getName(),
-										"warpDisplayName", warp.getDisplayName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WARP_EDITING).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WARP_EDITING).getTitle()
+						.build(player, Map.of(
+								"player", player.getName(),
+								"warpName", warp.getName(),
+								"warpDisplayName", warp.getDisplayName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		if (config.getPreviewWarpItem().isEnabled()) {
 
-			EXGItemConfig previewWarpItem = config.getPreviewWarpItem().duplicate();
+			ConfigurableItem previewWarpItem = config.getPreviewWarpItem().get();
 			previewWarpItem.setMaterial(warp.getMaterial().name());
 			previewWarpItem.setData(warp.getData());
 
@@ -77,10 +76,10 @@ public class WarpEditingInventory extends FastInv {
 
 			} else {
 				previewWarpItemStack = previewWarpItem
-						.updateVariables(
-								Map.of("warpDisplayName", warp.getDisplayName(),
-										"warpName", warp.getName()))
-						.build(player);
+						.build(player, Map.of(
+								"warpDisplayName", warp.getDisplayName(),
+								"warpName", warp.getName()
+						));
 			}
 
 			setItem(config.getPreviewWarpItem().getSlot(), previewWarpItemStack);
@@ -89,10 +88,10 @@ public class WarpEditingInventory extends FastInv {
 
 		if (config.getChangeDisplayNameItem().isEnabled()) {
 			setItem(config.getChangeDisplayNameItem().getSlot(), config.getChangeDisplayNameItem()
-					.updateVariables(
-							Map.of("warpName", warp.getName(),
-									"warpDisplayName", warp.getDisplayName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"warpName", warp.getName(),
+							"warpDisplayName", warp.getDisplayName()
+					)), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				changeWarpDisplayName(player, warp);
@@ -102,9 +101,9 @@ public class WarpEditingInventory extends FastInv {
 
 		if (config.getChangeIconItem().isEnabled()) {
 			setItem(config.getChangeIconItem().getSlot(), config.getChangeIconItem()
-					.updateVariables(
-							Map.of("warpName", warp.getName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"warpName", warp.getName()
+					)), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				changeWarpIcon(player, warp);
@@ -113,10 +112,10 @@ public class WarpEditingInventory extends FastInv {
 
 		if (config.getDeleteWarpItem().isEnabled()) {
 			setItem(config.getDeleteWarpItem().getSlot(), config.getDeleteWarpItem()
-					.updateVariables(
-							Map.of("warpName", warp.getName(),
-									"warpDisplayName", warp.getDisplayName()))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"warpName", warp.getName(),
+							"warpDisplayName", warp.getDisplayName()
+					)), e -> {
 
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				deleteWarp(player, warp);
@@ -143,7 +142,7 @@ public class WarpEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("warps", "changeWarpDisplayNameEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("warps", "changeWarpDisplayNameEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_DISPLAY_NAME_CHAT));
@@ -178,7 +177,7 @@ public class WarpEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("warps", "changeWarpIconEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("warps", "changeWarpIconEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_ICON_NAME_CHAT));
@@ -231,7 +230,7 @@ public class WarpEditingInventory extends FastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("warps", "deleteWarpEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("warps", "deleteWarpEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.CONFIRM_DELETE_WARP_CHAT, Map.of("warpName", warp.getName())));

@@ -4,9 +4,10 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois.EXGWhoisViewInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois.ConfigurableWhoisViewInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -24,7 +25,7 @@ public class WhoisViewInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWhoisViewInventoryConfig config = Main.getInstance().getInventoriesManager().getWhoisViewInventoryConfig().copy();
+	private final ConfigurableWhoisViewInventory config = (ConfigurableWhoisViewInventory) Main.getInstance().getInventory(EXGInventory.WHOIS_VIEW);
 
 
 	// -------------------------------------------------- //
@@ -32,15 +33,14 @@ public class WhoisViewInventory extends FastInv {
 
 	public WhoisViewInventory(Player player, Player target) {
 		super(
-				Main.getInstance().getInventoriesManager().getWhoisViewInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWhoisViewInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(Map.of("targetName", target.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WHOIS_VIEW).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WHOIS_VIEW).getTitle()
+						.build(player, Map.of(
+								"targetName", target.getName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		// Fetching user data
@@ -120,36 +120,31 @@ public class WhoisViewInventory extends FastInv {
 		// Setting items
 		if (config.getPlayerIdentificationItem().isEnabled()) {
 			setItem(config.getPlayerIdentificationItem().getSlot(), config.getPlayerIdentificationItem()
-					.updateVariables(playerIdentificationPlaceholders)
-					.build(player)
+					.build(player, playerIdentificationPlaceholders)
 			);
 		}
 
 		if (config.getPlayerStatisticsItem().isEnabled()) {
 			setItem(config.getPlayerStatisticsItem().getSlot(), config.getPlayerStatisticsItem()
-					.updateVariables(playerStatisticsPlaceholders)
-					.build(player)
+					.build(player, playerStatisticsPlaceholders)
 			);
 		}
 
 		if (config.getPlayerWorldItem().isEnabled()) {
 			setItem(config.getPlayerWorldItem().getSlot(), config.getPlayerWorldItem()
-					.updateVariables(playerWorldPlaceholders)
-					.build(player)
+					.build(player, playerWorldPlaceholders)
 			);
 		}
 
 		if (config.getPlayerServerDataItem().isEnabled()) {
 			setItem(config.getPlayerServerDataItem().getSlot(), config.getPlayerServerDataItem()
-					.updateVariables(playerServerDataPlaceholders)
-					.build(player)
+					.build(player, playerServerDataPlaceholders)
 			);
 		}
 
 		if (config.getPlayerPunishmentsItem().isEnabled()) {
 			setItem(config.getPlayerPunishmentsItem().getSlot(), config.getPlayerPunishmentsItem()
-					.updateVariables(playerPunishmentsPlaceholders)
-					.build(player)
+					.build(player, playerPunishmentsPlaceholders)
 			);
 		}
 

@@ -2,13 +2,14 @@ package fr.snipertvmc.essentialsxgui.inventories.homes;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGHome;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGPlayer;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.EXGHomesInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.ConfigurableHomesInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -28,7 +29,7 @@ public class HomesInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGHomesInventoryConfig config = Main.getInstance().getInventoriesManager().getHomesInventoryConfig().copy();
+	private final ConfigurableHomesInventory config = (ConfigurableHomesInventory) Main.getInstance().getInventory(EXGInventory.HOMES);
 
 
 	// -------------------------------------------------- //
@@ -36,16 +37,13 @@ public class HomesInventory extends PaginatedFastInv {
 
 	public HomesInventory(Player player, String homeSearch, Set<EXGHome> definedHomes) {
 		super(
-				Main.getInstance().getInventoriesManager().getHomesInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getHomesInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.HOMES).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.HOMES).getTitle()
+						.build(player, Map.of("player", player.getName()))
 		);
 
-
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -74,19 +72,19 @@ public class HomesInventory extends PaginatedFastInv {
 
 		for (EXGHome home : homes) {
 
-			EXGItemConfig homeItem = config.getHomeItem().duplicate();
-			ItemStack homeItemStack = InventoriesUtils.getHomeItemStack(homeItem, home, player);
+			ConfigurableItem homeItem = config.getHomeItem();
+			ItemStack homeItemStack = InventoriesUtils.getCustomItemStack(homeItem, home, "home", player);
 
 			addContent(homeItemStack, e -> {
 
-				if (homeItem.isCorrectClick(e.getClick(), "teleportToHome")) {
+				if (homeItem.getExtra().isCorrectClick(e.getClick(), "teleportToHome")) {
 					e.getWhoClicked().closeInventory();
 					player.performCommand("essentials:home " + home.getName());
 
-				} else if (homeItem.isCorrectClick(e.getClick(), "editHome")) {
+				} else if (homeItem.getExtra().isCorrectClick(e.getClick(), "editHome")) {
 					new HomeEditingInventory(player, home).open(player);
 
-				} else if (homeItem.isCorrectClick(e.getClick(), "deleteHome")) {
+				} else if (homeItem.getExtra().isCorrectClick(e.getClick(), "deleteHome")) {
 					new HomeEditingInventory(player, home).deleteHome(player, home);
 				}
 
@@ -100,10 +98,9 @@ public class HomesInventory extends PaginatedFastInv {
 				addContent(config.getNoHomesItem().build(player));
 
 			} else {
-				addContent(config.getNoSearchHomeResultsItem()
-						.updateVariables(
-								Map.of("homeSearch", homeSearch))
-						.build(player));
+				addContent(config.getNoSearchHomeResultsItem().build(player, Map.of(
+						"homeSearch", homeSearch))
+				);
 			}
 		}
 	}
@@ -113,13 +110,14 @@ public class HomesInventory extends PaginatedFastInv {
 
 		String[] bedHomeMaterialParts = getBedHomeMaterialAndData(player).split(":");
 		String bedHomeMaterialName = bedHomeMaterialParts[0];
-		byte bedHomeData = Byte.parseByte(bedHomeMaterialParts[1]);
+		byte bedHomeData = bedHomeMaterialParts.length > 1 ? Byte.parseByte(bedHomeMaterialParts[1]) : 0;
 		if (player.hasPermission("essentials.home.bed") && config.getBedHomeItem().isEnabled()) {
 			setItem(config.getBedHomeItem().getSlot(), config.getBedHomeItem()
-					.updateVariables(Map.of("bedHomeWorldDisplayName", getBedHomeWorldDisplayName(player)))
 					.setMaterial(bedHomeMaterialName)
 					.setData(bedHomeData)
-					.build(player), e -> {
+					.build(player, Map.of(
+							"bedHomeWorldDisplayName", getBedHomeWorldDisplayName(player))
+					), e -> {
 
 				if (player.hasPermission("essentials.home.bed")) {
 					e.getWhoClicked().closeInventory();
@@ -127,7 +125,7 @@ public class HomesInventory extends PaginatedFastInv {
 					return;
 				}
 
-				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.NO_PERMISSION, null));
+				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.NO_PERMISSION));
 				SoundsUtils.playSound(player, EXGSound.ACTION_FAILURE);
 			});
 		}
@@ -213,7 +211,7 @@ public class HomesInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("homes", "createNewHomeEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("homes", "createNewHomeEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_HOME_NAME_CHAT));
@@ -270,7 +268,7 @@ public class HomesInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("homes", "searchHomeEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("homes", "searchHomeEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.SEARCH_HOME_CHAT));
@@ -339,7 +337,7 @@ public class HomesInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

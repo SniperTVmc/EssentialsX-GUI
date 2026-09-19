@@ -1,8 +1,9 @@
 package fr.snipertvmc.essentialsxgui.inventories.economy;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGSellInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableSellInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
@@ -12,10 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SellInventory extends FastInv {
 
@@ -23,9 +21,9 @@ public class SellInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGSellInventoryConfig config = Main.getInstance().getInventoriesManager().getSellInventoryConfig().copy();
+	private final ConfigurableSellInventory config = (ConfigurableSellInventory) Main.getInstance().getInventory(EXGInventory.SELL);
 
-	private final List<Integer> reservedSlots = new ArrayList<>();
+	private final Set<Integer> reservedSlots = new HashSet<>(config.getBorderSlots());
 
 
 	// -------------------------------------------------- //
@@ -33,23 +31,18 @@ public class SellInventory extends FastInv {
 
 	public SellInventory(Player player) {
 		super(
-				Main.getInstance().getInventoriesManager().getSellInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getSellInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(
-								Map.of("player", player.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.SELL).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.SELL).getTitle()
+						.build(player, Map.of(
+								"player", player.getName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		if (config.getConfirmSellItem().isEnabled()) reservedSlots.add(config.getConfirmSellItem().getSlot());
 		if (config.getCancelSellItem().isEnabled()) reservedSlots.add(config.getCancelSellItem().getSlot());
-		for (int borderSlot : config.getBorderSlots()) {;
-			reservedSlots.add(borderSlot);
-		}
 
 
 		if (config.getConfirmSellItem().isEnabled()) {

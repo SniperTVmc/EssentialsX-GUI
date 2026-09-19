@@ -3,8 +3,9 @@ package fr.snipertvmc.essentialsxgui.inventories.economy;
 import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEcoAction;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGEcoActionInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableEcoActionInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
@@ -19,7 +20,7 @@ public class EcoActionInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGEcoActionInventoryConfig config = Main.getInstance().getInventoriesManager().getEcoActionInventoryConfig().copy();
+	private final ConfigurableEcoActionInventory config = (ConfigurableEcoActionInventory) Main.getInstance().getInventory(EXGInventory.ECO_ACTION);
 
 
 	// -------------------------------------------------- //
@@ -27,15 +28,13 @@ public class EcoActionInventory extends FastInv {
 
 	public EcoActionInventory(Player player, Player target) {
 		super(
-				Main.getInstance().getInventoriesManager().getEcoActionInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getEcoActionInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(Map.of("targetName", target.getName()))
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.ECO_ACTION).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.ECO_ACTION).getTitle()
+						.build(player, Map.of("target", target.getName()))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		if (config.getPlayerItem().isEnabled()) {
@@ -44,10 +43,10 @@ public class EcoActionInventory extends FastInv {
 			String targetBalance = NumberUtil.displayCurrency(targetBalanceValue, Main.getInstance().getEssentials());
 
 			setItem(config.getPlayerItem().getSlot(), config.getPlayerItem()
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"targetName", target.getName(),
-							"targetBalance", targetBalance))
-					.build(player));
+							"targetBalance", targetBalance)
+					));
 		}
 
 

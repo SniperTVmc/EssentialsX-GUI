@@ -2,8 +2,9 @@ package fr.snipertvmc.essentialsxgui.inventories.economy;
 
 import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGEcoPlayersInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableEcoPlayersInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
@@ -21,7 +22,7 @@ public class EcoPlayersInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGEcoPlayersInventoryConfig config = Main.getInstance().getInventoriesManager().getEcoPlayersInventoryConfig().copy();
+	private final ConfigurableEcoPlayersInventory config = (ConfigurableEcoPlayersInventory) Main.getInstance().getInventory(EXGInventory.ECO_PLAYERS);
 
 
 	// -------------------------------------------------- //
@@ -29,14 +30,13 @@ public class EcoPlayersInventory extends PaginatedFastInv {
 
 	public EcoPlayersInventory(Player player) {
 		super(
-				Main.getInstance().getInventoriesManager().getEcoPlayersInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getEcoPlayersInventoryConfig().getEXGTitle()
-						.duplicate()
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.ECO_PLAYERS).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.ECO_PLAYERS).getTitle()
+						.build(player)
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -51,11 +51,10 @@ public class EcoPlayersInventory extends PaginatedFastInv {
 			String targetBalance = NumberUtil.displayCurrency(targetBalanceValue, Main.getInstance().getEssentials());
 
 			addContent(config.getPlayerItem()
-					.duplicate()
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"targetName", onlinePlayer.getName(),
-							"targetBalance", targetBalance))
-					.build(player), e -> {
+							"targetBalance", targetBalance)
+					), e -> {
 
 				new EcoActionInventory(player, onlinePlayer).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
@@ -69,7 +68,7 @@ public class EcoPlayersInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

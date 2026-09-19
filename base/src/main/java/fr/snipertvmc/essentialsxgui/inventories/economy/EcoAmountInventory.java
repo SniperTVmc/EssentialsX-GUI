@@ -3,10 +3,11 @@ package fr.snipertvmc.essentialsxgui.inventories.economy;
 import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEcoAction;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.EXGEcoAmountInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.ConfigurableEcoAmountInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -24,7 +25,7 @@ public class EcoAmountInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGEcoAmountInventoryConfig config = Main.getInstance().getInventoriesManager().getEcoAmountInventoryConfig().copy();
+	private final ConfigurableEcoAmountInventory config = (ConfigurableEcoAmountInventory) Main.getInstance().getInventory(EXGInventory.ECO_AMOUNT);
 
 	private double totalAmountValue = 0;
 	private double targetBalanceValue = 0;
@@ -35,19 +36,16 @@ public class EcoAmountInventory extends FastInv {
 
 	public EcoAmountInventory(Player player, Player target, EXGEcoAction ecoAction) {
 		super(
-				Main.getInstance().getInventoriesManager().getEcoAmountInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getEcoAmountInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(Map.of(
+				Main.getInstance().getInventory(EXGInventory.ECO_AMOUNT).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.ECO_AMOUNT).getTitle()
+						.build(player, Map.of(
 								"targetName", target.getName(),
 								"ecoAction", TextUtils.firstLetterToUpperCase(
-										MessagesUtils.getString(ecoAction.getActionName())
-								)))
-						.getTitle(player)
+										MessagesUtils.getString(ecoAction.getActionName()))))
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 
 
 		this.targetBalanceValue = Main.getInstance().getEssentials().getUser(target).getMoney().doubleValue();
@@ -56,9 +54,9 @@ public class EcoAmountInventory extends FastInv {
 
 		if (config.getCancelActionItem().isEnabled()) {
 			setItem(config.getCancelActionItem().getSlot(), config.getCancelActionItem()
-					.updateVariables(Map.of(
-							"ecoAction", ecoActionName))
-					.build(player), e -> {
+					.build(player, Map.of(
+							"ecoAction", ecoActionName)
+					), e -> {
 
 				new EcoActionInventory(player, target).open(player);
 				SoundsUtils.playSound(player, EXGSound.ACTION_CANCELED);
@@ -87,29 +85,29 @@ public class EcoAmountInventory extends FastInv {
 		String totalAmount = NumberUtil.displayCurrency(BigDecimal.valueOf(this.totalAmountValue), Main.getInstance().getEssentials());
 
 		// true -> AddItem, false -> RemoveItem
-		Map<EXGItemConfig, Boolean> amountItems = new HashMap<>();
+		Map<ConfigurableItem, Boolean> amountItems = new HashMap<>();
 
-		if (config.getAddItems().getFirst().isEnabled() && ecoAction != EXGEcoAction.RESET) {
+		if (config.getAddItems().stream().anyMatch(ConfigurableItem::isEnabled) && ecoAction != EXGEcoAction.RESET) {
 			config.getAddItems().forEach(addItem -> amountItems.put(addItem, true));
 		}
-		if (config.getRemoveItems().getFirst().isEnabled() && ecoAction != EXGEcoAction.RESET) {
+		if (config.getRemoveItems().stream().anyMatch(ConfigurableItem::isEnabled) && ecoAction != EXGEcoAction.RESET) {
 			config.getRemoveItems().forEach(removeItem -> amountItems.put(removeItem, false));
 		}
 
-		for (EXGItemConfig amountItem : amountItems.keySet()) {
-			EXGItemConfig amountItemCopy = amountItem.duplicate();
+		for (ConfigurableItem amountItem : amountItems.keySet()) {
+			ConfigurableItem amountItemCopy = amountItem.get();
 
-			double amountValue = amountItemCopy.getAmountValue();
+			double amountValue = amountItemCopy.getExtra().getAmountValue();
 			String amount = NumberUtil.displayCurrency(BigDecimal.valueOf(amountValue), Main.getInstance().getEssentials());
 
 			setItem(amountItemCopy.getSlot(), amountItemCopy
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"targetBalance", targetBalance,
 							"targetNewBalance", targetNewBalance,
 							"ecoAction", ecoActionName,
 							"amount", amount,
-							"totalAmount", totalAmount))
-					.build(player), e -> {
+							"totalAmount", totalAmount)
+					), e -> {
 
 
 				// Calculate total amount
@@ -147,13 +145,12 @@ public class EcoAmountInventory extends FastInv {
 			String amount = NumberUtil.displayCurrency(BigDecimal.valueOf(this.totalAmountValue), Main.getInstance().getEssentials());
 
 			setItem(config.getConfirmActionItem().getSlot(), config.getConfirmActionItem()
-					.duplicate()
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"targetBalance", targetBalance,
 							"targetNewBalance", targetNewBalance,
 							"ecoAction", MessagesUtils.getString(ecoAction.getActionName()),
-							"amount", amount))
-					.build(player), e -> {
+							"amount", amount)
+					), e -> {
 
 				executeAction(player, target, ecoAction);
 

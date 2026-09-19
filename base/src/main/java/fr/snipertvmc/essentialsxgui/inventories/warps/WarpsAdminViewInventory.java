@@ -2,12 +2,13 @@ package fr.snipertvmc.essentialsxgui.inventories.warps;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGWarp;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.EXGWarpsAdminViewInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpsAdminViewInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -27,7 +28,7 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWarpsAdminViewInventoryConfig config = Main.getInstance().getInventoriesManager().getWarpsAdminViewInventoryConfig().copy();
+	private final ConfigurableWarpsAdminViewInventory config = (ConfigurableWarpsAdminViewInventory) Main.getInstance().getInventory(EXGInventory.WARPS_ADMIN_VIEW);
 
 
 	// -------------------------------------------------- //
@@ -35,14 +36,14 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 
 	public WarpsAdminViewInventory(Player player, String warpSearch, Set<EXGWarp> definedWarps) {
 		super(
-				Main.getInstance().getInventoriesManager().getWarpsAdminViewInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWarpsAdminViewInventoryConfig().getEXGTitle()
-						.duplicate()
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.WARPS_ADMIN_VIEW).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WARPS_ADMIN_VIEW).getTitle()
+						.build(player)
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -70,18 +71,18 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 
 		for (EXGWarp warp : warps) {
 
-			EXGItemConfig warpItem = config.getWarpItem().duplicate();
-			ItemStack warpItemStack = InventoriesUtils.getWarpItemStack(warpItem, warp, player);
+			ConfigurableItem warpItem = config.getWarpItem().get();
+			ItemStack warpItemStack = InventoriesUtils.getCustomItemStack(warpItem, warp, "warp", player);
 
 			addContent(warpItemStack, e -> {
 
-				if (warpItem.isCorrectClick(e.getClick(), "teleportWarp")) {
+				if (warpItem.getExtra().isCorrectClick(e.getClick(), "teleportWarp")) {
 					new WarpPlayerTeleportInventory(player, warp).open(player);
 
-				} else if (warpItem.isCorrectClick(e.getClick(), "editWarp")) {
+				} else if (warpItem.getExtra().isCorrectClick(e.getClick(), "editWarp")) {
 					new WarpEditingInventory(player, warp).open(player);
 
-				} else if (warpItem.isCorrectClick(e.getClick(), "deleteWarp")) {
+				} else if (warpItem.getExtra().isCorrectClick(e.getClick(), "deleteWarp")) {
 					new WarpEditingInventory(player, warp).deleteWarp(player, warp);
 				}
 
@@ -96,9 +97,9 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 
 			} else {
 				addContent(config.getNoSearchWarpResultsItem()
-						.updateVariables(
-								Map.of("warpSearch", warpSearch))
-						.build(player));
+						.build(player, Map.of(
+								"warpSearch", warpSearch
+						)));
 			}
 		}
 	}
@@ -202,7 +203,7 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("warps", "createNewWarpEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("warps", "createNewWarpEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_WARP_NAME_CHAT));
@@ -259,7 +260,7 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("warps", "searchWarpEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("warps", "searchWarpEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.SEARCH_WARP_CHAT));
@@ -302,7 +303,7 @@ public class WarpsAdminViewInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

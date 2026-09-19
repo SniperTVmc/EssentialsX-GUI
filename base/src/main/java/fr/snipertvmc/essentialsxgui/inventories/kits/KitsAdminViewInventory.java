@@ -2,12 +2,13 @@ package fr.snipertvmc.essentialsxgui.inventories.kits;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.EXGKitsAdminViewInventoryConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.ConfigurableKitsAdminViewInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -27,7 +28,7 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGKitsAdminViewInventoryConfig config = Main.getInstance().getInventoriesManager().getKitsAdminViewInventoryConfig().copy();
+	private final ConfigurableKitsAdminViewInventory config = (ConfigurableKitsAdminViewInventory) Main.getInstance().getInventory(EXGInventory.KITS_ADMIN_VIEW);
 
 
 	// -------------------------------------------------- //
@@ -35,14 +36,14 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 
 	public KitsAdminViewInventory(Player player, String kitSearch, Set<EXGKit> definedKits) {
 		super(
-				Main.getInstance().getInventoriesManager().getKitsAdminViewInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getKitsAdminViewInventoryConfig().getEXGTitle()
-						.duplicate()
-						.getTitle(player)
+				Main.getInstance().getInventory(EXGInventory.KITS_ADMIN_VIEW).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.KITS_ADMIN_VIEW).getTitle()
+						.build(player)
 		);
 
 
-		InventoriesUtils.initializeInventoryWithClose(player, config, this, config.getCloseItem());
+		InventoriesUtils.insertBorderItems(player, config, this);
+		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -70,18 +71,18 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 
 		for (EXGKit kit : kits) {
 
-			EXGItemConfig kitItem = config.getKitItem().duplicate();
-			ItemStack kitItemStack = InventoriesUtils.getKitItemStack(kitItem, kit, player);
+			ConfigurableItem kitItem = config.getKitItem().get();
+			ItemStack kitItemStack = InventoriesUtils.getCustomItemStack(kitItem, kit, "kit", player);
 
 			addContent(kitItemStack, e -> {
 
-				if (kitItem.isCorrectClick(e.getClick(), "giveKit")) {
+				if (kitItem.getExtra().isCorrectClick(e.getClick(), "giveKit")) {
 					new KitPlayerGiveInventory(player, kit).open(player);
 
-				} else if (kitItem.isCorrectClick(e.getClick(), "editKit")) {
+				} else if (kitItem.getExtra().isCorrectClick(e.getClick(), "editKit")) {
 					new KitEditingInventory(player, kit).open(player);
 
-				} else if (kitItem.isCorrectClick(e.getClick(), "deleteKit")) {
+				} else if (kitItem.getExtra().isCorrectClick(e.getClick(), "deleteKit")) {
 					new KitEditingInventory(player, kit).deleteKit(player, kit);
 				}
 
@@ -96,9 +97,8 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 
 			} else {
 				addContent(config.getNoSearchKitResultsItem()
-						.updateVariables(
-								Map.of("kitSearch", kitSearch))
-						.build(player));
+						.build(player, Map.of(
+								"kitSearch", kitSearch)));
 			}
 		}
 	}
@@ -197,7 +197,7 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "createNewKitNameEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "createNewKitNameEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_KIT_NAME_CHAT));
@@ -244,7 +244,7 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "createNewKitDelayEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "createNewKitDelayEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.ENTER_NEW_KIT_DELAY_CHAT));
@@ -277,7 +277,7 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 			return;
 		}
 
-		EXGEntryType entryType = Main.getInstance().getFilesManager().getConfiguration().getEntryType("kits", "searchKitEntryType");
+		EXGEntryType entryType = Main.getInstance().getConfiguration().getEntryType("kits", "searchKitEntryType");
 		if (entryType == EXGEntryType.CHAT) {
 			player.closeInventory();
 			TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.SEARCH_KIT_CHAT));
@@ -320,7 +320,7 @@ public class KitsAdminViewInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}

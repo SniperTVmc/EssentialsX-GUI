@@ -1,10 +1,11 @@
 package fr.snipertvmc.essentialsxgui.inventories.warps;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGWarp;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.EXGItemConfig;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.EXGWarpPlayerTeleportInventoryConfig;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpPlayerTeleportInventory;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
@@ -21,7 +22,7 @@ public class WarpPlayerTeleportInventory extends PaginatedFastInv {
 	// -------------------------------------------------- //
 
 
-	private final EXGWarpPlayerTeleportInventoryConfig config = Main.getInstance().getInventoriesManager().getWarpPlayerTeleportInventoryConfig().copy();
+	private final ConfigurableWarpPlayerTeleportInventory config = (ConfigurableWarpPlayerTeleportInventory) Main.getInstance().getInventory(EXGInventory.WARP_PLAYER_TELEPORT);
 
 
 	// -------------------------------------------------- //
@@ -29,17 +30,15 @@ public class WarpPlayerTeleportInventory extends PaginatedFastInv {
 
 	public WarpPlayerTeleportInventory(Player player, EXGWarp warp) {
 		super(
-				Main.getInstance().getInventoriesManager().getWarpPlayerTeleportInventoryConfig().getRows() * 9,
-				Main.getInstance().getInventoriesManager().getWarpPlayerTeleportInventoryConfig().getEXGTitle()
-						.duplicate()
-						.updateVariables(Map.of(
+				Main.getInstance().getInventory(EXGInventory.WARP_PLAYER_TELEPORT).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.WARP_PLAYER_TELEPORT).getTitle()
+						.build(player, Map.of(
 								"warpName", warp.getName(),
 								"warpDisplayName", warp.getDisplayName()))
-						.getTitle(player)
 		);
 
 
-		InventoriesUtils.initializeBorderItem(player, config, this);
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 
 
@@ -52,13 +51,13 @@ public class WarpPlayerTeleportInventory extends PaginatedFastInv {
 
 		for (Player target : targets) {
 
-			EXGItemConfig playerItem = config.getPlayerItem().duplicate();
+			ConfigurableItem playerItem = config.getPlayerItem().get();
 			addContent(playerItem
-					.updateVariables(Map.of(
+					.build(player, Map.of(
 							"targetName", target.getName(),
 							"warpName", warp.getName(),
-							"warpDisplayName", warp.getDisplayName()))
-					.build(player), e -> {
+							"warpDisplayName", warp.getDisplayName()
+					)), e -> {
 
 				e.getWhoClicked().closeInventory();
 				player.performCommand("essentials:warp " + warp.getName() + " " + target.getName());
@@ -81,7 +80,7 @@ public class WarpPlayerTeleportInventory extends PaginatedFastInv {
 
 	@Override
 	protected void onPageChange(int page) {
-		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().get(0);
+		Player player = this.getInventory().getViewers().isEmpty() ? null : (Player) this.getInventory().getViewers().getFirst();
 		InventoriesUtils.updateCurrentPageItem(player, config, this);
 		SoundsUtils.playSound(player, EXGSound.GUI_PAGE_CHANGE);
 	}
