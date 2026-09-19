@@ -60,7 +60,7 @@ public class TextUtils {
 		if (Main.getInstance().getLibraryManager().hasNativeAdventureSupport()) {
 			return (Audience) sender;
 		} else {
-			return Main.getInstance().getBukkitAudiences().sender(sender);
+			return Main.getInstance().getLoadingManager().getBukkitAudiences().sender(sender);
 		}
 	}
 

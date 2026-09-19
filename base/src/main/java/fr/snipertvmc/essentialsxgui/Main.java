@@ -18,14 +18,13 @@
 package fr.snipertvmc.essentialsxgui;
 
 import com.earth2me.essentials.Essentials;
-import dev.faststats.core.ErrorTracker;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGServer;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFile;
-import fr.snipertvmc.essentialsxgui.libraries.bstats.Metrics;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
 import fr.snipertvmc.essentialsxgui.libraries.libby.bukkit.BukkitLibraryManager;
 import fr.snipertvmc.essentialsxgui.managers.*;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -52,11 +51,7 @@ public class Main extends JavaPlugin {
 	private ServerDataManager serverDataManager;
 	private ServerManager serverManager;
 
-	private BukkitAudiences bukkitAudiences;
-
-	private Metrics bStatsMetrics;
-	private dev.faststats.core.Metrics fastStatsMetrics;
-	private final ErrorTracker fastStatsErrorTracker = ErrorTracker.contextAware();
+	private boolean pluginLoaded = false;
 
 
 	// -------------------------------------------------- //
@@ -94,12 +89,6 @@ public class Main extends JavaPlugin {
 		serverDataManager = new ServerDataManager();
 
 
-		// BUKKIT PLATFORM SUPPORT INITIALIZATION
-		if (!libraryManager.hasNativeAdventureSupport()) {
-			bukkitAudiences = BukkitAudiences.create(this);
-		}
-
-
 		// FILES LOADING
 		filesManager.loadFiles();
 
@@ -110,25 +99,22 @@ public class Main extends JavaPlugin {
 
 
 		// LOAD PLUGIN
-		bStatsMetrics = new Metrics(this, 26314);
-		boolean successfullyLoaded = loadingManager.loadPlugin(filesManager.getConfiguration().isDetailedLoading());
-		fastStatsMetrics.ready();
-
-
-		// SERVER INITIALIZATION
-		if (successfullyLoaded) serverManager = new ServerManager();
-
-
-		// PLUGIN LOADING COMPLETED
-		long endTime = System.currentTimeMillis();
-		long loadingTime = endTime - startTime;
-
-		if (!successfullyLoaded) {
+		pluginLoaded = loadingManager.loadPlugin(filesManager.getConfigurationFile().isDetailedLoading());
+		if (!pluginLoaded) {
 			ConsoleLogger.console("\t§6EssentialsX-GUI: §cPlugin will be disabled due to loading errors.");
 			ConsoleLogger.console("");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+
+
+		// SERVER INITIALIZATION
+		serverManager = new ServerManager();
+
+
+		// PLUGIN LOADING COMPLETED
+		long endTime = System.currentTimeMillis();
+		long loadingTime = endTime - startTime;
 
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7The plugin has been §floaded §7correctly in §f" + loadingTime + "ms§7.");
 		ConsoleLogger.console("");
@@ -149,19 +135,8 @@ public class Main extends JavaPlugin {
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Plugin unloading...");
 
 
-		// METRICS SHUTDOWN
-		fastStatsMetrics.shutdown();
-
-
 		// UNLOAD PLUGIN
-		loadingManager.unloadPlugin(filesManager.getConfiguration().isDetailedLoading());
-
-
-		// BUKKIT PLATFORM SUPPORT SHUTDOWN
-		if (this.bukkitAudiences != null) {
-			this.bukkitAudiences.close();
-			this.bukkitAudiences = null;
-		}
+		if (pluginLoaded) loadingManager.unloadPlugin(filesManager.getConfigurationFile().isDetailedLoading());
 
 
 		// PLUGIN UNLOADING COMPLETED
@@ -234,29 +209,13 @@ public class Main extends JavaPlugin {
 		return hookManager.getEssentialsHook().getEssentials();
 	}
 	public ConfigurationFile getConfiguration() {
-		return filesManager.getConfiguration();
+		return filesManager.getConfigurationFile();
 	}
 	public File getPluginFile() {
 		return getFile();
 	}
-
-
-	// CONSTANTS VARIABLES
-	public BukkitAudiences getBukkitAudiences() {
-		return bukkitAudiences;
-	}
-
-	public Metrics getbStatsMetrics() {
-		return bStatsMetrics;
-	}
-	public dev.faststats.core.Metrics getFastStatsMetrics() {
-		return fastStatsMetrics;
-	}
-	public void setFastStatsMetrics(dev.faststats.core.Metrics fastStatsMetrics) {
-		this.fastStatsMetrics = fastStatsMetrics;
-	}
-	public ErrorTracker getFastStatsErrorTracker() {
-		return fastStatsErrorTracker;
+	public ConfigurableInventory getInventory(EXGInventory inventory) {
+		return inventoriesManager.getInventory(inventory);
 	}
 
 

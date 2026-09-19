@@ -2,6 +2,7 @@ package fr.snipertvmc.essentialsxgui.managers;
 
 import com.earth2me.essentials.utils.VersionUtil;
 import dev.faststats.bukkit.BukkitMetrics;
+import dev.faststats.core.ErrorTracker;
 import dev.faststats.core.data.Metric;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
@@ -13,6 +14,7 @@ import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.RegisterUtils;
 import fr.snipertvmc.essentialsxgui.utilities.TextUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.UpdateUtils;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,6 +34,12 @@ public class LoadingManager {
 	private boolean pluginReady = false;
 	private final long startTimestamp = System.currentTimeMillis();
 
+	private BukkitAudiences bukkitAudiences;
+
+	private Metrics bStatsMetrics;
+	private dev.faststats.core.Metrics fastStatsMetrics;
+	private final ErrorTracker fastStatsErrorTracker = ErrorTracker.contextAware();
+
 
 	// -------------------------------------------------- //
 
@@ -44,10 +52,6 @@ public class LoadingManager {
 			ConsoleLogger.console("\t§6EssentialsX-GUI: §cThe plugin is already loaded.");
 			return false;
 		}
-
-
-		// DATABASES CONNECTION
-		Main.getInstance().getDatabaseManager().connectAllDatabases();
 
 
 		// SERVER CONFIGURATION ANALYSIS
@@ -63,6 +67,16 @@ public class LoadingManager {
 		checkForWorldGuardSupport();
 		checkForUpdates(false);
 		if (detailedLoading) ConsoleLogger.console("\t§6EssentialsX-GUI: §7Server configuration analysis §fcompleted§7.");
+
+
+		// BUKKIT PLATFORM SUPPORT INITIALIZATION
+		if (!Main.getInstance().getLibraryManager().hasNativeAdventureSupport()) {
+			bukkitAudiences = BukkitAudiences.create(Main.getInstance());
+		}
+
+
+		// DATABASES CONNECTION
+		Main.getInstance().getDatabaseManager().connectAllDatabases();
 
 
 		// GLOBAL DATA INITIALIZATION
@@ -106,6 +120,17 @@ public class LoadingManager {
 			ConsoleLogger.console("\t§6EssentialsX-GUI: §cThe plugin is already unloaded.");
 			ConsoleLogger.console("\t§6EssentialsX-GUI: §cWell... it's impossible to unload an unloaded plugin ¯\\_(ツ)_/¯");
 			return;
+		}
+
+
+		// METRICS SHUTDOWN
+		fastStatsMetrics.shutdown();
+
+
+		// BUKKIT PLATFORM SUPPORT SHUTDOWN
+		if (this.bukkitAudiences != null) {
+			this.bukkitAudiences.close();
+			this.bukkitAudiences = null;
 		}
 
 
@@ -271,6 +296,7 @@ public class LoadingManager {
 
 		if (!essentialsVersionSupported) {
 			ConsoleLogger.console("\t§6EssentialsX-GUI: §cCurrent version is not supported. §4(Minimum version required: §4" + essentialsVersionRequired + ")");
+			ConsoleLogger.console("\t§6EssentialsX-GUI: §cDownload here: §4https://essentialsx.net/downloads");
 			return false;
 		}
 
@@ -431,7 +457,6 @@ public class LoadingManager {
 
 
 		// --- Data Metrics --- //
-
 		Callable<String> essentialsVersionData = () -> Main.getInstance().getEssentials() != null ?
 				Main.getInstance().getEssentials().getDescription().getVersion() : "Other";
 
@@ -441,16 +466,16 @@ public class LoadingManager {
 
 
 		// --- bStats Metrics //
+		bStatsMetrics = new Metrics(Main.getInstance(), 26314);
 
 		// EssentialsX Version Chart
-		Main.getInstance().getbStatsMetrics().addCustomChart(new Metrics.SimplePie("essentialsx_version", essentialsVersionData));
+		bStatsMetrics.addCustomChart(new Metrics.SimplePie("essentialsx_version", essentialsVersionData));
 		// Storage Type Chart
-		Main.getInstance().getbStatsMetrics().addCustomChart(new Metrics.SimplePie("storage_type", storageTypeData));
+		bStatsMetrics.addCustomChart(new Metrics.SimplePie("storage_type", storageTypeData));
 
 
 		// -- FastStats Metrics //
-
-		Main.getInstance().setFastStatsMetrics(BukkitMetrics.factory()
+		fastStatsMetrics = BukkitMetrics.factory()
 				.token("1c3f12060cd797a90580e386d61bd7e5")
 
 				// EssentialsX Version Chart
@@ -458,9 +483,11 @@ public class LoadingManager {
 				// Storage Type Chart
 				.addMetric(Metric.string("storage_type", storageTypeData))
 
-				.errorTracker(Main.getInstance().getFastStatsErrorTracker())
+				.errorTracker(fastStatsErrorTracker)
 
-				.create(Main.getInstance()));
+				.create(Main.getInstance());
+
+		fastStatsMetrics.ready();
 	}
 
 
@@ -475,6 +502,20 @@ public class LoadingManager {
 	}
 	public long getUptimeInHours() {
 		return getUptimeInSeconds() / 3600L;
+	}
+
+	public BukkitAudiences getBukkitAudiences() {
+		return bukkitAudiences;
+	}
+
+	public Metrics getbStatsMetrics() {
+		return bStatsMetrics;
+	}
+	public dev.faststats.core.Metrics getFastStatsMetrics() {
+		return fastStatsMetrics;
+	}
+	public ErrorTracker getFastStatsErrorTracker() {
+		return fastStatsErrorTracker;
 	}
 
 
