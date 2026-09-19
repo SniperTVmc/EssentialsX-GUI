@@ -12,15 +12,15 @@
 # For more information about how to configure EssentialsX-GUI,
 # check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
 
+# Please do not change this value as it may cause the file to be reset.
+# Default: "1.1"
+config-version: "1.1"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        General                       | #
 # +------------------------------------------------------+ #
 ############################################################
-
-# Please do not change this value as it may cause the file to be reset.
-# Default: "1.1"
-config-version: "1.1"
 
 # If true, EssentialsX-GUI will only use PlaceholderAPI placeholders in this inventory.
 # This means that if you have PlaceholderAPI installed, you can use any PlaceholderAPI placeholder instead
@@ -56,7 +56,7 @@ whoisView:
 
   borderItem:
     enabled: true
-    slots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    slot: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
     material: "BLACK_STAINED_GLASS_PANE"
     data: 15
     displayName: "&8- &6&lEssentialsX-GUI"

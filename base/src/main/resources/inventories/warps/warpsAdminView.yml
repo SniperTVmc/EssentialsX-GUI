@@ -12,15 +12,9 @@
 # For more information about how to configure EssentialsX-GUI,
 # check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
 
-############################################################
-# +------------------------------------------------------+ #
-# |                        General                       | #
-# +------------------------------------------------------+ #
-############################################################
-
 # Please do not change this value as it may cause the file to be reset.
-# Default: "1.0"
-config-version: "1.0"
+# Default: "2.0"
+fileVersion: "2.0"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -47,7 +41,7 @@ warpsAdminView:
 
   borderItem:
     enabled: true
-    slots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    slot: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
     material: "BLACK_STAINED_GLASS_PANE"
     data: 15
     displayName: "&8- &6&lEssentialsX-GUI"
@@ -72,10 +66,11 @@ warpsAdminView:
         - "&f&lDrop &7to delete this warp."
         - ""
         - "&7Warp Name: &f&o{warpName}"
-      clickActions:
-        teleportWarp: "LEFT"
-        editWarp: "RIGHT"
-        deleteWarp: "DROP"
+      extra:
+        clickActions:
+          teleportWarp: "LEFT"
+          editWarp: "RIGHT"
+          deleteWarp: "DROP"
 
     # 'slot' value will be ignored in this section. The item will be placed in the first slot like a warp item.
     # The item will be displayed if the server has no warps available.

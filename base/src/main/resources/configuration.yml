@@ -12,6 +12,10 @@
 # For more information about how to configure EssentialsX-GUI,
 # check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/main-configuration
 
+# Please do not change this value as it may cause the file to be reset.
+# Default: "2.0"
+fileVersion: "2.0"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        General                       | #
@@ -19,10 +23,6 @@
 ############################################################
 
 general:
-
-  # Please do not change this value as it may cause the file to be reset.
-  # Default: "1.8"
-  configVersion: "1.8"
 
   # If you want to see a detailed loading message when the plugin is loading, set this to true. (Also works for unloading)
   # Default: false

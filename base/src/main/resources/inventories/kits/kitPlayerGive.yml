@@ -12,15 +12,9 @@
 # For more information about how to configure EssentialsX-GUI,
 # check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
 
-############################################################
-# +------------------------------------------------------+ #
-# |                        General                       | #
-# +------------------------------------------------------+ #
-############################################################
-
 # Please do not change this value as it may cause the file to be reset.
-# Default: "1.0"
-config-version: "1.0"
+# Default: "2.0"
+fileVersion: "2.0"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -48,7 +42,7 @@ kitPlayerGive:
 
   borderItem:
     enabled: true
-    slots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    slot: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
     material: "BLACK_STAINED_GLASS_PANE"
     data: 15
     displayName: "&8- &6&lEssentialsX-GUI"
@@ -56,17 +50,18 @@ kitPlayerGive:
   items:
 
     # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
-    # 'material' value as "PLAYER_HEAD:{targetName}" will use the player's head as the item.
     # Placeholders available: {targetName}, {kitName}, {kitDisplayName}
     # By default, if kitDisplayName is not set, it will use the kit name.
     playerItem:
       enabled: true
-      material: "PLAYER_HEAD:{targetName}"
+      material: "PLAYER_HEAD"
       data: 3
       displayName: "&b{targetName}"
       lore:
         - "&7Click to give this kit to the player."
         - "&7Kit Name: &f{kitName}"
+      extra:
+        skullOwner: "{targetName}"
 
     # Placeholders available: {currentPage}, {previousPage}
     previousPageItem:

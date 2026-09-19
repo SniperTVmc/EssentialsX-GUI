@@ -12,15 +12,9 @@
 # For more information about how to configure EssentialsX-GUI,
 # check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
 
-############################################################
-# +------------------------------------------------------+ #
-# |                        General                       | #
-# +------------------------------------------------------+ #
-############################################################
-
 # Please do not change this value as it may cause the file to be reset.
-# Default: "1.0"
-config-version: "1.0"
+# Default: "2.0"
+fileVersion: "2.0"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -35,7 +29,7 @@ sell:
 
   borderItem:
     enabled: true
-    slots: [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 52, 53]
+    slot: [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 52, 53]
     material: "BLACK_STAINED_GLASS_PANE"
     data: 15
     displayName: "&8- &6&lEssentialsX-GUI"

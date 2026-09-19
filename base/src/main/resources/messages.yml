@@ -23,15 +23,15 @@
 #   ⚠️ This is different from the plugin's "placeholders," which are only available in certain messages, when specified.
 #      The plugin's “placeholders” are listed in the comments above the relevant messages and should be used with the syntax {placeholderName}.
 
+# Please do not change this value as it may cause the file to be reset.
+# Default: "2.0"
+fileVersion: "2.0"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        General                       | #
 # +------------------------------------------------------+ #
 ############################################################
-
-# Please do not change this value as it may cause the file to be reset.
-# Default: "1.9"
-messages-version: "1.9"
 
 # Change the prefix sent at the beginning of most sent messages.
 # TIP: Use {prefix} in any message to include the prefix.
