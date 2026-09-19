@@ -58,7 +58,7 @@ public class EssentialsHook {
 	// -------------------------------------------------- //
 
 
-	private final String minimumVersionRequired = "2.21.2";
+	private final String minimumVersionRequired = "2.22.0";
 
 
 	public String getMinimumVersionRequired() {
