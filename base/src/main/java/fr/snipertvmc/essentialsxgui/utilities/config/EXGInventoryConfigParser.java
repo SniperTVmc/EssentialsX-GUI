@@ -1,6 +1,5 @@
 package fr.snipertvmc.essentialsxgui.utilities.config;
 
-import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -50,7 +49,7 @@ public class EXGInventoryConfigParser {
 
 		// Get the inventory configuration
 		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-		String inventoryName = Main.getInstance().getFilesManager().getInventoryName(inventoryFile);
+		String inventoryName = inventoryFile.getFileName();
 
 
 		// Retrieve inventory properties

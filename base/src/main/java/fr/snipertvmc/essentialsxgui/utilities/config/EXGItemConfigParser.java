@@ -5,9 +5,9 @@ import com.cryptomorin.xseries.XItemFlag;
 import com.cryptomorin.xseries.XMaterial;
 import com.earth2me.essentials.utils.VersionUtil;
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,44 +88,44 @@ public class EXGItemConfigParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isEXGItemConfigValid(InventoryFile inventoryFile, String itemPath, boolean multipleSlots) {
-
-
-		// Get the inventory configuration
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-		String inventoryName = Main.getInstance().getFilesManager().getInventoryName(inventoryFile);
-
-
-		// Retrieve item properties
-		Object slots = config.get(itemPath + ".slots");
-		Object slot = config.get(itemPath + ".slot");
-
-		Object material = config.get(itemPath + ".material");
-		Object data = config.get(itemPath + ".data");
-		Object amount = config.get(itemPath + ".amount");
-
-		Object displayName = config.get(itemPath + ".displayName");
-		Object lore = config.get(itemPath + ".lore");
-
-		Object itemFlags = config.get(itemPath + ".itemFlags");
-		Object enchantments = config.get(itemPath + ".enchantments");
-
-
-		// Validate item properties
-		return isSlotValid(slot, slots, itemPath, inventoryName, multipleSlots) &&
-
-				isMaterialValid(material, itemPath) &&
-				isDataValid(data, itemPath) &&
-				isAmountValid(amount, itemPath) &&
-
-				isDisplayNameValid(displayName, itemPath) &&
-				isLoreValid(lore, itemPath) &&
-
-				areEnchantmentsValid(enchantments, itemPath) &&
-				areItemFlagsValid(itemFlags, itemPath) &&
-
-				EXGItemCustomConfigParser.isEXGItemCustomConfigValid(inventoryFile, itemPath);
-	}
+//	public static boolean isEXGItemConfigValid(InventoryFile inventoryFile, String itemPath, boolean multipleSlots) {
+//
+//
+//		// Get the inventory configuration
+//		YamlConfiguration config = inventoryFile.getYamlConfiguration();
+//		String inventoryName = Main.getInstance().getFilesManager().getInventoryName(inventoryFile);
+//
+//
+//		// Retrieve item properties
+//		Object slots = config.get(itemPath + ".slots");
+//		Object slot = config.get(itemPath + ".slot");
+//
+//		Object material = config.get(itemPath + ".material");
+//		Object data = config.get(itemPath + ".data");
+//		Object amount = config.get(itemPath + ".amount");
+//
+//		Object displayName = config.get(itemPath + ".displayName");
+//		Object lore = config.get(itemPath + ".lore");
+//
+//		Object itemFlags = config.get(itemPath + ".itemFlags");
+//		Object enchantments = config.get(itemPath + ".enchantments");
+//
+//
+//		// Validate item properties
+//		return isSlotValid(slot, slots, itemPath, inventoryName, multipleSlots) &&
+//
+//				isMaterialValid(material, itemPath) &&
+//				isDataValid(data, itemPath) &&
+//				isAmountValid(amount, itemPath) &&
+//
+//				isDisplayNameValid(displayName, itemPath) &&
+//				isLoreValid(lore, itemPath) &&
+//
+//				areEnchantmentsValid(enchantments, itemPath) &&
+//				areItemFlagsValid(itemFlags, itemPath) &&
+//
+//				EXGItemCustomConfigParser.isEXGItemCustomConfigValid(inventoryFile, itemPath);
+//	}
 
 
 	// -------------------------------------------------- //
@@ -158,7 +158,7 @@ public class EXGItemConfigParser {
 
 			int slotValue = ((Number) slot).intValue();
 
-			InventoryFile inventoryFile = Main.getInstance().getFilesManager().getInventory(inventoryName);
+			InventoryFile inventoryFile = Main.getInstance().getFilesManager().getInventoryFile(EXGInventory.getByName(inventoryName));
 			int rows = inventoryFile.getRows();
 			int maxSlots = (rows * 9) - 1;
 
