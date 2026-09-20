@@ -5,6 +5,7 @@ plugins {
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
+
     // SpigotAPI
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")

@@ -60,12 +60,15 @@ dependencies {
     runtimeOnly(project(":v2_22_0"))
 
     compileOnly("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
-    compileOnly("net.essentialsx:EssentialsX:2.21.2-SNAPSHOT")
+    compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
+        exclude(group = "io.papermc.paper", module = "paper-api")
+    }
     compileOnly("com.squareup.moshi:moshi:1.15.2")
     compileOnly("com.zaxxer:HikariCP:7.0.2")
     compileOnly("com.github.InstantlyMoist:privatebin-java-api:master")
     compileOnly("me.clip:placeholderapi:2.12.2")
     compileOnly("com.github.cryptomorin:XSeries:13.7.1")
+    compileOnly("net.kyori:adventure-text-minimessage:4.26.1")
     compileOnly("net.kyori:adventure-platform-bukkit:4.4.1")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.17")
 
