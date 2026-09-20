@@ -133,11 +133,11 @@ public class PlayerCommandPreprocess implements Listener {
 				if (player.hasPermission(EXGPermission.WARPS_ADMIN.get())
 						&& Main.getInstance().getConfiguration().mustOpenWarpAdminViewByDefault()) {
 
-					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_ADMIN_KITS_INVENTORY, null));
+					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_ADMIN_WARPS_INVENTORY, null));
 					new WarpsAdminViewInventory(player, null, null).open(player);
 
 				} else {
-					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_PLAYER_KITS_INVENTORY, null));
+					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_PLAYER_WARPS_INVENTORY, null));
 					new WarpsPlayerViewInventory(player, null, null).open(player);
 				}
 
@@ -177,7 +177,7 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
-			// BALANCETOP
+			// BALANCE TOP
 
 			case "balancetop", "baltop", "ebalancetop", "ebaltop" -> {
 
@@ -209,7 +209,7 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
-			// WORTH
+			// ECONOMY
 
 			case "eco", "economy", "eeco", "eeconomy" -> {
 
@@ -260,7 +260,7 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
-			// WORTH
+			// SELL
 
 			case "sell", "esell" -> {
 
