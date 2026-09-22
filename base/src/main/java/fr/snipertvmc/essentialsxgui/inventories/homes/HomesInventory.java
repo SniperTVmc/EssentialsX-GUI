@@ -228,7 +228,7 @@ public class HomesInventory extends PaginatedFastInv {
 				result -> {
 
 					Pattern pattern = Pattern.compile("^[a-zA-Z0-9 _-]+$");
-					if (!pattern.matcher(result.getLeft()).matches()) {
+					if (!pattern.matcher(result.getLeft()).matches() || result.getLeft().equalsIgnoreCase("bed")) {
 						TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.INVALID_NAME));
 						new HomesInventory(player, null, null).open(player);
 						SoundsUtils.playSound(player, EXGSound.ACTION_FAILURE);
