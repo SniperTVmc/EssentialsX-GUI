@@ -146,7 +146,8 @@ balanceTop:
         - "&7Next Update: &a{nextUpdate}"
         - ""
         - "&7Click to force update the balance top data."
-      updateItemInterval: 1
+      extra:
+        updateItemInterval: 1
 
     closeItem:
       enabled: true

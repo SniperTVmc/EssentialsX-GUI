@@ -56,7 +56,7 @@ public class ConfigurableItem {
 		if (!ConfigurableItemParser.isConfigurableItemValid(itemConfig, itemPath, index > 0)) return;
 		if (itemConfig == null) return;
 
-		this.enabled = itemConfig.getBoolean("enabled");
+		this.enabled = itemConfig.getBoolean("enabled", true);
 
 		boolean hasSlots = itemConfig.get("slot") instanceof List;
 		this.slot = hasSlots ? itemConfig.getIntegerList("slot").get(index) : itemConfig.getInt("slot", -1);
