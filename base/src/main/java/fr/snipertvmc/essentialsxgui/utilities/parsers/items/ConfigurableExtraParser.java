@@ -9,19 +9,21 @@ public class ConfigurableExtraParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isConfigurableExtraValid(Object extra, String itemPath) {
+	public static boolean isConfigurableExtraValid(ConfigurationSection itemSection, String itemPath, boolean silence) {
 
 
-		// Get the inventory configuration
+		// Get the extra configuration
+		Object extra = itemSection.get("extra");
 		ConfigurationSection extraSection = (extra instanceof ConfigurationSection) ? (ConfigurationSection) extra : null;
 		if (extraSection == null) {
 			if (!ItemPropertyParser.isExtraRequired(itemPath)) return true;
+			if (silence) return false;
 			ConsoleLogger.error("Invalid item path '" + itemPath + "': the extra section is missing.");
 			return false;
 		}
 
 
-		// Retrieve item properties
+		// Extra properties
 		Object skullOwner = extraSection.get("skullOwner");
 		Object customModelData = extraSection.get("customModelData");
 
@@ -31,14 +33,18 @@ public class ConfigurableExtraParser {
 		Object amountValue = extraSection.get("amountValue");
 
 
+		// Non-extra properties
+		Object material = itemSection.get("material");
+		Object slot = itemSection.get("slot");
+
 		// Validate item properties
-		return ItemPropertyParser.isSkullOwnerValid(skullOwner, itemPath) &&
-				ItemPropertyParser.isCustomModelDataValid(customModelData, itemPath) &&
+		return ItemPropertyParser.isSkullOwnerValid(skullOwner, material, itemPath, silence) &&
+				ItemPropertyParser.isCustomModelDataValid(customModelData, itemPath, silence) &&
 
-				ItemPropertyParser.areClickActionsValid(clickActions, itemPath) &&
+				ItemPropertyParser.areClickActionsValid(clickActions, itemPath, silence) &&
 
-				ItemPropertyParser.isUpdateItemIntervalValid(updateItemInterval, itemPath) &&
-				ItemPropertyParser.isAmountValueValid(amountValue, itemPath);
+				ItemPropertyParser.isUpdateItemIntervalValid(updateItemInterval, itemPath, silence) &&
+				ItemPropertyParser.isAmountValueValid(amountValue, slot, itemPath, silence);
 	}
 
 

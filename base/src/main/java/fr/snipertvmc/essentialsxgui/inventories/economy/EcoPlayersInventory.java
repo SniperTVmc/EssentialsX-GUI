@@ -36,6 +36,7 @@ public class EcoPlayersInventory extends PaginatedFastInv {
 		);
 
 
+		InventoriesUtils.insertBorderItems(player, config, this);
 		InventoriesUtils.insertCloseItem(player, config.getCloseItem(), this);
 		InventoriesUtils.initializePaginatedInventory(player, config, this, config.getInventoryScheme());
 

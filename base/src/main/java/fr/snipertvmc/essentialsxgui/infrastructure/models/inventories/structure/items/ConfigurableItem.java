@@ -25,7 +25,6 @@ public class ConfigurableItem {
 
 
 	private boolean isCopied = false;
-	private String itemPath;
 
 	private boolean enabled = false;
 	private Integer slot = 0;
@@ -54,11 +53,10 @@ public class ConfigurableItem {
 
 	public ConfigurableItem(ConfigurationSection itemConfig, String itemPath, int index) {
 
-		if (!ConfigurableItemParser.isConfigurableItemValid(itemConfig, itemPath)) return;
+		if (!ConfigurableItemParser.isConfigurableItemValid(itemConfig, itemPath, index > 0)) return;
 		if (itemConfig == null) return;
 
 		this.enabled = itemConfig.getBoolean("enabled");
-		this.itemPath = itemPath;
 
 		boolean hasSlots = itemConfig.get("slot") instanceof List;
 		this.slot = hasSlots ? itemConfig.getIntegerList("slot").get(index) : itemConfig.getInt("slot", -1);

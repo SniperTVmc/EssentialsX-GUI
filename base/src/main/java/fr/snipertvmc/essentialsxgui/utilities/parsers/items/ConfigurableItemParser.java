@@ -20,7 +20,7 @@ public class ConfigurableItemParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isConfigurableItemValid(ConfigurationSection itemSection, String itemPath) {
+	public static boolean isConfigurableItemValid(ConfigurationSection itemSection, String itemPath, boolean silence) {
 
 
 		// Get the item configuration
@@ -50,25 +50,23 @@ public class ConfigurableItemParser {
 		Object enchantments = itemSection.get("enchantments");
 		Object itemFlags = itemSection.get("itemFlags");
 
-		Object extra = itemSection.get("extra");
-
 
 		// Validate item properties
-		return ItemPropertyParser.isEnabled(enabled, itemPath) &&
+		return ItemPropertyParser.isEnabled(enabled, itemPath, silence) &&
 
-				ItemPropertyParser.isSlotValid(slot, itemPath, rows) &&
+				ItemPropertyParser.isSlotValid(slot, itemPath, rows, silence) &&
 
-				ItemPropertyParser.isMaterialValid(material, itemPath) &&
-				ItemPropertyParser.isDataValid(data, itemPath) &&
-				ItemPropertyParser. isAmountValid(amount, itemPath) &&
+				ItemPropertyParser.isMaterialValid(material, itemPath, silence) &&
+				ItemPropertyParser.isDataValid(data, itemPath, silence) &&
+				ItemPropertyParser. isAmountValid(amount, itemPath, silence) &&
 
-				ItemPropertyParser.isDisplayNameValid(displayName, itemPath) &&
-				ItemPropertyParser.isLoreValid(lore, itemPath) &&
+				ItemPropertyParser.isDisplayNameValid(displayName, itemPath, silence) &&
+				ItemPropertyParser.isLoreValid(lore, itemPath, silence) &&
 
-				ItemPropertyParser.areEnchantmentsValid(enchantments, itemPath) &&
-				ItemPropertyParser.areItemFlagsValid(itemFlags, itemPath) &&
+				ItemPropertyParser.areEnchantmentsValid(enchantments, itemPath, silence) &&
+				ItemPropertyParser.areItemFlagsValid(itemFlags, itemPath, silence) &&
 
-				ConfigurableExtraParser.isConfigurableExtraValid(extra, itemPath);
+				ConfigurableExtraParser.isConfigurableExtraValid(itemSection, itemPath, silence);
 	}
 
 

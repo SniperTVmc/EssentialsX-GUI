@@ -50,7 +50,8 @@ ecoAmount:
         - "&7Amount to {ecoAction}: &f{totalAmount}"
         - ""
         - "&7Click to add {amount} to the amount."
-      amountValue: [1, 10, 100, 1000, 10000, 100000, 1000000]
+      extra:
+        amountValue: [1, 10, 100, 1000, 10000, 100000, 1000000]
 
     # Placeholders available: {targetBalance}, {targetNewBalance}, {ecoAction}, {amount}, {totalAmount}
     removeItem:
@@ -65,7 +66,8 @@ ecoAmount:
         - "&7Amount to {ecoAction}: &f{totalAmount}"
         - ""
         - "&7Click to remove {amount} from the amount."
-      amountValue: [1, 10, 100, 1000, 10000, 100000, 1000000]
+      extra:
+        amountValue: [1, 10, 100, 1000, 10000, 100000, 1000000]
 
     # Placeholders available: {targetBalance}, {targetNewBalance}, {ecoAction}, {amount}
     confirmActionItem:
