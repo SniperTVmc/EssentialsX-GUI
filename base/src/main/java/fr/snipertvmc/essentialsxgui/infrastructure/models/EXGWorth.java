@@ -51,7 +51,7 @@ public class EXGWorth {
 			if (!materials.containsKey(materialName)) continue;
 
 			// With data
-			boolean dataSupport = VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT"));
+			boolean dataSupport = VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01);
 			if (dataSupport && worthConfig.getConfigurationSection(key) != null) {
 				ConfigurationSection materialSection = worthConfig.getConfigurationSection(key);
 				if (materialSection == null) continue;
@@ -88,7 +88,7 @@ public class EXGWorth {
 		String itemName = itemStack.getType().name().toLowerCase().replace("_", "");
 
 		// Without data
-		if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT"))) {
+		if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_12_2_R01)) {
 			BigDecimal unitPrice = itemsWorth.getOrDefault(itemName, null);
 			return unitPrice != null ? unitPrice.multiply(getMultiplier(player)) : null;
 		}

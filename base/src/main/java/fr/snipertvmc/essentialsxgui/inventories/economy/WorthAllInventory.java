@@ -72,7 +72,7 @@ public class WorthAllInventory extends PaginatedFastInv {
 	private void addWorthItem(Player player, Map<String, BigDecimal> itemsWorth, String worthSearch) {
 
 		// Without data
-		if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT"))) {
+		if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
 
 			for (Map.Entry<String, BigDecimal> entry : itemsWorth.entrySet()) {
 
@@ -83,6 +83,12 @@ public class WorthAllInventory extends PaginatedFastInv {
 
 				Material material = Main.getInstance().getEXGServer().getWorth().getMaterialFromWorthName(materialName);
 				byte data = !dataValue.equals("*") ? Byte.valueOf(dataValue) : 0;
+
+				try {
+					if (!material.isItem()) continue;
+				} catch (NoSuchMethodError e) {
+					// Ignore the error for versions lower than 1.13
+				}
 
 				BigDecimal itemPrice = entry.getValue();
 				String itemWorth = NumberUtil.displayCurrency(itemPrice, Main.getInstance().getEssentials());
@@ -97,13 +103,19 @@ public class WorthAllInventory extends PaginatedFastInv {
 						));
 			}
 
-			// Without data
+		// Without data
 		} else {
 
 			for (Map.Entry<String, BigDecimal> entry : itemsWorth.entrySet()) {
 
 				String materialName = entry.getKey();
 				Material material = Main.getInstance().getEXGServer().getWorth().getMaterialFromWorthName(materialName);
+
+				try {
+					if (!material.isItem()) continue;
+				} catch (NoSuchMethodError e) {
+					// Ignore the error for versions lower than 1.13
+				}
 
 				BigDecimal itemPrice = entry.getValue();
 				String itemWorth = NumberUtil.displayCurrency(itemPrice, Main.getInstance().getEssentials());
