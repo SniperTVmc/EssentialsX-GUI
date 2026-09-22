@@ -117,7 +117,6 @@ public class EcoAmountInventory extends FastInv {
 
 				// Check if total amount can be updated (not negative and not exceeding max balance)
 				if (canUpdateTotalAmount(player, target, ecoAction)) SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
-				else SoundsUtils.playSound(player, EXGSound.ACTION_FAILURE);
 
 
 				// Update items to display new total amount and new target balance if action is confirmed
