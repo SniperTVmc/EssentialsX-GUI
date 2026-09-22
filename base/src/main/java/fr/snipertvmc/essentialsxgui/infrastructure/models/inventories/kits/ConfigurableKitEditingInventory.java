@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableKitEditingInventory extends ConfigurableInventory {
 
@@ -27,19 +26,16 @@ public class ConfigurableKitEditingInventory extends ConfigurableInventory {
 	public ConfigurableKitEditingInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.previewKitItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.previewKitItem"));
+		this.previewKitItem = inventoryFile.getItem("previewKitItem");
 
-		this.changeDisplayNameItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.changeDisplayNameItem"));
-		this.changeIconItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.changeIconItem"));
-		this.deleteKitItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.deleteKitItem"));
-		this.editKitContentsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.editKitContentsItem"));
+		this.changeDisplayNameItem = inventoryFile.getItem("changeDisplayNameItem");
+		this.changeIconItem = inventoryFile.getItem("changeIconItem");
+		this.deleteKitItem = inventoryFile.getItem("deleteKitItem");
+		this.editKitContentsItem = inventoryFile.getItem("editKitContentsItem");
 
-		this.backItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.backItem"));
+		this.backItem = inventoryFile.getItem("backItem");
 	}
 
 

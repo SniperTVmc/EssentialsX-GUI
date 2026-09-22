@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableEcoActionInventory extends ConfigurableInventory {
 
@@ -26,19 +25,16 @@ public class ConfigurableEcoActionInventory extends ConfigurableInventory {
 	public ConfigurableEcoActionInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.playerItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerItem"));
+		this.playerItem = inventoryFile.getItem("playerItem");
 
-		this.addBalanceItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.addBalanceItem"));
-		this.takeBalanceItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.takeBalanceItem"));
-		this.setBalanceItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.setBalanceItem"));
-		this.resetBalanceItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.resetBalanceItem"));
+		this.addBalanceItem = inventoryFile.getItem("addBalanceItem");
+		this.takeBalanceItem = inventoryFile.getItem("takeBalanceItem");
+		this.setBalanceItem = inventoryFile.getItem("setBalanceItem");
+		this.resetBalanceItem = inventoryFile.getItem("resetBalanceItem");
 
-		this.backItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.backItem"));
+		this.backItem = inventoryFile.getItem("backItem");
 	}
 
 

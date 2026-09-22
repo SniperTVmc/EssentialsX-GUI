@@ -20,7 +20,6 @@ public class ConfigurableBalanceTopInventory extends ConfigurableInventory {
 	private final ConfigurableItem closeItem;
 
 	private final Set<ConfigurableItem> rankingItems;
-
 	private final Pair<Integer, Integer> rankingRange;
 
 
@@ -30,19 +29,15 @@ public class ConfigurableBalanceTopInventory extends ConfigurableInventory {
 	public ConfigurableBalanceTopInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.playerRankingItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerRankingItem"));
-		this.forceUpdateItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.forceUpdateItem"));
+		this.playerRankingItem = inventoryFile.getItem("playerRankingItem");
+		this.forceUpdateItem = inventoryFile.getItem("forceUpdateItem");
 
-		this.closeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.closeItem"));
+		this.closeItem = inventoryFile.getItem("closeItem");
 
-		this.rankingItems = inventoryFile.getSlotsItems(config.getConfigurationSection("rankingItems"));
-
-		this.rankingRange = getRankingRange(config);
+		this.rankingItems = inventoryFile.getSlotsItems("rankingItems");
+		this.rankingRange = getRankingRange(inventoryFile.getYamlConfiguration());
 	}
 
 
@@ -63,7 +58,6 @@ public class ConfigurableBalanceTopInventory extends ConfigurableInventory {
 	public Set<ConfigurableItem> getRankingItems() {
 		return rankingItems;
 	}
-
 	public Pair<Integer, Integer> getRankingRange() {
 		return rankingRange;
 	}

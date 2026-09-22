@@ -15,9 +15,12 @@ import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.Conf
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpsPlayerViewInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois.ConfigurableWhoisPlayersInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois.ConfigurableWhoisViewInventory;
+import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class InventoriesManager {
 
@@ -37,7 +40,7 @@ public class InventoriesManager {
 
 		inventories.put(EXGInventory.BALANCE_TOP, new ConfigurableBalanceTopInventory(getInventoryFile(EXGInventory.BALANCE_TOP)));
 		inventories.put(EXGInventory.ECO_ACTION, new ConfigurableEcoActionInventory(getInventoryFile(EXGInventory.ECO_ACTION)));
-		inventories.put(EXGInventory.ECO_AMOUNT, new ConfigurableEcoActionInventory(getInventoryFile(EXGInventory.ECO_AMOUNT)));
+		inventories.put(EXGInventory.ECO_AMOUNT, new ConfigurableEcoAmountInventory(getInventoryFile(EXGInventory.ECO_AMOUNT)));
 		inventories.put(EXGInventory.ECO_PLAYERS, new ConfigurableEcoPlayersInventory(getInventoryFile(EXGInventory.ECO_PLAYERS)));
 		inventories.put(EXGInventory.SELL, new ConfigurableSellInventory(getInventoryFile(EXGInventory.SELL)));
 		inventories.put(EXGInventory.WORTH, new ConfigurableWorthInventory(getInventoryFile(EXGInventory.WORTH)));
@@ -68,6 +71,17 @@ public class InventoriesManager {
 
 	private InventoryFile getInventoryFile(EXGInventory inventory) {
 		return Main.getInstance().getFilesManager().getInventoryFile(inventory);
+	}
+
+
+	public InventoryFile getInventoryFileByItemPath(String itemPath) {
+		String inventoryNameFromItemPath = itemPath.split("\\.")[0];
+		Optional<EXGInventory> result = Arrays.stream(EXGInventory.values())
+				.filter(inventory -> inventory.getFileName().equalsIgnoreCase(inventoryNameFromItemPath))
+				.findFirst();
+		if (result.isPresent()) return getInventoryFile(result.get());
+		if (itemPath.contains(".items.")) ConsoleLogger.warn("No inventory file was found for item path '" + itemPath + "'.");
+		return null;
 	}
 
 

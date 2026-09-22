@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurablePaginatedInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableWarpsAdminViewInventory extends ConfigurablePaginatedInventory {
 
@@ -29,21 +28,18 @@ public class ConfigurableWarpsAdminViewInventory extends ConfigurablePaginatedIn
 	public ConfigurableWarpsAdminViewInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.warpItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.warpItem"));
-		this.noWarpsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.noWarpsItem"));
+		this.warpItem = inventoryFile.getItem("warpItem");
+		this.noWarpsItem = inventoryFile.getItem("noWarpsItem");
 
-		this.switchToPlayerModeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.switchToPlayerModeItem"));
-		this.createWarpItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.createWarpItem"));
-		this.searchWarpItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.searchWarpItem"));
-		this.cancelSearchWarpItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.cancelSearchWarpItem"));
-		this.noSearchWarpResultsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.noSearchWarpResultsItem"));
+		this.switchToPlayerModeItem = inventoryFile.getItem("switchToPlayerModeItem");
+		this.createWarpItem = inventoryFile.getItem("createWarpItem");
+		this.searchWarpItem = inventoryFile.getItem("searchWarpItem");
+		this.cancelSearchWarpItem = inventoryFile.getItem("cancelSearchWarpItem");
+		this.noSearchWarpResultsItem = inventoryFile.getItem("noSearchWarpResultsItem");
 
-		this.closeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.closeItem"));
+		this.closeItem = inventoryFile.getItem("closeItem");
 	}
 
 

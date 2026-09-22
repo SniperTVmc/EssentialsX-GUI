@@ -43,7 +43,7 @@ public class TextUtils {
 	}
 
 
-	public static Component parseAsComponent(String formattedMessage) {
+	private static Component parseAsComponent(String formattedMessage) {
 		if (TextUtils.hasLegacyFormat(formattedMessage)) {
 			String convertedDisplayName = TextUtils.replaceAmpersand(formattedMessage);
 			return LegacyComponentSerializer.legacySection().deserialize(convertedDisplayName);
@@ -68,19 +68,16 @@ public class TextUtils {
 	// -------------------------------------------------- //
 
 
-	public static boolean hasLegacyFormat(String message) {
+	private static boolean hasLegacyFormat(String message) {
 		if (message == null || message.isEmpty()) return false;
 		return message.matches(".*[&§][0-9a-fk-orx].*");
 	}
 
 
-	public static String replaceAmpersand(String message) {
+	private static String replaceAmpersand(String message) {
 		if (message == null) return "";
 		return message.replaceAll("(?i)&([0-9a-fk-orx])", "§$1");
 	}
-
-
-	// -------------------------------------------------- //
 
 
 	public static String firstLetterToUpperCase(String string) {

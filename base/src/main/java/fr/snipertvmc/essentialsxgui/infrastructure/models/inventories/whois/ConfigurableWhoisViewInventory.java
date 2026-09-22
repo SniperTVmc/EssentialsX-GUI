@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.whois;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableWhoisViewInventory extends ConfigurableInventory {
 
@@ -28,20 +27,17 @@ public class ConfigurableWhoisViewInventory extends ConfigurableInventory {
 	public ConfigurableWhoisViewInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.playerIdentificationItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerIdentificationItem"));
-		this.playerStatisticsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerStatisticsItem"));
-		this.playerWorldItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerWorldItem"));
-		this.playerServerDataItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerServerDataItem"));
-		this.playerPunishmentsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.playerPunishmentsItem"));
+		this.playerIdentificationItem = inventoryFile.getItem("playerIdentificationItem");
+		this.playerStatisticsItem = inventoryFile.getItem("playerStatisticsItem");
+		this.playerWorldItem = inventoryFile.getItem("playerWorldItem");
+		this.playerServerDataItem = inventoryFile.getItem("playerServerDataItem");
+		this.playerPunishmentsItem = inventoryFile.getItem("playerPunishmentsItem");
 
-		this.backItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.backItem"));
+		this.backItem = inventoryFile.getItem("backItem");
 
-		this.onlyUsePlaceholderAPI = config.getBoolean("onlyUsePlaceholderAPI");
+		this.onlyUsePlaceholderAPI = inventoryFile.getYamlConfiguration().getBoolean("onlyUsePlaceholderAPI");
 	}
 
 

@@ -174,7 +174,7 @@ public class LoadingManager {
 
 
 		// FILES RELOADING
-		totalErrors += reloadFiles(commandSenders, detailedLoading);
+		reloadFiles(commandSenders, detailedLoading);
 
 
 		// DATABASE RELOADING
@@ -201,18 +201,16 @@ public class LoadingManager {
 	}
 
 
-	private int reloadFiles(Set<CommandSender> commandSenders, boolean detailedLoading) {
+	private void reloadFiles(Set<CommandSender> commandSenders, boolean detailedLoading) {
 		if (detailedLoading) TextUtils.sendMessageToCommandSender(commandSenders,
 				MessagesUtils.getString(EXGMessage.FILES_RELOADING, null));
 
-		int errors = Main.getInstance().getFilesManager().reloadFiles();
+		Main.getInstance().getFilesManager().reloadFiles();
 
-		if (detailedLoading) TextUtils.sendMessageToCommandSender(commandSenders,
-				MessagesUtils.getString(EXGMessage.FILES_RELOADED, Map.of(
-						"errors", String.valueOf(errors)))
-		);
-
-		return errors;
+		if (detailedLoading) TextUtils.sendMessageToCommandSender(commandSenders, MessagesUtils.getString(EXGMessage.FILES_RELOADED));
+//				MessagesUtils.getString(EXGMessage.FILES_RELOADED, Map.of(
+//						"errors", String.valueOf(errors)))
+//		);
 	}
 
 

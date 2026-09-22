@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.ItemBuilder;
+import fr.snipertvmc.essentialsxgui.utilities.parsers.items.ConfigurableItemParser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -24,6 +25,7 @@ public class ConfigurableItem {
 
 
 	private boolean isCopied = false;
+	private String itemPath;
 
 	private boolean enabled = false;
 	private Integer slot = 0;
@@ -45,16 +47,18 @@ public class ConfigurableItem {
 	// -------------------------------------------------- //
 
 
-	public ConfigurableItem(ConfigurationSection itemConfig) {
-		this(itemConfig, 0);
+	public ConfigurableItem(ConfigurationSection itemConfig, String itemPath) {
+		this(itemConfig, itemPath, 0);
 	}
 
 
-	public ConfigurableItem(ConfigurationSection itemConfig, int index) {
+	public ConfigurableItem(ConfigurationSection itemConfig, String itemPath, int index) {
 
+		if (!ConfigurableItemParser.isConfigurableItemValid(itemConfig, itemPath)) return;
 		if (itemConfig == null) return;
 
 		this.enabled = itemConfig.getBoolean("enabled");
+		this.itemPath = itemPath;
 
 		boolean hasSlots = itemConfig.get("slot") instanceof List;
 		this.slot = hasSlots ? itemConfig.getIntegerList("slot").get(index) : itemConfig.getInt("slot", -1);

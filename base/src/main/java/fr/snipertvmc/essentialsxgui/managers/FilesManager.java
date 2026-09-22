@@ -6,6 +6,7 @@ import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFil
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.MessagesFile;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
+import fr.snipertvmc.essentialsxgui.utilities.parsers.inventories.ConfigurableInventoryParser;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -22,7 +23,7 @@ public class FilesManager {
 
 	private ConfigurationFile configurationFile;
 	private MessagesFile messagesFile;
-	private final Set<InventoryFile> inventoriesFiles = new HashSet<>();
+	private Set<InventoryFile> inventoriesFiles = new HashSet<>();
 
 	private final String configurationFileVersion = "2.0";
 	private final String messagesFileVersion = "2.0";
@@ -42,22 +43,22 @@ public class FilesManager {
 	}
 
 
-	public int reloadFiles() {
+	public void reloadFiles() {
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Reloading files...");
 
-		int errors = loadAndCheckConfiguration(true);
-		errors += loadAndCheckMessages(true);
-		errors += loadAndCheckInventories(true);
+		loadAndCheckConfiguration(true);
+		loadAndCheckMessages(true);
+		inventoriesFiles = new HashSet<>();
+		loadAndCheckInventories(true);
 
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Files reloading §fcompleted§7.");
-		return errors;
 	}
 
 
 	// -------------------------------------------------- //
 
 
-	private int loadYAMLFile(String filePath) {
+	private boolean loadYAMLFile(String filePath) {
 
 		try {
 			File file = new File(Main.getInstance().getDataFolder(), filePath);
@@ -74,17 +75,16 @@ public class FilesManager {
 				case "messages.yml" -> messagesFile = new MessagesFile(yamlFile);
 				default -> inventoriesFiles.add(new InventoryFile(yamlFile, filePath));
 			}
-
-			return 0;
+			return true;
 
 		} catch (Exception e) {
 			ConsoleLogger.console("\t§6EssentialsX-GUI: §cError while loading " + filePath + ": " + e.getMessage());
-			return 1;
+			return false;
 		}
 	}
 
 
-	private boolean createBackupYAMLFile(String filePath) {
+	private void createBackupYAMLFile(String filePath) {
 		Date currentDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String formattedDate = dateFormat.format(currentDate);
@@ -101,7 +101,6 @@ public class FilesManager {
 
 					if (success) {
 						loadYAMLFile(filePath);
-						return true;
 					}
 
 				} catch (SecurityException e) {
@@ -112,7 +111,6 @@ public class FilesManager {
 		} else {
 			loadYAMLFile(filePath);
 		}
-		return false;
 	}
 
 
@@ -149,46 +147,33 @@ public class FilesManager {
 	// -------------------------------------------------- //
 
 
-	public int loadAndCheckConfiguration(boolean reload) {
-		int errors = loadYAMLFile("configuration.yml");
+	public void loadAndCheckConfiguration(boolean reload) {
+		loadYAMLFile("configuration.yml");
 		checkUpdateForFile("configuration.yml");
 		String label = reload ? "Reloaded" : "Loaded";
 		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fconfiguration.yml: §a" + label);
-		return errors;
 	}
 
 
-	public int loadAndCheckMessages(boolean reload) {
-		int errors = loadYAMLFile("messages.yml");
+	public void loadAndCheckMessages(boolean reload) {
+		loadYAMLFile("messages.yml");
 		checkUpdateForFile("messages.yml");
 		String label = reload ? "Reloaded" : "Loaded";
 		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fmessages.yml: §a" + label);
-		return errors;
 	}
 
 
-	public int loadAndCheckInventories(boolean reload) {
+	public void loadAndCheckInventories(boolean reload) {
 
-		int errors = 0;
-
-		for (String inventoryPath : EXGInventory.getAllPaths()) {
-			if (loadYAMLFile(inventoryPath) == 1) {
-				errors++;
-				continue;
-			}
-			checkUpdateForFile(inventoryPath);
-//			int inventoryErrors = EXGInventoryConfigParser.isEXGInventoryConfigValid(getInventoryFile(inventoryPath));
-
+		for (EXGInventory inventory : EXGInventory.values()) {
+			if (!loadYAMLFile(inventory.getFilePath())) continue;
+			checkUpdateForFile(inventory.getFilePath());
+			ConfigurableInventoryParser.isConfigurableInventoryValid(getInventoryFile(inventory));
 			String label = reload ? "Reloaded" : "Loaded";
-//			label = inventoryErrors == 0 ? label : "§4Not valid, please resolve the above errors";
-
-//			if (inventoryErrors > 0) errors += inventoryErrors;
-			if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + inventoryPath + ".yml: §a" + label);
+			if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + inventory.getFileName() + ".yml: §a" + label);
 		}
 
 		Main.getInstance().getInventoriesManager().loadInventories();
-
-		return errors;
 	}
 
 

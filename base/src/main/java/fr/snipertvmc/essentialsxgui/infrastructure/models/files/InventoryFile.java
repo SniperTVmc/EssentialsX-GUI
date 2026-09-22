@@ -50,10 +50,15 @@ public class InventoryFile extends BaseFile {
 	public Set<ConfigurableItem> getBorderItems() {
 
 		Set<ConfigurableItem> borderItems = new HashSet<>();
-		ConfigurableItem borderItem = new ConfigurableItem(getYamlConfiguration().getConfigurationSection(getFileName() + ".borderItem"));
+
+		String itemPath = getFileName() + ".borderItem";
+		ConfigurationSection borderSection = getYamlConfiguration().getConfigurationSection(itemPath);
+		if (borderSection == null) return borderItems;
+
+		ConfigurableItem borderItem = new ConfigurableItem(borderSection, itemPath);
 		if (!borderItem.isEnabled()) return borderItems;
 
-		List<Integer> borderSlots = getYamlConfiguration().getIntegerList(getFileName() + ".borderItem.slot");
+		List<Integer> borderSlots = getYamlConfiguration().getIntegerList(itemPath + ".slot");
 		borderSlots.forEach(slot -> {
 			ConfigurableItem borderItemCopy = new ConfigurableItem(borderItem);
 			borderItemCopy.setSlot(slot);
@@ -72,19 +77,28 @@ public class InventoryFile extends BaseFile {
 	// -------------------------------------------------- //
 
 
-	public ConfigurableItem getItem(ConfigurationSection itemSection) {
-		return new ConfigurableItem(itemSection);
+	public ConfigurableItem getItem(String itemName) {
+		return getItem(itemName, true);
+	}
+	public ConfigurableItem getItem(String itemPath, boolean includeItemPath) {
+		if (includeItemPath) itemPath = getFileName() + ".items." + itemPath;
+		ConfigurationSection itemSection = getYamlConfiguration().getConfigurationSection(itemPath);
+		return new ConfigurableItem(itemSection, itemPath);
 	}
 
 
-	public Set<ConfigurableItem> getItems(ConfigurationSection itemSection) {
-
+	public Set<ConfigurableItem> getItems(String itemName) {
+		return getItems(itemName, true);
+	}
+	public Set<ConfigurableItem> getItems(String itemPath, boolean includeItemPath) {
+		if (includeItemPath) itemPath = getFileName() + ".items." + itemPath;
+		ConfigurationSection itemSection = getYamlConfiguration().getConfigurationSection(itemPath);
 		if (itemSection == null) return new HashSet<>();
 		int count = itemSection.getIntegerList("slot").size();
 		Set<ConfigurableItem> items = new HashSet<>();
 
 		for (int i = 0; i < count; i++) {
-			ConfigurableItem itemConfig = new ConfigurableItem(itemSection, i);
+			ConfigurableItem itemConfig = new ConfigurableItem(itemSection, itemPath, i);
 			items.add(itemConfig);
 		}
 
@@ -96,26 +110,27 @@ public class InventoryFile extends BaseFile {
 
 
 	public ConfigurableItem getNextPageItem() {
-		return getItem(getYamlConfiguration().getConfigurationSection(getFileName() + ".items.nextPageItem"));
+		return getItem("nextPageItem");
 	}
 	public ConfigurableItem getPreviousPageItem() {
-		return getItem(getYamlConfiguration().getConfigurationSection(getFileName() + ".items.previousPageItem"));
+		return getItem("previousPageItem");
 	}
 	public ConfigurableItem getCurrentPageItem() {
-		return getItem(getYamlConfiguration().getConfigurationSection(getFileName() + ".items.currentPageItem"));
+		return getItem("currentPageItem");
 	}
 
 
 	// -------------------------------------------------- //
 
 
-	public Set<ConfigurableItem> getSlotsItems(ConfigurationSection itemSection) {
+	public Set<ConfigurableItem> getSlotsItems(String slotsItemsPath) {
 
+		ConfigurationSection itemSection = getYamlConfiguration().getConfigurationSection(slotsItemsPath);
 		if (itemSection == null) return new HashSet<>();
 		Set<ConfigurableItem> slotsItems = new HashSet<>();
 
 		for (String key : itemSection.getKeys(false)) {
-			ConfigurableItem itemConfig = getItem(itemSection.getConfigurationSection(key));
+			ConfigurableItem itemConfig = getItem(slotsItemsPath + "." + key, false);
 
 			// Range slots
 			if (key.contains("-")) {

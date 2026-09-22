@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.others;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurablePaginatedInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableDataEntryGUI extends ConfigurablePaginatedInventory {
 
@@ -23,14 +22,11 @@ public class ConfigurableDataEntryGUI extends ConfigurablePaginatedInventory {
 	public ConfigurableDataEntryGUI(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.materialIconItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.materialIconItem"));
+		this.materialIconItem = inventoryFile.getItem("materialIconItem");
 
-		this.cancelItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.cancelItem"));
+		this.cancelItem = inventoryFile.getItem("cancelItem");
 	}
 
 

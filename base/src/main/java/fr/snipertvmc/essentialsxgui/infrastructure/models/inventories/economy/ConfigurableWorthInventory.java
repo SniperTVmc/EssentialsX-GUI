@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableWorthInventory extends ConfigurableInventory {
 
@@ -24,16 +23,13 @@ public class ConfigurableWorthInventory extends ConfigurableInventory {
 	public ConfigurableWorthInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.allItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.allItem"));
-		this.handItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.handItem"));
-		this.inventoryItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.inventoryItem"));
+		this.allItem = inventoryFile.getItem("allItem");
+		this.handItem = inventoryFile.getItem("handItem");
+		this.inventoryItem = inventoryFile.getItem("inventoryItem");
 
-		this.closeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.closeItem"));
+		this.closeItem = inventoryFile.getItem("closeItem");
 	}
 
 

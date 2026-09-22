@@ -40,16 +40,16 @@ public class ConfigurableHomesInventory extends ConfigurablePaginatedInventory {
 
 
 		// Items
-		this.homeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.homeItem"));
-		this.bedHomeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.bedHomeItem"));
-		this.noHomesItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.noHomesItem"));
+		this.homeItem = inventoryFile.getItem("homeItem");
+		this.bedHomeItem = inventoryFile.getItem("bedHomeItem");
+		this.noHomesItem = inventoryFile.getItem("noHomesItem");
 
-		this.createHomeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.createHomeItem"));
-		this.searchHomeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.searchHomeItem"));
-		this.cancelSearchHomeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.cancelSearchHomeItem"));
-		this.noSearchHomeResultsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.noSearchHomeResultsItem"));
+		this.createHomeItem = inventoryFile.getItem("createHomeItem");
+		this.searchHomeItem = inventoryFile.getItem("searchHomeItem");
+		this.cancelSearchHomeItem = inventoryFile.getItem("cancelSearchHomeItem");
+		this.noSearchHomeResultsItem = inventoryFile.getItem("noSearchHomeResultsItem");
 
-		this.closeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.closeItem"));
+		this.closeItem = inventoryFile.getItem("closeItem");
 
 
 		// Special settings

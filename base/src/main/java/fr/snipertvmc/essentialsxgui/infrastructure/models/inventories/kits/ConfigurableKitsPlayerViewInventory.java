@@ -3,7 +3,6 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurablePaginatedInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurableKitsPlayerViewInventory extends ConfigurablePaginatedInventory {
 
@@ -28,20 +27,17 @@ public class ConfigurableKitsPlayerViewInventory extends ConfigurablePaginatedIn
 	public ConfigurableKitsPlayerViewInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
-		YamlConfiguration config = inventoryFile.getYamlConfiguration();
-
 
 		// Items
-		this.kitItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.kitItem"));
-		this.noKitsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.noKitsItem"));
+		this.kitItem = inventoryFile.getItem("kitItem");
+		this.noKitsItem = inventoryFile.getItem("noKitsItem");
 
-		this.switchToAdminModeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.switchToAdminModeItem"));
-		this.searchKitItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.searchKitItem"));
-		this.cancelSearchKitItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.cancelSearchKitItem"));
-		this.noSearchKitResultsItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.noSearchKitResultsItem"));
+		this.switchToAdminModeItem = inventoryFile.getItem("switchToAdminModeItem");
+		this.searchKitItem = inventoryFile.getItem("searchKitItem");
+		this.cancelSearchKitItem = inventoryFile.getItem("cancelSearchKitItem");
+		this.noSearchKitResultsItem = inventoryFile.getItem("noSearchKitResultsItem");
 
-		this.closeItem = new ConfigurableItem(config.getConfigurationSection(name + ".items.closeItem"));
+		this.closeItem = inventoryFile.getItem("closeItem");
 	}
 
 
