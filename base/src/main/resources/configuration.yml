@@ -181,6 +181,15 @@ kits:
   # Default: "NONE"
   kitsVisibleWithoutPermission: "NONE"
 
+  # Decide precisely where the kits will be displayed in the GUI.
+  # If you don't want a custom order, use "NONE".
+  # If you want a custom order, use a list of kit names in the order you want them to be displayed.
+  # Example: ["kit1", "kit2", "kit3"]
+  # Note: Please refer to 'inventoryScheme' in the 'kits/kitsPlayerView.yml' file to understand how the kits will be displayed in the GUI.
+  #       More help at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/main-configuration/kits#custom-order-of-kits-in-the-gui
+  # Default: "NONE"
+  customKitsOrder: "NONE"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Warps                         | #
@@ -240,6 +249,15 @@ warps:
   # Note: It doesn't give access to the warp, it just makes it visible in the GUI. Players still need permission to use the warp.
   # Default: "NONE"
   warpsVisibleWithoutPermission: "NONE"
+
+  # Decide precisely where the warps will be displayed in the GUI.
+  # If you don't want a custom order, use "NONE".
+  # If you want a custom order, use a list of warp names in the order you want them to be displayed.
+  # Example: ["warp1", "warp2", "warp3"]
+  # Note: Please refer to 'inventoryScheme' in the 'warps/warpsPlayerView.yml' file to understand how the warps will be displayed in the GUI.
+  #       More help at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/main-configuration/warps#custom-order-of-warps-in-the-gui
+  # Default: "NONE"
+  customWarpsOrder: "NONE"
 
 ############################################################
 # +------------------------------------------------------+ #

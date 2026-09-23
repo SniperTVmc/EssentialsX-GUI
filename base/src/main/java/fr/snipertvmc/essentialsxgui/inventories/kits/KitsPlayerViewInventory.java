@@ -73,7 +73,16 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 	private void defineKitsItems(Player player, String kitSearch, Set<EXGKit> kits) {
 
-		for (EXGKit kit : kits) {
+		List<EXGKit> sortedKits = new ArrayList<>(kits);
+		if (Main.getInstance().getConfiguration().hasCustomKitsOrder()) {
+			List<String> customKitsOrder = Main.getInstance().getConfiguration().getCustomKitsOrder();
+			sortedKits.sort(Comparator.comparingInt(kit -> {
+				int index = customKitsOrder.indexOf(kit.getName());
+				return index != -1 ? index : Integer.MAX_VALUE;
+			}));
+		}
+
+		for (EXGKit kit : sortedKits) {
 
 			AtomicReference<ConfigurableItem> atomicKitItem = new AtomicReference<>(config.getKitItem());
 

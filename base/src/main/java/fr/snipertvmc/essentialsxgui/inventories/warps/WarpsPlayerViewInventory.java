@@ -66,7 +66,16 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 	private void defineWarpsItems(Player player, String warpSearch, Set<EXGWarp> warps) {
 
-		for (EXGWarp warp : warps) {
+		List<EXGWarp> sortedWarps = new ArrayList<>(warps);
+		if (Main.getInstance().getConfiguration().hasCustomWarpsOrder()) {
+			List<String> customWarpsOrder = Main.getInstance().getConfiguration().getCustomWarpsOrder();
+			sortedWarps.sort(Comparator.comparingInt(warp -> {
+				int index = customWarpsOrder.indexOf(warp.getName());
+				return index != -1 ? index : Integer.MAX_VALUE;
+			}));
+		}
+
+		for (EXGWarp warp : sortedWarps) {
 
 			ConfigurableItem warpItem = config.getWarpItem().get();
 			if (!player.hasPermission("essentials.warps." + warp.getName())) {

@@ -191,6 +191,22 @@ public class ConfigurationFile extends BaseFile {
 	}
 
 
+	public boolean hasCustomKitsOrder() {
+		return getYamlConfiguration().get("kits.customKitsOrder") instanceof List<?>;
+	}
+	public List<String> getCustomKitsOrder() {
+		return getYamlConfiguration().getStringList("kits.customKitsOrder");
+	}
+
+
+	public boolean hasCustomWarpsOrder() {
+		return getYamlConfiguration().get("warps.customWarpsOrder") instanceof List<?>;
+	}
+	public List<String> getCustomWarpsOrder() {
+		return getYamlConfiguration().getStringList("warps.customWarpsOrder");
+	}
+
+
 	// -------------------------------------------------- //
 
 
