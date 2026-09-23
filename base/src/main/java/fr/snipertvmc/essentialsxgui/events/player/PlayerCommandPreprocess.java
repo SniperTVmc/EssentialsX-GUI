@@ -177,7 +177,9 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
+			//
 			// BALANCE TOP
+			//
 
 			case "balancetop", "baltop", "ebalancetop", "ebaltop" -> {
 
@@ -193,7 +195,9 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
+			//
 			// WORTH
+			//
 
 			case "worth", "price", "eworth", "eprice" -> {
 
@@ -209,7 +213,9 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
+			//
 			// ECONOMY
+			//
 
 			case "eco", "economy", "eeco", "eeconomy" -> {
 
@@ -260,7 +266,9 @@ public class PlayerCommandPreprocess implements Listener {
 			}
 
 
+			//
 			// SELL
+			//
 
 			case "sell", "esell" -> {
 

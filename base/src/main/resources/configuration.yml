@@ -299,8 +299,8 @@ sounds:
 
 
   # Warning: This section should follow values listed on this website:
-  # - https://helpch.at/docs/1.21.5/org/bukkit/Sound.html
-  # Change '1.21.5' with your current Minecraft version.
+  # - https://helpch.at/docs/26.2/org/bukkit/Sound.html
+  # Change '26.2' with your current Minecraft version.
 
 
   # The sound played when a player opens a GUI.
