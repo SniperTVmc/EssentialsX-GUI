@@ -172,6 +172,15 @@ kits:
   # Default: false
   openKitAdminViewByDefault: false
 
+  # Decide which kits are visible to players without permission.
+  # If you want to allow all kits to be visible, use "ALL".
+  # If you want to allow no kits to be visible, use "NONE".
+  # If you want to allow specific kits to be visible, use a list of kit names.
+  # Example: ["kit1", "kit2", "kit3"]
+  # Note: It doesn't give access to the kit, it just makes it visible in the GUI. Players still need permission to use the kit.
+  # Default: "NONE"
+  kitsVisibleWithoutPermission: "NONE"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Warps                         | #
@@ -222,6 +231,15 @@ warps:
   # with permission to see the admin view.
   # Default: false
   openWarpAdminViewByDefault: false
+
+  # Decide which warps are visible to players without permission.
+  # If you want to allow all warps to be visible, use "ALL".
+  # If you want to allow no warps to be visible, use "NONE".
+  # If you want to allow specific warps to be visible, use a list of warp names.
+  # Example: ["warp1", "warp2", "warp3"]
+  # Note: It doesn't give access to the warp, it just makes it visible in the GUI. Players still need permission to use the warp.
+  # Default: "NONE"
+  warpsVisibleWithoutPermission: "NONE"
 
 ############################################################
 # +------------------------------------------------------+ #

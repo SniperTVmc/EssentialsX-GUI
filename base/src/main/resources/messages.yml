@@ -101,11 +101,13 @@ errors:
 
   kitNameAlreadyExists: "&cA kit with this name already exists."
   noKitFound: "&cNo kit found with that name."
+  noKitAccess: "&cYou can't use this kit."
 
   warpCreationError: "&cAn error occurred while creating the warp. Please contact the server administrator."
   warpDeleteError: "&cAn error occurred while deleting the warp. Please contact the server administrator."
   warpNameAlreadyExists: "&cA warp with this name already exists."
   noWarpFound: "&cNo warp found with that name."
+  noWarpAccess: "&cYou can't access this warp."
 
   noWorthFound: "&cNo items with worth found with that name."
   amountMustBePositive: "&cThe amount must be a positive number."

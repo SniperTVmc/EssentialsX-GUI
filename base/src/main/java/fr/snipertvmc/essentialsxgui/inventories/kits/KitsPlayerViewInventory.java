@@ -53,7 +53,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 				Main.getInstance().getEXGServer().getKits()
 						.stream()
-						.filter(kit -> player.hasPermission("essentials.kits." + kit.getName()))
+						.filter(kit -> Main.getInstance().getConfiguration().canSeeKit(player, kit.getName()))
 						.sorted(Comparator.comparing(EXGKit::getName))
 						.collect(Collectors.toCollection(LinkedHashSet::new));
 
@@ -75,7 +75,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 		for (EXGKit kit : kits) {
 
-			AtomicReference<ConfigurableItem> atomicKitItemConfig = new AtomicReference<>(config.getKitItem());
+			AtomicReference<ConfigurableItem> atomicKitItem = new AtomicReference<>(config.getKitItem());
 
 			Supplier<ItemStack> supplierKitItem = () -> {
 
@@ -90,19 +90,23 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 					}
 				}
 
-				atomicKitItemConfig.set(config.getKitItem().get().addVariable("kitDelay", kitDelay));
-				return InventoriesUtils.getCustomItemStack(atomicKitItemConfig.get(), kit, "kit", player);
+				ConfigurableItem kitItem = config.getKitItem().get().addVariable("kitDelay", kitDelay);
+				if (!player.hasPermission("essentials.kits." + kit.getName())) {
+					kitItem.setLore(List.of(MessagesUtils.getString(EXGMessage.NO_KIT_ACCESS)));
+				}
+				atomicKitItem.set(kitItem);
+				return InventoriesUtils.getCustomItemStack(atomicKitItem.get(), kit, "kit", player);
 			};
 
-			ConfigurableItem kitItemConfig = atomicKitItemConfig.get();
+			ConfigurableItem kitItem = atomicKitItem.get();
 
 			addDynamicContent(supplierKitItem, e -> {
 
-				if (kitItemConfig.getExtra().isCorrectClick(e.getClick(), "receiveKit")) {
+				if (kitItem.getExtra().isCorrectClick(e.getClick(), "receiveKit")) {
 					player.performCommand("essentials:kit " + kit.getName());
 					SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 
-				} else if (kitItemConfig.getExtra().isCorrectClick(e.getClick(), "previewKit")) {
+				} else if (kitItem.getExtra().isCorrectClick(e.getClick(), "previewKit")) {
 					new KitPreviewInventory(player, kit).open(player);
 					SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				}
@@ -188,7 +192,7 @@ public class KitsPlayerViewInventory extends PaginatedFastInv {
 
 					Set<EXGKit> searchKits = Main.getInstance().getEXGServer().getKits()
 							.stream()
-							.filter(kit -> player.hasPermission("essentials.kits." + kit.getName()))
+							.filter(kit -> Main.getInstance().getConfiguration().canSeeKit(player, kit.getName()))
 							.filter(kit -> kit.getDisplayName().toLowerCase().contains(result.getLeft().toLowerCase()) ||
 									kit.getName().toLowerCase().contains(result.getLeft().toLowerCase()))
 							.sorted(Comparator.comparing(EXGKit::getName))

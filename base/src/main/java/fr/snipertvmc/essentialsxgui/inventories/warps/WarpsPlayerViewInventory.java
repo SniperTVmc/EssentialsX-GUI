@@ -50,7 +50,7 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 				Main.getInstance().getEXGServer().getWarps()
 						.stream()
-						.filter(warp -> player.hasPermission("essentials.warps." + warp.getName()))
+						.filter(warp -> Main.getInstance().getConfiguration().canSeeWarp(player, warp.getName()))
 						.sorted(Comparator.comparing(EXGWarp::getName))
 						.collect(Collectors.toCollection(LinkedHashSet::new));
 
@@ -69,6 +69,9 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 		for (EXGWarp warp : warps) {
 
 			ConfigurableItem warpItem = config.getWarpItem().get();
+			if (!player.hasPermission("essentials.warps." + warp.getName())) {
+				warpItem.setLore(List.of(MessagesUtils.getString(EXGMessage.NO_WARP_ACCESS)));
+			}
 			ItemStack warpItemStack = InventoriesUtils.getCustomItemStack(warpItem, warp, "warp", player);
 
 			addContent(warpItemStack, e -> {
@@ -157,7 +160,7 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 
 					Set<EXGWarp> searchWarps = Main.getInstance().getEXGServer().getWarps()
 							.stream()
-							.filter(warp -> player.hasPermission("essentials.warps." + warp.getName()))
+							.filter(warp -> Main.getInstance().getConfiguration().canSeeWarp(player, warp.getName()))
 							.filter(warp -> warp.getDisplayName().toLowerCase().contains(result.getLeft().toLowerCase()) ||
 									warp.getName().toLowerCase().contains(result.getLeft().toLowerCase()))
 							.sorted(Comparator.comparing(EXGWarp::getName))

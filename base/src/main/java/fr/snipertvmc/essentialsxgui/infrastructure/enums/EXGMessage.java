@@ -50,11 +50,13 @@ public enum EXGMessage {
 
 	KIT_NAME_ALREADY_EXISTS("errors.kitNameAlreadyExists"),
 	NO_KIT_FOUND("errors.noKitFound"),
+	NO_KIT_ACCESS("errors.noKitAccess"),
 
 	WARP_CREATION_ERROR("errors.warpCreationError"),
 	WARP_DELETE_ERROR("errors.warpDeleteError"),
 	WARP_NAME_ALREADY_EXISTS("errors.warpNameAlreadyExists"),
 	NO_WARP_FOUND("errors.noWarpFound"),
+	NO_WARP_ACCESS("errors.noWarpAccess"),
 
 	NO_WORTH_FOUND("errors.noWorthFound"),
 	AMOUNT_MUST_BE_POSITIVE("errors.amountMustBePositive"),

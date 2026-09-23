@@ -5,6 +5,7 @@ import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
 import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -172,6 +173,21 @@ public class ConfigurationFile extends BaseFile {
 
 	public int getBalanceTopUpdateInterval() {
 		return getYamlConfiguration().getInt("economy.balanceTop.updateInterval", 60);
+	}
+
+
+	public boolean canSeeKit(Player player, String kitName) {
+		return canSeeElement(player, kitName, "kits.kitsVisibleWithoutPermission", "essentials.kits." + kitName);
+	}
+	public boolean canSeeWarp(Player player, String warpName) {
+		return canSeeElement(player, warpName, "warps.warpsVisibleWithoutPermission", "essentials.warps." + warpName);
+	}
+
+	private boolean canSeeElement(Player player, String elementName, String configPath, String permission) {
+		Object visibleWithoutPermission = getYamlConfiguration().get(configPath);
+		if (visibleWithoutPermission instanceof List<?> list) return list.contains(elementName) || player.hasPermission(permission);
+		if (visibleWithoutPermission instanceof String str) return str.equals("ALL") || player.hasPermission(permission);
+		return true;
 	}
 
 
