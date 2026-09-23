@@ -2,7 +2,6 @@ package fr.snipertvmc.essentialsxgui.managers;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGServer;
-import fr.snipertvmc.essentialsxgui.utilities.data.DataConverter;
 
 import java.util.Map;
 
@@ -33,19 +32,9 @@ public class ServerManager {
 
 
 		// KITS LOADING
-		Map<String, Object> kitsRaw;
-
-		// Legacy data conversion if needed
-		if (DataConverter.isLegacyServerDataFilePresent()) {
-			kitsRaw = (Map<String, Object>) DataConverter.getLegacyServerData().get("kits");
-			DataConverter.deleteLegacyServerDataFile();
-			DataConverter.tryToRemoveLegacyDataFolders();
-
-		} else {
-			kitsRaw = Main.getInstance().getDatabaseManager().getKitsTableManager().fetchKits();
-			if (kitsRaw.isEmpty()) {
-				kitsRaw = Main.getInstance().getServerDataManager().generateDefaultKitsData();
-			}
+		Map<String, Object> kitsRaw = Main.getInstance().getDatabaseManager().getKitsTableManager().fetchKits();
+		if (kitsRaw.isEmpty()) {
+			kitsRaw = Main.getInstance().getServerDataManager().generateDefaultKitsData();
 		}
 
 		exgServer.setKitsRaw(kitsRaw);

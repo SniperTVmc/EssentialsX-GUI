@@ -2,7 +2,6 @@ package fr.snipertvmc.essentialsxgui.managers;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGPlayer;
-import fr.snipertvmc.essentialsxgui.utilities.data.DataConverter;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -29,22 +28,12 @@ public class PlayerManager {
 
 		// HOMES LOADING
 		Map<String, Object> homesRaw;
-
-		// Legacy data conversion if needed
-		if (DataConverter.areLegacyPlayerDataFilesPresent()) {
-			homesRaw = (Map<String, Object>) DataConverter.getLegacyPlayerData(player).get("homes");
-			DataConverter.deleteLegacyPlayerDataFile(player);
-			DataConverter.tryToRemoveLegacyDataFolders();
+		if (!Main.getInstance().getDatabaseManager().getPlayerHomesTableManager().isPlayerExists(exgPlayer.getName())) {
+			homesRaw = Main.getInstance().getPlayerDataManager().generateDefaultHomesData(exgPlayer);
+			Main.getInstance().getDatabaseManager().getPlayerHomesTableManager().insertPlayer(exgPlayer.getName(), homesRaw);
 
 		} else {
-			if (!Main.getInstance().getDatabaseManager().getPlayerHomesTableManager().isPlayerExists(exgPlayer.getName())) {
-				homesRaw = Main.getInstance().getPlayerDataManager().generateDefaultHomesData(exgPlayer);
-
-				Main.getInstance().getDatabaseManager().getPlayerHomesTableManager().insertPlayer(exgPlayer.getName(), homesRaw);
-
-			} else {
-				homesRaw = Main.getInstance().getDatabaseManager().getPlayerHomesTableManager().fetchHomes(exgPlayer.getName());
-			}
+			homesRaw = Main.getInstance().getDatabaseManager().getPlayerHomesTableManager().fetchHomes(exgPlayer.getName());
 		}
 
 		exgPlayer.setHomesRaw(homesRaw);
