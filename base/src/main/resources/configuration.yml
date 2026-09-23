@@ -45,16 +45,6 @@ general:
   minNameLength: 3
   maxNameLength: 32
 
-  # Set this to true if you want to open the kit admin view by default when the /kit command is performed for players
-  # with permission to see the admin view.
-  # Default: false
-  openKitAdminViewByDefault: false
-
-  # Set this to true if you want to open the warp admin view by default when the /warp command is performed for players
-  # with permission to see the admin view.
-  # Default: false
-  openWarpAdminViewByDefault: false
-
   # Delay (in seconds) for typing in chat before the input is canceled.
   # This is used when players are required to type something in chat (like a name).
   # Default: 10
@@ -177,6 +167,11 @@ kits:
   # Ways available: "CHAT", "ANVIL"
   deleteKitEntryType: "CHAT"
 
+  # Set this to true if you want to open the kit admin view by default when the /kit command is performed for players
+  # with permission to see the admin view.
+  # Default: false
+  openKitAdminViewByDefault: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Warps                         | #
@@ -222,6 +217,11 @@ warps:
   # Decide how players can delete a warp.
   # Ways available: "CHAT", "ANVIL"
   deleteWarpEntryType: "CHAT"
+
+  # Set this to true if you want to open the warp admin view by default when the /warp command is performed for players
+  # with permission to see the admin view.
+  # Default: false
+  openWarpAdminViewByDefault: false
 
 ############################################################
 # +------------------------------------------------------+ #

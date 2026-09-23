@@ -137,11 +137,11 @@ public class ConfigurationFile extends BaseFile {
 	}
 
 	public boolean mustOpenKitAdminViewByDefault() {
-		return getYamlConfiguration().getBoolean("general.openKitAdminViewByDefault", false);
+		return getYamlConfiguration().getBoolean("kits.openKitAdminViewByDefault", false);
 	}
 
 	public boolean mustOpenWarpAdminViewByDefault() {
-		return getYamlConfiguration().getBoolean("general.openWarpAdminViewByDefault", false);
+		return getYamlConfiguration().getBoolean("warps.openWarpAdminViewByDefault", false);
 	}
 
 
