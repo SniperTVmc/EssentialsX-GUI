@@ -1,9 +1,11 @@
 package fr.snipertvmc.essentialsxgui.managers;
 
+import com.cryptomorin.xseries.XMaterial;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGKit;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGServer;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGWarp;
+import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,12 +23,13 @@ public class ServerDataManager {
 		Map<String, Object> serverKits = new HashMap<>();
 
 		Set<String> essentialsKits = Main.getInstance().getEssentials().getKits().getKitKeys();
+		Pair<XMaterial, Integer> defaultKitIcon = Main.getInstance().getConfiguration().getDefaultKitIcon();
 
 		for (String kitName : essentialsKits) {
 			serverKits.put(kitName, new HashMap<>() {{
 				put("displayName", kitName);
-				put("material", "CHEST");
-				put("data", "0");
+				put("material", defaultKitIcon.getLeft().name());
+				put("data", defaultKitIcon.getRight());
 				put("customItemStack", null);
 			}});
 
@@ -72,12 +75,13 @@ public class ServerDataManager {
 		Map<String, Object> serverWarps = new HashMap<>();
 
 		Set<String> essentialsWarps = new HashSet<>(Main.getInstance().getEssentials().getWarps().getList());
+		Pair<XMaterial, Integer> defaultWarpIcon = Main.getInstance().getConfiguration().getDefaultWarpIcon();
 
 		for (String warpName : essentialsWarps) {
 			serverWarps.put(warpName, new HashMap<>() {{
 				put("displayName", warpName);
-				put("material", "CHEST");
-				put("data", "0");
+				put("material", defaultWarpIcon.getLeft().name());
+				put("data", defaultWarpIcon.getRight());
 				put("customItemStack", null);
 			}});
 

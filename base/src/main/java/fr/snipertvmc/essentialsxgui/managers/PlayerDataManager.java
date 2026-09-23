@@ -1,9 +1,11 @@
 package fr.snipertvmc.essentialsxgui.managers;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.earth2me.essentials.User;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGHome;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGPlayer;
+import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 
 import java.util.*;
 
@@ -22,13 +24,14 @@ public class PlayerDataManager {
 		}
 
 		List<String> essentialsHomes = Main.getInstance().getEssentials().getUser(player.getName()).getHomes();
+		Pair<XMaterial, Integer> defaultHomeIcon = Main.getInstance().getConfiguration().getDefaultHomeIcon();
 
 		for (String homeName : essentialsHomes) {
 
 			playerHomes.put(homeName, new HashMap<>() {{
 				put("displayName", homeName);
-				put("material", "GRASS_BLOCK");
-				put("data", "0");
+				put("material", defaultHomeIcon.getLeft().name());
+				put("data", defaultHomeIcon.getRight());
 				put("customItemStack", null);
 			}});
 		}

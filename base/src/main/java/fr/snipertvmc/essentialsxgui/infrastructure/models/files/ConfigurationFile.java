@@ -207,6 +207,27 @@ public class ConfigurationFile extends BaseFile {
 	}
 
 
+	public Pair<XMaterial, Integer> getDefaultHomeIcon() {
+		return getDefaultIcon("homes.defaultHomeIcon", XMaterial.GRASS_BLOCK);
+	}
+
+	public Pair<XMaterial, Integer> getDefaultKitIcon() {
+		return getDefaultIcon("kits.defaultKitIcon", XMaterial.CHEST);
+	}
+
+	public Pair<XMaterial, Integer> getDefaultWarpIcon() {
+		return getDefaultIcon("warps.defaultWarpIcon", XMaterial.END_PORTAL_FRAME);
+	}
+
+	private Pair<XMaterial, Integer> getDefaultIcon(String path, XMaterial fallback) {
+		String materialString = getYamlConfiguration().getString(path + ".material", fallback.name());
+		int data = getYamlConfiguration().getInt(path + ".data", 0);
+		return XMaterial.matchXMaterial(materialString)
+				.map(material -> Pair.of(material, data))
+				.orElseGet(() -> Pair.of(fallback, 0));
+	}
+
+
 	// -------------------------------------------------- //
 
 

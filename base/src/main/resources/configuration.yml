@@ -117,6 +117,12 @@ homes:
   # Ways available: "CHAT", "ANVIL"
   deleteHomeEntryType: "CHAT"
 
+  # Set the default icon for homes when they are created.
+  # If your server is running on Minecraft 1.12 or lower, you can add 'data' field to specify the data value of the item.
+  # (e.g., "material: "WOOL", data: 14" for red wool)
+  defaultHomeIcon:
+    material: "GRASS_BLOCK"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                         Kits                         | #
@@ -190,6 +196,12 @@ kits:
   # Default: "NONE"
   customKitsOrder: "NONE"
 
+  # Set the default icon for kits when they are created.
+  # If your server is running on Minecraft 1.12 or lower, you can add 'data' field to specify the data value of the item.
+  # (e.g., "material: "WOOL", data: 14" for red wool)
+  defaultKitIcon:
+    material: "CHEST"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Warps                         | #
@@ -258,6 +270,12 @@ warps:
   #       More help at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/main-configuration/warps#custom-order-of-warps-in-the-gui
   # Default: "NONE"
   customWarpsOrder: "NONE"
+
+  # Set the default icon for warps when they are created.
+  # If your server is running on Minecraft 1.12 or lower, you can add 'data' field to specify the data value of the item.
+  # (e.g., "material: "WOOL", data: 14" for red wool)
+  defaultWarpIcon:
+    material: "END_PORTAL_FRAME"
 
 ############################################################
 # +------------------------------------------------------+ #
