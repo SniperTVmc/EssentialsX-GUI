@@ -68,6 +68,14 @@ public final class FastInvManager {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(plugin), plugin);
     }
 
+    public static void closeAll() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getOpenInventory().getTopInventory().getHolder() instanceof FastInv) {
+                player.closeInventory();
+            }
+        }
+    }
+
     public static final class InventoryListener implements Listener {
 
         private final Plugin plugin;

@@ -147,6 +147,7 @@ public class LoadingManager {
 		if (detailedLoading) ConsoleLogger.console("\t§6EssentialsX-GUI: §7Data saving...");
 		Main.getInstance().getPlayerManager().saveAll();
 		Main.getInstance().getServerManager().save();
+		FastInvManager.closeAll();
 		if (detailedLoading) ConsoleLogger.console("\t§6EssentialsX-GUI: §7Data saving §fcompleted§7.");
 
 
