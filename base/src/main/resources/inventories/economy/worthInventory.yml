@@ -48,7 +48,7 @@ worthInventory:
 
   items:
 
-    # Placeholders available: {worthItemMaterial}, {worthItemData} (1.12.2 and before), {itemUnitWorth}, {itemTotalWorth}, {itemAmount}
+    # Placeholders available: {worthItemMaterial}, {worthItemData} (1.12.2 and before), {itemUnitWorth}, {itemTotalWorth}, {itemAmount}, {worthMultiplier}
     worthItem:
       enabled: true
       slot: 13

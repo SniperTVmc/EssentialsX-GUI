@@ -56,6 +56,9 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 				itemTotalPrice = itemUnitPrice.multiply(BigDecimal.valueOf(itemStack.getAmount()));
 			}
 
+			BigDecimal worthMultiplier = Main.getInstance().getEXGServer().getWorth().getMultiplier(player);
+			boolean hasWorthMultiplier = worthMultiplier != null && worthMultiplier.compareTo(BigDecimal.ONE) != 0;
+
 			String itemUnitWorth = itemUnitPrice == null
 					? MessagesUtils.getString(EXGMessage.NO_WORTH_AVAILABLE)
 					: NumberUtil.displayCurrency(itemUnitPrice, Main.getInstance().getEssentials());
@@ -64,14 +67,27 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 					? MessagesUtils.getString(EXGMessage.NO_WORTH_AVAILABLE)
 					: NumberUtil.displayCurrency(itemTotalPrice, Main.getInstance().getEssentials());
 
-			Map<String, String> variables = new HashMap<>() {{
-				put("worthItemMaterial", materialName);
-				put("itemUnitWorth", itemUnitWorth);
-				put("itemTotalWorth", itemTotalWorth);
-				put("itemAmount", String.valueOf(itemStack.getAmount()));
-			}};
+			if (itemUnitPrice != null) {
+				if (hasWorthMultiplier) {
+					itemUnitWorth = itemUnitWorth + " " + MessagesUtils.getString(EXGMessage.MULTIPLIER_FORMAT, Map.of(
+							"multiplier", String.valueOf(worthMultiplier)
+					));
 
-			if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT"))) {
+					itemTotalWorth = itemTotalWorth + " " + MessagesUtils.getString(EXGMessage.MULTIPLIER_FORMAT, Map.of(
+							"multiplier", String.valueOf(worthMultiplier)
+					));
+				}
+			}
+
+			Map<String, String> variables = new HashMap<>(Map.of(
+					"worthItemMaterial", materialName,
+					"itemUnitWorth", itemUnitWorth,
+					"itemTotalWorth", itemTotalWorth,
+					"itemAmount", String.valueOf(itemStack.getAmount()),
+					"worthMultiplier", String.valueOf(worthMultiplier)
+			));
+
+			if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
 				variables.put("worthItemData", String.valueOf(itemStack.getDurability()));
 			}
 

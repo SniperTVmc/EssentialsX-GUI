@@ -43,8 +43,9 @@ worth:
       displayName: "&aAll items worth"
       lore:
         - "&7Click to view the worth of all existent items in the game."
+        - "&bⓘ &7&oMultipliers are not applied to this list."
 
-    # Placeholders available: {handItemMaterial}, {handItemUnitWorth}, {handItemTotalWorth}, {handItemAmount}
+    # Placeholders available: {handItemMaterial}, {handItemUnitWorth}, {handItemTotalWorth}, {handItemAmount}, {worthMultiplier}
     handItem:
       enabled: true
       slot: 22
@@ -57,7 +58,7 @@ worth:
         - "&7Total worth: &a{handItemTotalWorth}"
         - "&7Amount: &a{handItemAmount}"
 
-    # Placeholders available: {inventoryWorth}
+    # Placeholders available: {inventoryWorth}, {worthMultiplier}
     inventoryItem:
       enabled: true
       slot: 33

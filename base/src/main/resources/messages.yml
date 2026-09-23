@@ -233,6 +233,11 @@ general:
   set: "set"
   reset: "reset"
   available: "&aAvailable"
+  # Placeholders available: {worth}
+  worthFormat: "&a{worth}"
+  # Placeholders available: {multiplier}
+  # Note: if the multiplier is 1, it will not be displayed.
+  multiplierFormat: "&7&o(&2&ox{multiplier}&7&o)"
 
 
   days: "{days}d"

@@ -161,6 +161,8 @@ public enum EXGMessage {
 	SET("general.set"),
 	RESET("general.reset"),
 	AVAILABLE("general.available"),
+	WORTH_FORMAT("general.worthFormat"),
+	MULTIPLIER_FORMAT("general.multiplierFormat"),
 
 
 	DAYS("general.days"),

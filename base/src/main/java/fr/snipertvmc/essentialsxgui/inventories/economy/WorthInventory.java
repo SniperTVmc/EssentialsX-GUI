@@ -69,14 +69,28 @@ public class WorthInventory extends FastInv {
 		int handItemAmount = hasItemInHand ? handItemStack.getAmount() : 1;
 		byte handItemData = hasItemInHand ? (byte) handItemStack.getDurability() : 0;
 
+		BigDecimal worthMultiplier = Main.getInstance().getEXGServer().getWorth().getMultiplier(player);
+		boolean hasWorthMultiplier = worthMultiplier != null && worthMultiplier.compareTo(BigDecimal.ONE) != 0;
+
 		if (hasItemInHand) {
 
 			BigDecimal handItemUnitPrice = Main.getInstance().getEXGServer().getWorth().getUnitPrice(player, handItemStack);
 			if (handItemUnitPrice != null) {
-
-				handItemUnitWorth = NumberUtil.displayCurrency(handItemUnitPrice, Main.getInstance().getEssentials());
+				handItemUnitWorth = MessagesUtils.getString(EXGMessage.WORTH_FORMAT, Map.of(
+						"worth", NumberUtil.displayCurrency(handItemUnitPrice, Main.getInstance().getEssentials())));
 				BigDecimal handItemTotalPrice = handItemUnitPrice.multiply(BigDecimal.valueOf(handItemStack.getAmount()));
-				handItemTotalWorth = NumberUtil.displayCurrency(handItemTotalPrice, Main.getInstance().getEssentials());
+				handItemTotalWorth = MessagesUtils.getString(EXGMessage.WORTH_FORMAT, Map.of(
+						"worth", NumberUtil.displayCurrency(handItemTotalPrice, Main.getInstance().getEssentials())));
+
+				if (hasWorthMultiplier) {
+					handItemUnitWorth = handItemUnitWorth + " " + MessagesUtils.getString(EXGMessage.MULTIPLIER_FORMAT, Map.of(
+							"multiplier", String.valueOf(worthMultiplier)
+					));
+
+					handItemTotalWorth = handItemTotalWorth + " " + MessagesUtils.getString(EXGMessage.MULTIPLIER_FORMAT, Map.of(
+							"multiplier", String.valueOf(worthMultiplier)
+					));
+				}
 			}
 		}
 
@@ -89,7 +103,8 @@ public class WorthInventory extends FastInv {
 							"handItemMaterial", handItemMaterialName,
 							"handItemUnitWorth", handItemUnitWorth,
 							"handItemTotalWorth", handItemTotalWorth,
-							"handItemAmount", String.valueOf(handItemAmount)
+							"handItemAmount", String.valueOf(handItemAmount),
+							"worthMultiplier", String.valueOf(worthMultiplier)
 					)));
 		}
 
@@ -97,11 +112,18 @@ public class WorthInventory extends FastInv {
 		BigDecimal inventoryPrice = Main.getInstance().getEXGServer().getWorth().getInventoryPrice(player);
 		String inventoryWorth = NumberUtil.displayCurrency(inventoryPrice, Main.getInstance().getEssentials());
 
+		if (hasWorthMultiplier) {
+			inventoryWorth = inventoryWorth + " " + MessagesUtils.getString(EXGMessage.MULTIPLIER_FORMAT, Map.of(
+					"multiplier", String.valueOf(worthMultiplier)
+			));
+		}
+
 		if (config.getInventoryItem().isEnabled()) {
 			setItem(config.getInventoryItem().getSlot(), config.getInventoryItem()
 					.build(player, Map.of(
-							"inventoryWorth", inventoryWorth)
-					), e -> {
+							"inventoryWorth", inventoryWorth,
+							"worthMultiplier", String.valueOf(worthMultiplier)
+					)), e -> {
 
 				new WorthInventoryInventory(player).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);

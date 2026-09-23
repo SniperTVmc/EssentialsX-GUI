@@ -54,7 +54,7 @@ worthAll:
       slot: 13
       displayName: "&a{worthItemMaterial} worth"
       lore:
-        - "&7Worth &7&o(per item)&r&7: &a{itemWorth}"
+        - "&7Worth &7&o(per item, no multiplier)&r&7: &a{itemWorth}"
 
     # 'slot' value will be ignored in this section. The item will be placed in the first slot like a worth item.
     # The item will be displayed if the server has no items with worth.
