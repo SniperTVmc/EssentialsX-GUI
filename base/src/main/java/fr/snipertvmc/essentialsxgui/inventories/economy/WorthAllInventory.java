@@ -82,7 +82,7 @@ public class WorthAllInventory extends PaginatedFastInv {
 				String dataValue = fullMaterial.length > 1 ? fullMaterial[1] : "0";
 
 				Material material = Main.getInstance().getEXGServer().getWorth().getMaterialFromWorthName(materialName);
-				byte data = !dataValue.equals("*") ? Byte.valueOf(dataValue) : 0;
+				int data = !dataValue.equals("*") ? Integer.parseInt(dataValue) : 0;
 
 				try {
 					if (!material.isItem()) continue;

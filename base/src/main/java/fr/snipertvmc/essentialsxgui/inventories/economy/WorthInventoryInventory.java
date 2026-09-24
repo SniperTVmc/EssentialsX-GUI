@@ -94,7 +94,7 @@ public class WorthInventoryInventory extends PaginatedFastInv {
 			addContent(config.getWorthItem()
 					.setMaterial(materialName)
 					.setAmount(itemStack.getAmount())
-					.setData((byte) itemStack.getDurability())
+					.setData((int) itemStack.getDurability())
 					.build(player, variables));
 		}
 

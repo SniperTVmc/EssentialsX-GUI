@@ -67,7 +67,7 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 	                              Consumer<Pair<String, EXGEntryResult>> onFailure) {
 
 
-		List<Pair<XMaterial, Byte>> materialList = Main.getInstance().getConfiguration().getMaterialsList(entrySettings.getMaterialListPath());
+		List<Pair<XMaterial, Integer>> materialList = Main.getInstance().getConfiguration().getMaterialsList(entrySettings.getMaterialListPath());
 
 		if (materialList.isEmpty()) {
 
@@ -83,7 +83,7 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 			return;
 		}
 
-		for (Pair<XMaterial, Byte> materialPair : materialList) {
+		for (Pair<XMaterial, Integer> materialPair : materialList) {
 
 			ConfigurableItem materialIconItem = config.getMaterialIconItem();
 			materialIconItem.setMaterial(materialPair.getLeft().name());

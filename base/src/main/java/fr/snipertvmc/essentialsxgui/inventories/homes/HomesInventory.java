@@ -110,7 +110,7 @@ public class HomesInventory extends PaginatedFastInv {
 
 		String[] bedHomeMaterialParts = getBedHomeMaterialAndData(player).split(":");
 		String bedHomeMaterialName = bedHomeMaterialParts[0];
-		byte bedHomeData = bedHomeMaterialParts.length > 1 ? Byte.parseByte(bedHomeMaterialParts[1]) : 0;
+		int bedHomeData = bedHomeMaterialParts.length > 1 ? Integer.parseInt(bedHomeMaterialParts[1]) : 0;
 		if (player.hasPermission("essentials.home.bed") && config.getBedHomeItem().isEnabled()) {
 			setItem(config.getBedHomeItem().getSlot(), config.getBedHomeItem()
 					.setMaterial(bedHomeMaterialName)

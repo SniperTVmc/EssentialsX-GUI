@@ -31,7 +31,7 @@ public class ConfigurableItem {
 
 	private String material = Material.AIR.name();
 	private Integer amount = 1;
-	private Byte data = 0;
+	private Integer data = 0;
 
 	private String displayName;
 	private List<String> lore;
@@ -63,7 +63,7 @@ public class ConfigurableItem {
 
 		this.material = itemConfig.getString("material", Material.BEDROCK.name());
 		this.amount = itemConfig.getInt("amount", 1);
-		this.data = (byte) itemConfig.getInt("data", 0);
+		this.data = itemConfig.getInt("data", 0);
 
 		this.displayName = itemConfig.getString("displayName", null);
 		this.lore = itemConfig.getStringList("lore");
@@ -130,7 +130,7 @@ public class ConfigurableItem {
 	public Integer getAmount() {
 		return amount;
 	}
-	public Byte getData() {
+	public Integer getData() {
 		return data;
 	}
 
@@ -169,7 +169,7 @@ public class ConfigurableItem {
 		this.amount = amount;
 		return this;
 	}
-	public ConfigurableItem setData(Byte data) {
+	public ConfigurableItem setData(Integer data) {
 		this.data = data;
 		return this;
 	}

@@ -67,7 +67,7 @@ public class WorthInventory extends FastInv {
 				: EXGMessage.NO_ITEM_IN_HAND);
 
 		int handItemAmount = hasItemInHand ? handItemStack.getAmount() : 1;
-		byte handItemData = hasItemInHand ? (byte) handItemStack.getDurability() : 0;
+		int handItemData = hasItemInHand ? handItemStack.getDurability() : 0;
 
 		BigDecimal worthMultiplier = Main.getInstance().getEXGServer().getWorth().getMultiplier(player);
 		boolean hasWorthMultiplier = worthMultiplier != null && worthMultiplier.compareTo(BigDecimal.ONE) != 0;

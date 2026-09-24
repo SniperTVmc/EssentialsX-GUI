@@ -91,20 +91,20 @@ public class ConfigurationFile extends BaseFile {
 		}
 	}
 
-	public List<Pair<XMaterial, Byte>> getMaterialsList(String path) {
+	public List<Pair<XMaterial, Integer>> getMaterialsList(String path) {
 
 		List<String> materialsStringList = getYamlConfiguration().getStringList(path);
-		List<Pair<XMaterial, Byte>> materialsList = new ArrayList<>();
+		List<Pair<XMaterial, Integer>> materialsList = new ArrayList<>();
 
 		for (String materialString : materialsStringList) {
 			String[] parts = materialString.split(":");
 			String materialName = parts[0];
-			byte dataValue = 0;
+			int dataValue = 0;
 			if (parts.length > 1) {
 				try {
-					dataValue = Byte.parseByte(parts[1]);
+					dataValue = Integer.parseInt(parts[1]);
 				} catch (NumberFormatException exception) {
-					ConsoleLogger.warn("The data value '" + parts[1] + "' is not a valid byte for the material '" + materialName + "' in the path '" + path + "'. Using the default data value '0' instead.");
+					ConsoleLogger.warn("The data value '" + parts[1] + "' is not a valid integer for the material '" + materialName + "' in the path '" + path + "'. Using the default data value '0' instead.");
 				}
 			}
 			if (XMaterial.matchXMaterial(materialName).isPresent()) {

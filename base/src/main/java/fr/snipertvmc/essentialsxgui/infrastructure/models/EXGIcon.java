@@ -13,7 +13,7 @@ public class EXGIcon {
 
 	private String displayName;
 	private XMaterial material;
-	private byte data;
+	private int data;
 
 	private ItemStack customItemStack;
 
@@ -42,7 +42,7 @@ public class EXGIcon {
 	public XMaterial getMaterial() {
 		return material;
 	}
-	public byte getData() {
+	public int getData() {
 		return data;
 	}
 
@@ -61,7 +61,7 @@ public class EXGIcon {
 	public void setMaterial(XMaterial material) {
 		this.material = material;
 	}
-	public void setData(byte data) {
+	public void setData(int data) {
 		this.data = data;
 	}
 
