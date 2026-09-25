@@ -293,11 +293,11 @@ public class ItemPropertyParser {
 
 
 
-	private static boolean isPositive(String itemPath, boolean silence, int... slotValue) {
-		for (int slot : slotValue) {
-			if (slot <= 0) {
+	private static boolean isPositive(String itemPath, boolean silence, int... values) {
+		for (int value : values) {
+			if (value <= 0) {
 				if (silence) return false;
-				ConsoleLogger.error("Invalid slot for item '" + itemPath + "': it must be a positive number.");
+				ConsoleLogger.error("Invalid value for item '" + itemPath + "': it must be a positive number.");
 				return false;
 			}
 		}

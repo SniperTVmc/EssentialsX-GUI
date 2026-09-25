@@ -6,6 +6,7 @@ import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFil
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.MessagesFile;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
+import fr.snipertvmc.essentialsxgui.utilities.parsers.configuration.ConfigurationParser;
 import fr.snipertvmc.essentialsxgui.utilities.parsers.inventories.ConfigurableInventoryParser;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -150,6 +151,7 @@ public class FilesManager {
 	public void loadAndCheckConfiguration(boolean reload) {
 		loadYAMLFile("configuration.yml");
 		checkUpdateForFile("configuration.yml");
+		ConfigurationParser.isConfigurationValid(configurationFile, false);
 		String label = reload ? "Reloaded" : "Loaded";
 		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fconfiguration.yml: §a" + label);
 	}

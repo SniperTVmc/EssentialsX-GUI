@@ -64,12 +64,12 @@ general:
   # used as internal names for EssentialsX, so they must follow EssentialsX 'naming rules'. If you don't know
   # what that means, just use simple names like the ones provided by default.
   instantCreationDefaultValues:
-    home_name: "home_%number%"
+    homeName: "home_%number%"
 
-    kit_name: "kit_%number%"
-    kit_delay: 3600
+    kitName: "kit_%number%"
+    kitDelay: 3600
 
-    warp_name: "warp_%number%"
+    warpName: "warp_%number%"
 
 ############################################################
 # +------------------------------------------------------+ #

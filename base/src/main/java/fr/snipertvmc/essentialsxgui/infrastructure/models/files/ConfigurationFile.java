@@ -155,16 +155,16 @@ public class ConfigurationFile extends BaseFile {
 	}
 
 	public String getInstantCreationDefaultHomeName() {
-		return getYamlConfiguration().getString("general.instantCreationDefaultValues.home_name", "home_%number%");
+		return getYamlConfiguration().getString("general.instantCreationDefaultValues.homeName", "home_%number%");
 	}
 	public String getInstantCreationDefaultKitName() {
-		return getYamlConfiguration().getString("general.instantCreationDefaultValues.kit_name", "kit_%number%");
+		return getYamlConfiguration().getString("general.instantCreationDefaultValues.kitName", "kit_%number%");
 	}
 	public long getInstantCreationDefaultKitDelay() {
-		return getYamlConfiguration().getLong("general.instantCreationDefaultValues.kit_delay", 3600L);
+		return getYamlConfiguration().getLong("general.instantCreationDefaultValues.kitDelay", 3600L);
 	}
 	public String getInstantCreationDefaultWarpName() {
-		return getYamlConfiguration().getString("general.instantCreationDefaultValues.warp_name", "warp_%number%");
+		return getYamlConfiguration().getString("general.instantCreationDefaultValues.warpName", "warp_%number%");
 	}
 
 
