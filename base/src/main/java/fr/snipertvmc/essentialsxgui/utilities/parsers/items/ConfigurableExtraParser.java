@@ -37,14 +37,15 @@ public class ConfigurableExtraParser {
 		Object material = itemSection.get("material");
 		Object slot = itemSection.get("slot");
 
+
 		// Validate item properties
-		return ItemPropertyParser.isSkullOwnerValid(skullOwner, material, itemPath, silence) &&
-				ItemPropertyParser.isCustomModelDataValid(customModelData, itemPath, silence) &&
-
-				ItemPropertyParser.areClickActionsValid(clickActions, itemPath, silence) &&
-
-				ItemPropertyParser.isUpdateItemIntervalValid(updateItemInterval, itemPath, silence) &&
-				ItemPropertyParser.isAmountValueValid(amountValue, slot, itemPath, silence);
+		boolean isValid = true;
+		if (!ItemPropertyParser.isSkullOwnerValid(skullOwner, material, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isCustomModelDataValid(customModelData, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.areClickActionsValid(clickActions, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isUpdateItemIntervalValid(updateItemInterval, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isAmountValueValid(amountValue, slot, itemPath, silence)) isValid = false;
+		return isValid;
 	}
 
 

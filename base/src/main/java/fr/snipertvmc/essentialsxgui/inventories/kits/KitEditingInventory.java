@@ -159,7 +159,7 @@ public class KitEditingInventory extends FastInv {
 		EXGEntrySettings entrySettings = new EXGEntrySettings(entryType)
 				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL))
 				.setEntryDisplayName(MessagesUtils.getString(EXGMessage.ENTER_NEW_DISPLAY_NAME))
-				.setCharactersListPath("kits.changeKitDisplayNameCharacterList")
+				.setCharactersListPath("kits.changeKitDisplayNameCharactersList")
 				.setMinLength(Main.getInstance().getConfiguration().getMinNameLength())
 				.setMaxLength(Main.getInstance().getConfiguration().getMaxNameLength());
 

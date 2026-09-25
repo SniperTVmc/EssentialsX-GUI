@@ -101,7 +101,7 @@ homes:
   changeHomeIconEntryType: "GUI"
 
   # If you set the changeHomeIconEntryType to "GUI", you must set the materials available in the GUI here.
-  changeHomeIconMaterialList: ["STONE", "COBBLESTONE", "DIRT", "IRON_ORE", "DIAMOND_BLOCK", "SPONGE", "ANVIL",
+  changeHomeIconMaterialsList: ["STONE", "COBBLESTONE", "DIRT", "IRON_ORE", "DIAMOND_BLOCK", "SPONGE", "ANVIL",
                                "QUARTZ_BLOCK", "COOKED_BEEF", "APPLE", "BREAD", "WHEAT", "BOW", "IRON_SWORD",]
 
   # Decide which characters are allowed in the display name of a home.
@@ -111,7 +111,7 @@ homes:
   #   => With regex, start the string with "regex:" followed by the regex pattern.
   #      For example, "regex:^[a-zA-Z0-9_ ]+$" will allow only letters, numbers, underscores and spaces.
   #   => Blank field: If you want to allow all characters, just leave this field blank.
-  changeHomeDisplayNameCharacterList: "regex:^[a-zA-Z0-9_ ]+$"
+  changeHomeDisplayNameCharactersList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a home.
   # Ways available: "CHAT", "ANVIL"
@@ -119,7 +119,7 @@ homes:
 
   # Set the default icon for homes when they are created.
   # If your server is running on Minecraft 1.12 or lower, you can add 'data' field to specify the data value of the item.
-  # (e.g., "material: "WOOL", data: 14" for red wool)
+  # (e.g. "material: "WOOL", data: 14" for red wool)
   defaultHomeIcon:
     material: "GRASS_BLOCK"
 
@@ -157,7 +157,7 @@ kits:
   changeKitIconEntryType: "GUI"
 
   # If you set the changeKitIconEntryType to "GUI", you must set the materials available in the GUI here.
-  changeKitIconMaterialList: ["STONE", "COBBLESTONE", "DIRT", "IRON_ORE", "DIAMOND_BLOCK", "SPONGE", "ANVIL",
+  changeKitIconMaterialsList: ["STONE", "COBBLESTONE", "DIRT", "IRON_ORE", "DIAMOND_BLOCK", "SPONGE", "ANVIL",
                               "QUARTZ_BLOCK", "COOKED_BEEF", "APPLE", "BREAD", "WHEAT", "BOW", "IRON_SWORD",]
 
   # Decide which characters are allowed in the display name of a kit.
@@ -167,7 +167,7 @@ kits:
   #   => With regex, start the string with "regex:" followed by the regex pattern.
   #      For example, "regex:^[a-zA-Z0-9_ ]+$" will allow only letters, numbers, underscores and spaces.
   #   => Blank field: If you want to allow all characters, just leave this field blank.
-  changeKitDisplayNameCharacterList: "regex:^[a-zA-Z0-9_ ]+$"
+  changeKitDisplayNameCharactersList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a kit.
   # Ways available: "CHAT", "ANVIL"
@@ -232,7 +232,7 @@ warps:
   changeWarpIconEntryType: "GUI"
 
   # If you set the changeWarpIconEntryType to "GUI", you must set the materials available in the GUI here.
-  changeWarpIconMaterialList: ["STONE", "COBBLESTONE", "DIRT", "IRON_ORE", "DIAMOND_BLOCK", "SPONGE", "ANVIL",
+  changeWarpIconMaterialsList: ["STONE", "COBBLESTONE", "DIRT", "IRON_ORE", "DIAMOND_BLOCK", "SPONGE", "ANVIL",
                                "QUARTZ_BLOCK", "COOKED_BEEF", "APPLE", "BREAD", "WHEAT", "BOW", "IRON_SWORD",]
 
   # Decide which characters are allowed in the display name of a warp.
@@ -242,7 +242,7 @@ warps:
   #   => With regex, start the string with "regex:" followed by the regex pattern.
   #      For example, "regex:^[a-zA-Z0-9_ ]+$" will allow only letters, numbers, underscores and spaces.
   #   => Blank field: If you want to allow all characters, just leave this field blank.
-  changeWarpDisplayNameCharacterList: "regex:^[a-zA-Z0-9_ ]+$"
+  changeWarpDisplayNameCharactersList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a warp.
   # Ways available: "CHAT", "ANVIL"

@@ -38,10 +38,11 @@ public class ConfigurableInventoryParser {
 
 
 		// Validate inventory properties
-		return InventoryPropertyParser.isTitleValid(title, inventoryFile.getFileName()) &&
-				InventoryPropertyParser.areRowsValid(rows, inventoryFile.getFileName()) &&
-
-				InventoryPropertyParser.isInventorySchemeValid(inventoryScheme, inventoryFile.getFileName(), rows);
+		boolean isValid = true;
+		if (!InventoryPropertyParser.isTitleValid(title, inventoryFile.getFileName())) isValid = false;
+		if (!InventoryPropertyParser.areRowsValid(rows, inventoryFile.getFileName())) isValid = false;
+		if (!InventoryPropertyParser.isInventorySchemeValid(inventoryScheme, inventoryFile.getFileName(), rows)) isValid = false;
+		return isValid;
 	}
 
 

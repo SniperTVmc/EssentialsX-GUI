@@ -52,21 +52,18 @@ public class ConfigurableItemParser {
 
 
 		// Validate item properties
-		return ItemPropertyParser.isEnabled(enabled, itemPath, silence) &&
-
-				ItemPropertyParser.isSlotValid(slot, itemPath, rows, silence) &&
-
-				ItemPropertyParser.isMaterialValid(material, itemPath, silence) &&
-				ItemPropertyParser.isDataValid(data, itemPath, silence) &&
-				ItemPropertyParser. isAmountValid(amount, itemPath, silence) &&
-
-				ItemPropertyParser.isDisplayNameValid(displayName, itemPath, silence) &&
-				ItemPropertyParser.isLoreValid(lore, itemPath, silence) &&
-
-				ItemPropertyParser.areEnchantmentsValid(enchantments, itemPath, silence) &&
-				ItemPropertyParser.areItemFlagsValid(itemFlags, itemPath, silence) &&
-
-				ConfigurableExtraParser.isConfigurableExtraValid(itemSection, itemPath, silence);
+		boolean isValid = true;
+		if (!ItemPropertyParser.isEnabled(enabled, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isSlotValid(slot, itemPath, rows, silence)) isValid = false;
+		if (!ItemPropertyParser.isMaterialValid(material, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isDataValid(data, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isAmountValid(amount, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isDisplayNameValid(displayName, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.isLoreValid(lore, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.areEnchantmentsValid(enchantments, itemPath, silence)) isValid = false;
+		if (!ItemPropertyParser.areItemFlagsValid(itemFlags, itemPath, silence)) isValid = false;
+		if (!ConfigurableExtraParser.isConfigurableExtraValid(itemSection, itemPath, silence)) isValid = false;
+		return isValid;
 	}
 
 
