@@ -17,7 +17,15 @@ public class ConfigurationParser {
 	public static boolean isConfigurationValid(ConfigurationFile configuration, boolean silence) {
 
 
-		// Get the configuration modules sections
+		// Get the configuration sections
+		ConfigurationSection generalSection = configuration.getYamlConfiguration().getConfigurationSection("general");
+		if (generalSection == null) {
+			if (!silence) {
+				ConsoleLogger.error("Invalid configuration: the 'general' section is missing.");
+			}
+			return false;
+		}
+
 		Map<String, ConfigurationSection> modulesSections = new HashMap<>() {{
 			put("homes", configuration.getYamlConfiguration().getConfigurationSection("homes"));
 			put("kits", configuration.getYamlConfiguration().getConfigurationSection("kits"));
@@ -38,12 +46,14 @@ public class ConfigurationParser {
 
 		// Validate configuration properties
 		boolean isValid = true;
-		if (!ConfigurationPropertyParser.areInstantCreationDefaultValuesValid(configuration, silence)) isValid = false;
+		if (!ConfigurationPropertyParser.isGeneralSectionValid(generalSection, silence)) isValid = false;
 		if (!ConfigurationPropertyParser.isHomesModuleValid(modulesSections.get("homes"), silence)) isValid = false;
 		if (!ConfigurationPropertyParser.isKitsModuleValid(modulesSections.get("kits"), silence)) isValid = false;
 		if (!ConfigurationPropertyParser.isWarpsModuleValid(modulesSections.get("warps"), silence)) isValid = false;
 		if (!ConfigurationPropertyParser.isWhoisModuleValid(modulesSections.get("whois"), silence)) isValid = false;
 		if (!ConfigurationPropertyParser.isEconomyModuleValid(modulesSections.get("economy"), silence)) isValid = false;
+		if (!ConfigurationPropertyParser.isSoundsSectionValid(generalSection, silence)) isValid = false;
+		if (!ConfigurationPropertyParser.isStorageSectionValid(generalSection, silence)) isValid = false;
 		return isValid;
 	}
 

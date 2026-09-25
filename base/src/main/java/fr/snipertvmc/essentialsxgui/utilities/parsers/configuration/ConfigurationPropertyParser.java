@@ -2,15 +2,10 @@ package fr.snipertvmc.essentialsxgui.utilities.parsers.configuration;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.earth2me.essentials.utils.VersionUtil;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFile;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -21,16 +16,38 @@ public class ConfigurationPropertyParser {
 
 
 
-	protected static boolean areInstantCreationDefaultValuesValid(ConfigurationFile configuration, boolean silence) {
+	protected static boolean isGeneralSectionValid(ConfigurationSection generalSection, boolean silence) {
 
-		if (!configuration.skipDataEntryProcess()) return true;
-		YamlConfiguration yamlConfiguration = configuration.getYamlConfiguration();
-		ConfigurationSection instantCreationDefaultValuesSection = yamlConfiguration.getConfigurationSection("general.instantCreationDefaultValues");
-		if (instantCreationDefaultValuesSection == null) {
-			ConsoleLogger.error("Invalid configuration '" + configuration.getFileName() + "': the 'general.instantCreationDefaultValues' section is missing.");
-			return false;
-		}
 
+		// Get the configuration properties
+		ConfigurationSection instantCreationDefaultValuesSection = generalSection.getConfigurationSection("instantCreationDefaultValues");
+		Object detailedLoading = generalSection.get("detailedLoading");
+		Object checkForUpdates = generalSection.get("checkForUpdates");
+		Object dateTimezone = generalSection.get("dateTimezone");
+		Object minNameLength = generalSection.get("minNameLength");
+		Object maxNameLength = generalSection.get("maxNameLength");
+		Object delayForTypingInChat = generalSection.get("delayForTypingInChat");
+		Object skipDataEntryProcess = generalSection.get("skipDataEntryProcess");
+
+
+		// Validate configuration properties
+		boolean isValid = true;
+		if (!isBooleanValid(detailedLoading, "general.detailedLoading", silence)) isValid = false;
+		if (!isBooleanValid(checkForUpdates, "general.checkForUpdates", silence)) isValid = false;
+		if (!isTimezoneValid(dateTimezone, "general.dateTimezone", silence)) isValid = false;
+		if (!isPositive("general.minNameLength", silence, (Integer) minNameLength)) isValid = false;
+		if (!isPositive("general.maxNameLength", silence, (Integer) maxNameLength)) isValid = false;
+		if (!isPositive("general.delayForTypingInChat", silence, (Integer) delayForTypingInChat)) isValid = false;
+		if (!isBooleanValid(skipDataEntryProcess, "general.skipDataEntryProcess", silence)) isValid = false;
+		if (!areInstantCreationDefaultValuesValid(instantCreationDefaultValuesSection, skipDataEntryProcess, silence)) isValid = false;
+		return isValid;
+	}
+
+
+
+	protected static boolean areInstantCreationDefaultValuesValid(ConfigurationSection instantCreationDefaultValuesSection, Object skipDataEntryProcess, boolean silence) {
+
+		if (!(skipDataEntryProcess instanceof Boolean) || !((Boolean) skipDataEntryProcess)) return true;
 		Object defaultHomeName = instantCreationDefaultValuesSection.get("homeName");
 		Object defaultKitName = instantCreationDefaultValuesSection.get("kitName");
 		Object defaultKitDelay = instantCreationDefaultValuesSection.get("kitDelay");
@@ -45,19 +62,7 @@ public class ConfigurationPropertyParser {
 	}
 
 
-	private static boolean isDefaultValueValid(Object value, String configurationPath, boolean silence) {
-		if (isMissing(value, configurationPath, silence)) return false;
-		if (isNotTypeRequired(value, configurationPath, silence, String.class, Number.class)) return false;
-		if (value instanceof String) {
-			if (!((String) value).contains("%number%)")) {
-				if (silence) return false;
-				ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property must contain the placeholder '%number%'.");
-				return false;
-			}
-		}
-		if (value instanceof Integer) return isPositive(configurationPath, silence, (Integer) value);
-		return true;
-	}
+	// -------------------------------------------------- //
 
 
 	protected static boolean isHomesModuleValid(ConfigurationSection homesSection, boolean silence) {
@@ -84,13 +89,28 @@ public class ConfigurationPropertyParser {
 		if (!isMaterialsListValid(kitsSection.get("changeKitIconMaterialsList"), "kits.changeKitIconMaterialsList", silence)) isValid = false;
 		if (!isCharactersListValid(kitsSection.get("changeKitDisplayNameCharactersList"), "kits.changeKitDisplayNameCharactersList", silence)) isValid = false;
 		if (!isMultipleChoiceValueValid(kitsSection.get("deleteKitEntryType"), "kits.deleteKitEntryType", silence)) isValid = false;
+		if (!isBooleanValid(kitsSection.get("openKitAdminViewByDefault"), "kits.openKitAdminViewByDefault", silence)) isValid = false;
+		if (!isElementsListValid(kitsSection.get("kitsVisibleWithoutPermission"), "kits.kitsVisibleWithoutPermission", silence)) isValid = false;
+		if (!isElementsListValid(kitsSection.get("customKitsOrder"), "kits.customKitsOrder", silence)) isValid = false;
 		if (!isDefaultIconValid(kitsSection.getConfigurationSection("defaultKitIcon"), "kits.defaultKitIcon", silence)) isValid = false;
 		return isValid;
 	}
 
 
 	protected static boolean isWarpsModuleValid(ConfigurationSection warpsSection, boolean silence) {
-		return true;
+		boolean isValid = true;
+		if (!isMultipleChoiceValueValid(warpsSection.get("createNewWarpEntryType"), "warps.createNewWarpEntryType", silence)) isValid = false;
+		if (!isMultipleChoiceValueValid(warpsSection.get("searchWarpEntryType"), "warps.searchWarpEntryType", silence)) isValid = false;
+		if (!isMultipleChoiceValueValid(warpsSection.get("changeWarpDisplayNameEntryType"), "warps.changeWarpDisplayNameEntryType", silence)) isValid = false;
+		if (!isMultipleChoiceValueValid(warpsSection.get("changeWarpIconEntryType"), "warps.changeWarpIconEntryType", silence)) isValid = false;
+		if (!isMaterialsListValid(warpsSection.get("changeWarpIconMaterialsList"), "warps.changeWarpIconMaterialsList", silence)) isValid = false;
+		if (!isCharactersListValid(warpsSection.get("changeWarpDisplayNameCharactersList"), "warps.changeWarpDisplayNameCharactersList", silence)) isValid = false;
+		if (!isMultipleChoiceValueValid(warpsSection.get("deleteWarpEntryType"), "warps.deleteWarpEntryType", silence)) isValid = false;
+		if (!isBooleanValid(warpsSection.get("openWarpAdminViewByDefault"), "warps.openWarpAdminViewByDefault", silence)) isValid = false;
+		if (!isElementsListValid(warpsSection.get("warpsVisibleWithoutPermission"), "warps.warpsVisibleWithoutPermission", silence)) isValid = false;
+		if (!isElementsListValid(warpsSection.get("customWarpsOrder"), "warps.customWarpsOrder", silence)) isValid = false;
+		if (!isDefaultIconValid(warpsSection.getConfigurationSection("defaultWarpIcon"), "warps.defaultWarpIcon", silence)) isValid = false;
+		return isValid;
 	}
 
 
@@ -104,7 +124,53 @@ public class ConfigurationPropertyParser {
 	}
 
 
+	protected static boolean isSoundsSectionValid(ConfigurationSection soundsSection, boolean silence) {
+		return true;
+	}
+
+
+	protected static boolean isStorageSectionValid(ConfigurationSection soundsSection, boolean silence) {
+		return true;
+	}
+
+
 	// -------------------------------------------------- //
+
+
+	private static boolean isBooleanValid(Object value, String configurationPath, boolean silence) {
+		if (isMissing(value, configurationPath, silence)) return false;
+		if (isNotTypeRequired(value, configurationPath, silence, Boolean.class)) return false;
+		return true;
+	}
+
+
+	private static boolean isTimezoneValid(Object value, String configurationPath, boolean silence) {
+		if (isMissing(value, configurationPath, silence)) return false;
+		if (isNotTypeRequired(value, configurationPath, silence, String.class)) return false;
+		try {
+			TimeZone.getTimeZone((String) value);
+		} catch (Exception e) {
+			if (silence) return false;
+			ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property contains an invalid timezone.");
+			return false;
+		}
+		return true;
+	}
+
+
+	private static boolean isDefaultValueValid(Object value, String configurationPath, boolean silence) {
+		if (isMissing(value, configurationPath, silence)) return false;
+		if (isNotTypeRequired(value, configurationPath, silence, String.class, Number.class)) return false;
+		if (value instanceof String) {
+			if (!((String) value).contains("%number%)")) {
+				if (silence) return false;
+				ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property must contain the placeholder '%number%'.");
+				return false;
+			}
+		}
+		if (value instanceof Integer) return isPositive(configurationPath, silence, (Integer) value);
+		return true;
+	}
 
 
 	private static boolean isMultipleChoiceValueValid(Object value, String configurationPath, boolean silence) {
@@ -192,6 +258,23 @@ public class ConfigurationPropertyParser {
 				ConsoleLogger.error("Invalid data for item '" + configurationPath + "': it must be between 0 and 15.");
 				return false;
 			}
+		}
+		return true;
+	}
+
+
+	protected static boolean isElementsListValid(Object value, String configurationPath, boolean silence) {
+		if (isMissing(value, configurationPath, silence)) return false;
+		if (isNotTypeRequired(value, configurationPath, silence, String.class, List.class)) return false;
+		if (value instanceof String stringValue) {
+			if (stringValue.equalsIgnoreCase("NONE")) return true;
+			if (silence) return false;
+			ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property must be a list of strings or the string 'NONE'.");
+			return false;
+		}
+		List<?> elementsList = (List<?>) value;
+		for (Object element : elementsList) {
+			if (isNotTypeRequired(element, configurationPath, silence, String.class)) return false;
 		}
 		return true;
 	}
