@@ -63,16 +63,16 @@ dependencies {
         exclude(group = "io.papermc.paper", module = "paper-api")
     }
     compileOnly("com.squareup.moshi:moshi:1.15.2")
-    compileOnly("com.zaxxer:HikariCP:7.0.2")
+    compileOnly("com.zaxxer:HikariCP:7.1.0")
     compileOnly("com.github.InstantlyMoist:privatebin-java-api:master")
-    compileOnly("me.clip:placeholderapi:2.12.2")
+    compileOnly("me.clip:placeholderapi:2.12.3")
     compileOnly("com.github.cryptomorin:XSeries:13.7.1")
     compileOnly("net.kyori:adventure-text-minimessage:4.26.1")
     compileOnly("net.kyori:adventure-platform-bukkit:4.4.1")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.17")
 
     implementation("net.wesjd:anvilgui:1.10.13-SNAPSHOT")
-    implementation("dev.faststats.metrics:bukkit:0.22.0")
+    implementation("dev.faststats.metrics:bukkit:0.30.1")
 }
 
 configurations.all {
