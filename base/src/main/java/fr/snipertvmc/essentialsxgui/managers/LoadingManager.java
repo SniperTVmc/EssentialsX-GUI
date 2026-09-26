@@ -1,9 +1,9 @@
 package fr.snipertvmc.essentialsxgui.managers;
 
 import com.earth2me.essentials.utils.VersionUtil;
-import dev.faststats.bukkit.BukkitMetrics;
-import dev.faststats.core.ErrorTracker;
-import dev.faststats.core.data.Metric;
+import dev.faststats.ErrorTracker;
+import dev.faststats.bukkit.BukkitContext;
+import dev.faststats.data.Metric;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGPermission;
@@ -37,8 +37,9 @@ public class LoadingManager {
 	private BukkitAudiences bukkitAudiences;
 
 	private Metrics bStatsMetrics;
-	private dev.faststats.core.Metrics fastStatsMetrics;
-	private final ErrorTracker fastStatsErrorTracker = ErrorTracker.contextAware();
+
+	private BukkitContext fastStatsBukkitContext;
+	public static final ErrorTracker fastStatsErrorTracker = ErrorTracker.contextAware();
 
 
 	// -------------------------------------------------- //
@@ -124,7 +125,7 @@ public class LoadingManager {
 
 
 		// METRICS SHUTDOWN
-		fastStatsMetrics.shutdown();
+		fastStatsBukkitContext.shutdown();
 
 
 		// BUKKIT PLATFORM SUPPORT SHUTDOWN
@@ -474,19 +475,22 @@ public class LoadingManager {
 
 
 		// -- FastStats Metrics //
-		fastStatsMetrics = BukkitMetrics.factory()
-				.token("1c3f12060cd797a90580e386d61bd7e5")
+		fastStatsBukkitContext = new BukkitContext.Factory(Main.getInstance(), "1c3f12060cd797a90580e386d61bd7e5")
 
-				// EssentialsX Version Chart
-				.addMetric(Metric.string("essentialsx_version", essentialsVersionData))
-				// Storage Type Chart
-				.addMetric(Metric.string("storage_type", storageTypeData))
+				.errorTrackerService(fastStatsErrorTracker)
 
-				.errorTracker(fastStatsErrorTracker)
+				.metrics(factory -> factory
 
-				.create(Main.getInstance());
+						// EssentialsX Version Chart
+						.addMetric(Metric.string("essentialsx_version", essentialsVersionData))
 
-		fastStatsMetrics.ready();
+						// Storage Type Chart
+						.addMetric(Metric.string("storage_type", storageTypeData))
+
+						.create())
+				.create();
+
+		fastStatsBukkitContext.ready();
 	}
 
 
@@ -505,16 +509,6 @@ public class LoadingManager {
 
 	public BukkitAudiences getBukkitAudiences() {
 		return bukkitAudiences;
-	}
-
-	public Metrics getbStatsMetrics() {
-		return bStatsMetrics;
-	}
-	public dev.faststats.core.Metrics getFastStatsMetrics() {
-		return fastStatsMetrics;
-	}
-	public ErrorTracker getFastStatsErrorTracker() {
-		return fastStatsErrorTracker;
 	}
 
 
