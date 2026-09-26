@@ -3,6 +3,7 @@ package fr.snipertvmc.essentialsxgui.utilities;
 import org.bukkit.Bukkit;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 public class ConsoleLogger {
 
@@ -31,8 +32,7 @@ public class ConsoleLogger {
 
 
 	public static void exception(Exception e) {
-		error(e.getMessage());
-		Arrays.stream(e.getStackTrace()).forEach(stackTraceElement -> error("\tat " + stackTraceElement.toString()));
+		Bukkit.getLogger().log(Level.SEVERE, "", e);
 	}
 
 
