@@ -442,13 +442,13 @@ storage:
       maximumPoolSize: 10
 
       # The minimum number of idle connections in the pool.
-      minimumIdle: 10
+      minimumIdle: 2
 
       # The maximum lifetime of a connection in the pool (in milliseconds).
       maxLifetime: 1800000
 
       # The idle timeout for connections in the pool (in milliseconds).
-      keepaliveTime: 0
+      keepaliveTime: 30000
 
       # The connection timeout for the pool (in milliseconds).
       connectionTimeout: 5000
