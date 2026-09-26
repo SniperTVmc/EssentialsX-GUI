@@ -2,7 +2,6 @@ package fr.snipertvmc.essentialsxgui.utilities;
 
 import org.bukkit.Bukkit;
 
-import java.util.Arrays;
 import java.util.logging.Level;
 
 public class ConsoleLogger {
