@@ -220,7 +220,7 @@ public class LoadingManager {
 				MessagesUtils.getString(EXGMessage.DATABASE_RELOADING, null));
 
 		Main.getInstance().getDatabaseManager().disconnectAllDatabases();
-		Main.getInstance().getDatabaseManager().updateDatabaseStorage();
+		Main.getInstance().getDatabaseManager().updateDatabaseStorage(false);
 		Main.getInstance().getDatabaseManager().connectAllDatabases();
 
 		int errors = Main.getInstance().getDatabaseManager().getStorage().isConnected() ? 0 : 1;

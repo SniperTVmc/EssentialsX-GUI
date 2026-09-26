@@ -7,6 +7,7 @@ import fr.snipertvmc.essentialsxgui.managers.database.storages.SQLiteStorageMana
 import fr.snipertvmc.essentialsxgui.managers.database.tables.KitsTableManager;
 import fr.snipertvmc.essentialsxgui.managers.database.tables.PlayerHomesTableManager;
 import fr.snipertvmc.essentialsxgui.managers.database.tables.WarpsTableManager;
+import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 
 public class DatabaseManager {
 
@@ -25,14 +26,15 @@ public class DatabaseManager {
 
 
 	public DatabaseManager() {
-		updateDatabaseStorage();
+		updateDatabaseStorage(false);
 	}
 
 
-	public void updateDatabaseStorage() {
+	public void updateDatabaseStorage(boolean forceUseSQLite) {
+
 
 		String storageType = Main.getInstance().getConfiguration().getStorageType();
-		if (storageType.equals("SQLite")) {
+		if (forceUseSQLite || storageType.equals("SQLite")) {
 			Main.getInstance().getLibraryManager().loadLibraries("SQLite");
 			storage = getSQLite();
 			return;
@@ -52,7 +54,25 @@ public class DatabaseManager {
 
 
 	public void connectAllDatabases() {
-		getStorage().connect();
+
+		// Attempt to connect to the database
+		boolean success = getStorage().connect();
+
+		// If the connection fails and the storage type is MySQL or MariaDB, try to switch to SQLite
+		if (!success && (getStorage().isMySQL() || getStorage().isMariaDB())) {
+			ConsoleLogger.warn("Failed to connect to the MySQL/MariaDB database. Switching to SQLite...");
+			updateDatabaseStorage(true);
+			success = getStorage().connect();
+		}
+
+		// If the connection still fails, disable the plugin
+		if (!success) {
+			ConsoleLogger.error("Failed to connect to the database. Disabling the plugin...");
+			Main.getInstance().getPluginLoader().disablePlugin(Main.getInstance());
+			return;
+		}
+
+		// Initialize the table managers
 		playerHomesTableManager.initialize(storage.isSQLite());
 		kitsTableManager.initialize(storage.isSQLite());
 		warpsTableManager.initialize(storage.isSQLite());

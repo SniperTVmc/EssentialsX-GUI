@@ -9,7 +9,7 @@ public interface EXGStorage {
 	// -------------------------------------------------- //
 
 
-	void connect();
+	boolean connect();
 	void disconnect();
 	boolean isConnected();
 	Connection getConnection() throws SQLException;
