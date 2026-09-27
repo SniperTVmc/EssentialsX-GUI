@@ -1,5 +1,6 @@
 package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items;
 
+import com.earth2me.essentials.utils.VersionUtil;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.ItemBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.inventory.ClickType;
@@ -135,7 +136,10 @@ public class ConfigurableExtra {
 
 
 	private void applyCustomModelData(ItemBuilder itemBuilder) {
-		itemBuilder.meta(meta -> meta.setCustomModelData(customModelData));
+		if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_14_R01)) return;
+		if (customModelData != null) {
+			itemBuilder.meta(meta -> meta.setCustomModelData(customModelData));
+		}
 	}
 
 
