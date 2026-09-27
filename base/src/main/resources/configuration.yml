@@ -122,6 +122,7 @@ homes:
   # (e.g. "material: "WOOL", data: 14" for red wool)
   defaultHomeIcon:
     material: "GRASS_BLOCK"
+    data: 0
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -201,6 +202,7 @@ kits:
   # (e.g., "material: "WOOL", data: 14" for red wool)
   defaultKitIcon:
     material: "CHEST"
+    data: 0
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -276,6 +278,7 @@ warps:
   # (e.g., "material: "WOOL", data: 14" for red wool)
   defaultWarpIcon:
     material: "END_PORTAL_FRAME"
+    data: 0
 
 ############################################################
 # +------------------------------------------------------+ #
