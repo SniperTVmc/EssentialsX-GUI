@@ -1,12 +1,15 @@
 package fr.snipertvmc.essentialsxgui.utilities;
 
+import com.earth2me.essentials.utils.NumberUtil;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.*;
+import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.math.BigDecimal;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -166,7 +169,12 @@ public class PluginDebugUtils {
 			content.append("- Update Interval: ").append(Main.getInstance().getConfiguration().getBalanceTopUpdateInterval()).append(" seconds\n");
 			content.append("- Top Size: ").append(balanceTop.getBalanceTopEntries().size()).append(" player(s)\n");
 			if (exgPlayer != null) {
-				content.append("- Player ranking: ").append(balanceTop.getPlayerRanking(exgPlayer.getName()));
+				Pair<Integer, BigDecimal> playerRanking = balanceTop.getPlayerRanking(exgPlayer.getName());
+				int rankingPosition = playerRanking.getLeft();
+				BigDecimal balance = playerRanking.getRight();
+				String playerBalance = NumberUtil.displayCurrency(balance, Main.getInstance().getEssentials());
+				content.append("- Player ranking: ").append(rankingPosition > 0 ? rankingPosition : "Not ranked").append("\n");
+				content.append("- Player balance: ").append(playerBalance).append("\n");
 			}
 		}
 
