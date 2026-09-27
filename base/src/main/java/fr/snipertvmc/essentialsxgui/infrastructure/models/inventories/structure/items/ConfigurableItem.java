@@ -300,6 +300,9 @@ public class ConfigurableItem {
 						.map(line -> line.replace("{" + key + "}", value))
 						.collect(Collectors.toList());
 			}
+			if (this.extra != null) {
+				this.extra.applyVariables(variables);
+			}
 		});
 	}
 

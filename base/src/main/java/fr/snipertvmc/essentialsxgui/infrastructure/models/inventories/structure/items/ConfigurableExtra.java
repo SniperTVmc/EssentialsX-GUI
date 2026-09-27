@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ConfigurableExtra {
 
@@ -146,6 +147,18 @@ public class ConfigurableExtra {
 			return false;
 		}
 		return clickType.name().equals(clickActions.get(actionName).name());
+	}
+
+
+	// -------------------------------------------------- //
+
+
+	public void applyVariables(Map<String, String> variables) {
+		variables.forEach((key, value) -> {
+			if (skullOwner != null) {
+				skullOwner = skullOwner.replace("{" + key + "}", value);
+			}
+		});
 	}
 
 
