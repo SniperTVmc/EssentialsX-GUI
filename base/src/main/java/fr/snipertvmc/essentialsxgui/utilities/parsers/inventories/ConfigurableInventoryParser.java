@@ -19,14 +19,15 @@ public class ConfigurableInventoryParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isConfigurableInventoryValid(InventoryFile inventoryFile) {
+	public static int isConfigurableInventoryValid(InventoryFile inventoryFile) {
+		int errorsCount = 0;
 
 
 		// Get the inventory configuration
 		ConfigurationSection inventorySection = inventoryFile.getYamlConfiguration().getConfigurationSection(inventoryFile.getFileName());
 		if (inventorySection == null) {
 			ConsoleLogger.error("Invalid inventory path '" + inventoryFile.getFileName() + "': the inventory section is missing.");
-			return false;
+			return 1;
 		}
 
 
@@ -38,11 +39,10 @@ public class ConfigurableInventoryParser {
 
 
 		// Validate inventory properties
-		boolean isValid = true;
-		if (!InventoryPropertyParser.isTitleValid(title, inventoryFile.getFileName())) isValid = false;
-		if (!InventoryPropertyParser.areRowsValid(rows, inventoryFile.getFileName())) isValid = false;
-		if (!InventoryPropertyParser.isInventorySchemeValid(inventoryScheme, inventoryFile.getFileName(), rows)) isValid = false;
-		return isValid;
+		if (!InventoryPropertyParser.isTitleValid(title, inventoryFile.getFileName())) errorsCount++;
+		if (!InventoryPropertyParser.areRowsValid(rows, inventoryFile.getFileName())) errorsCount++;
+		if (!InventoryPropertyParser.isInventorySchemeValid(inventoryScheme, inventoryFile.getFileName(), rows)) errorsCount++;
+		return errorsCount;
 	}
 
 

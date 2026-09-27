@@ -10,11 +10,12 @@ public class GeneralConfigurationParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isGeneralSectionValid(ConfigurationSection generalSection, boolean silence) {
+	public static int isGeneralSectionValid(ConfigurationSection generalSection, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Validate the general section
-		if (!ConfigurationPropertyParser.isSectionValid(generalSection, "general", silence)) return false;
+		if (!ConfigurationPropertyParser.isSectionValid(generalSection, "general", silence)) return 1;
 
 
 		// Get the instantCreationDefaultValues section
@@ -22,16 +23,15 @@ public class GeneralConfigurationParser {
 
 
 		// Validate configuration properties
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("detailedLoading"), "general.detailedLoading", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("checkForUpdates"), "general.checkForUpdates", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isTimezoneValid(generalSection.get("dateTimezone"), "general.dateTimezone", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("minNameLength"), "general.minNameLength", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("maxNameLength"), "general.maxNameLength", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("delayForTypingInChat"), "general.delayForTypingInChat", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("skipDataEntryProcess"), "general.skipDataEntryProcess", silence)) isValid = false;
-		if (!areInstantCreationDefaultValuesValid(instantCreationDefaultValuesSection, generalSection.get("skipDataEntryProcess"), silence)) isValid = false;
-		return isValid;
+		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("detailedLoading"), "general.detailedLoading", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("checkForUpdates"), "general.checkForUpdates", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isTimezoneValid(generalSection.get("dateTimezone"), "general.dateTimezone", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("minNameLength"), "general.minNameLength", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("maxNameLength"), "general.maxNameLength", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("delayForTypingInChat"), "general.delayForTypingInChat", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("skipDataEntryProcess"), "general.skipDataEntryProcess", silence)) errorsCount++;
+		errorsCount += areInstantCreationDefaultValuesValid(instantCreationDefaultValuesSection, generalSection.get("skipDataEntryProcess"), silence);
+		return errorsCount;
 	}
 
 
@@ -39,14 +39,14 @@ public class GeneralConfigurationParser {
 
 
 
-	private static boolean areInstantCreationDefaultValuesValid(ConfigurationSection instantCreationDefaultValuesSection, Object skipDataEntryProcess, boolean silence) {
-		if (!(skipDataEntryProcess instanceof Boolean) || !((Boolean) skipDataEntryProcess)) return true;
-		boolean isValid = true;
-		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("homeName"), "general.instantCreationDefaultValues.homeName", silence)) isValid = false;
-		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("kitName"), "general.instantCreationDefaultValues.kitName", silence)) isValid = false;
-		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("kitDelay"), "general.instantCreationDefaultValues.kitDelay", silence)) isValid = false;
-		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("warpName"), "general.instantCreationDefaultValues.warpName", silence)) isValid = false;
-		return isValid;
+	private static int areInstantCreationDefaultValuesValid(ConfigurationSection instantCreationDefaultValuesSection, Object skipDataEntryProcess, boolean silence) {
+		int errorsCount = 0;
+		if (!(skipDataEntryProcess instanceof Boolean) || !((Boolean) skipDataEntryProcess)) return 0;
+		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("homeName"), "general.instantCreationDefaultValues.homeName", silence)) errorsCount++;
+		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("kitName"), "general.instantCreationDefaultValues.kitName", silence)) errorsCount++;
+		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("kitDelay"), "general.instantCreationDefaultValues.kitDelay", silence)) errorsCount++;
+		if (!isDefaultValueValid(instantCreationDefaultValuesSection.get("warpName"), "general.instantCreationDefaultValues.warpName", silence)) errorsCount++;
+		return errorsCount;
 	}
 
 

@@ -53,7 +53,7 @@ public class ConfigurableItem {
 
 	public ConfigurableItem(ConfigurationSection itemConfig, String itemPath, int index) {
 
-		if (!ConfigurableItemParser.isConfigurableItemValid(itemConfig, itemPath, index > 0)) return;
+		if (ConfigurableItemParser.isConfigurableItemValid(itemConfig, itemPath, index > 0) > 0) return;
 		if (itemConfig == null) return;
 
 		this.enabled = itemConfig.getBoolean("enabled", true);

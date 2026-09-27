@@ -9,11 +9,12 @@ public class StorageConfigurationParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isStorageSectionValid(ConfigurationSection storageSection, boolean silence) {
+	public static int isStorageSectionValid(ConfigurationSection storageSection, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Validate the storage section
-		if (!ConfigurationPropertyParser.isSectionValid(storageSection, "storage", silence)) return false;
+		if (!ConfigurationPropertyParser.isSectionValid(storageSection, "storage", silence)) return 1;
 
 
 		// Get the storage sections
@@ -21,22 +22,22 @@ public class StorageConfigurationParser {
 
 
 		// Validate the storage module properties
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(storageSection.get("type"), "storage.type", silence)) return false;
-		if (storageSection.getString("type").equalsIgnoreCase("SQLite")) return true;
-		if (!isMySQLSectionValid(mysqlSection, "storage.mysql", silence)) isValid = false;
-		return isValid;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(storageSection.get("type"), "storage.type", silence)) return 1;
+		if (storageSection.getString("type").equalsIgnoreCase("SQLite")) return 0;
+		errorsCount += isMySQLSectionValid(mysqlSection, "storage.mysql", silence);
+		return errorsCount;
 	}
 
 
 	// -------------------------------------------------- //
 
 
-	private static boolean isMySQLSectionValid(ConfigurationSection mysqlSection, String configurationPath, boolean silence) {
+	private static int isMySQLSectionValid(ConfigurationSection mysqlSection, String configurationPath, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Validate the MySQL section
-		if (!ConfigurationPropertyParser.isSectionValid(mysqlSection, configurationPath, silence)) return false;
+		if (!ConfigurationPropertyParser.isSectionValid(mysqlSection, configurationPath, silence)) return 1;
 
 
 		// Get the connection pool section
@@ -44,27 +45,27 @@ public class StorageConfigurationParser {
 
 
 		// Validate the MySQL section
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("host"), configurationPath + ".host", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isPositiveValueValid(mysqlSection.get("port"), configurationPath + ".port", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("database"), configurationPath + ".database", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("username"), configurationPath + ".username", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("password"), configurationPath + ".password", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("settings"), configurationPath + ".settings", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("tablePrefix"), configurationPath + ".tablePrefix", silence)) isValid = false;
-		if (!isConnectionPoolSectionValid(connectionPoolSection, configurationPath + ".connectionPool", silence)) isValid = false;
-		return isValid;
+		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("host"), configurationPath + ".host", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveValueValid(mysqlSection.get("port"), configurationPath + ".port", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("database"), configurationPath + ".database", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("username"), configurationPath + ".username", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("password"), configurationPath + ".password", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("settings"), configurationPath + ".settings", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isStringValid(mysqlSection.get("tablePrefix"), configurationPath + ".tablePrefix", silence)) errorsCount++;
+		errorsCount += isConnectionPoolSectionValid(connectionPoolSection, configurationPath + ".connectionPool", silence);
+		return errorsCount;
 	}
 
 
-	private static boolean isConnectionPoolSectionValid(ConfigurationSection connectionPoolSection, String configurationPath, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isPositiveValueValid(connectionPoolSection, configurationPath + ".maximumPoolSize", silence)) return false;
-		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".minimumIdle", silence)) return false;
-		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".maxLifetime", silence)) return false;
-		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".keepaliveTime", silence)) return false;
-		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".connectionTimeout", silence)) return false;
-		return isValid;
+	private static int isConnectionPoolSectionValid(ConfigurationSection connectionPoolSection, String configurationPath, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(connectionPoolSection, configurationPath, silence)) return 1;
+		if (!ConfigurationPropertyParser.isPositiveValueValid(connectionPoolSection, configurationPath + ".maximumPoolSize", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".minimumIdle", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".maxLifetime", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".keepaliveTime", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isPositiveOrZeroValueValid(connectionPoolSection, configurationPath + ".connectionTimeout", silence)) errorsCount++;
+		return errorsCount;
 	}
 
 

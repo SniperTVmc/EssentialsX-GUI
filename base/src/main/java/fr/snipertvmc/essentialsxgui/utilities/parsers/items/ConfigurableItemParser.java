@@ -20,13 +20,15 @@ public class ConfigurableItemParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isConfigurableItemValid(ConfigurationSection itemSection, String itemPath, boolean silence) {
+	public static int isConfigurableItemValid(ConfigurationSection itemSection, String itemPath, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Get the item configuration
 		if (itemSection == null) {
+			if (silence) return 1;
 			ConsoleLogger.error("Invalid item path '" + itemPath + "': the item section is missing.");
-			return false;
+			return 1;
 		}
 
 
@@ -52,18 +54,17 @@ public class ConfigurableItemParser {
 
 
 		// Validate item properties
-		boolean isValid = true;
-		if (!ItemPropertyParser.isEnabled(enabled, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isSlotValid(slot, itemPath, rows, silence)) isValid = false;
-		if (!ItemPropertyParser.isMaterialValid(material, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isDataValid(data, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isAmountValid(amount, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isDisplayNameValid(displayName, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isLoreValid(lore, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.areEnchantmentsValid(enchantments, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.areItemFlagsValid(itemFlags, itemPath, silence)) isValid = false;
-		if (!ConfigurableExtraParser.isConfigurableExtraValid(itemSection, itemPath, silence)) isValid = false;
-		return isValid;
+		if (!ItemPropertyParser.isEnabled(enabled, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isSlotValid(slot, itemPath, rows, silence)) errorsCount++;
+		if (!ItemPropertyParser.isMaterialValid(material, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isDataValid(data, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isAmountValid(amount, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isDisplayNameValid(displayName, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isLoreValid(lore, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.areEnchantmentsValid(enchantments, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.areItemFlagsValid(itemFlags, itemPath, silence)) errorsCount++;
+		errorsCount += ConfigurableExtraParser.isConfigurableExtraValid(itemSection, itemPath, silence);
+		return errorsCount;
 	}
 
 

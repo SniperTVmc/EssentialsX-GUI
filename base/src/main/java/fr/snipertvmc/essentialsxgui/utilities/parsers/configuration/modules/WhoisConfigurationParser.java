@@ -10,12 +10,12 @@ public class WhoisConfigurationParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isWhoisModuleValid(ConfigurationSection whoisSection, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isSectionValid(whoisSection, "whois", silence)) return false;
-		if (!ConfigurationPropertyParser.isBooleanValid(whoisSection.get("enabled"), "whois.enabled", silence)) isValid = false;
-		if (!Main.getInstance().getConfiguration().isWhoisModuleEnabled()) return true;
-		return isValid;
+	public static int isWhoisModuleValid(ConfigurationSection whoisSection, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(whoisSection, "whois", silence)) return 1;
+		if (!ConfigurationPropertyParser.isBooleanValid(whoisSection.get("enabled"), "whois.enabled", silence)) errorsCount++;
+		if (!Main.getInstance().getConfiguration().isWhoisModuleEnabled()) return 0;
+		return errorsCount;
 	}
 
 

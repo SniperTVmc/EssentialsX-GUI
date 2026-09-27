@@ -9,17 +9,18 @@ public class ConfigurableExtraParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isConfigurableExtraValid(ConfigurationSection itemSection, String itemPath, boolean silence) {
+	public static int isConfigurableExtraValid(ConfigurationSection itemSection, String itemPath, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Get the extra configuration
 		Object extra = itemSection.get("extra");
 		ConfigurationSection extraSection = (extra instanceof ConfigurationSection) ? (ConfigurationSection) extra : null;
 		if (extraSection == null) {
-			if (!ItemPropertyParser.isExtraRequired(itemPath)) return true;
-			if (silence) return false;
+			if (!ItemPropertyParser.isExtraRequired(itemPath)) return 0;
+			if (silence) return 1;
 			ConsoleLogger.error("Invalid item path '" + itemPath + "': the extra section is missing.");
-			return false;
+			return 1;
 		}
 
 
@@ -39,13 +40,12 @@ public class ConfigurableExtraParser {
 
 
 		// Validate item properties
-		boolean isValid = true;
-		if (!ItemPropertyParser.isSkullOwnerValid(skullOwner, material, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isCustomModelDataValid(customModelData, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.areClickActionsValid(clickActions, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isUpdateItemIntervalValid(updateItemInterval, itemPath, silence)) isValid = false;
-		if (!ItemPropertyParser.isAmountValueValid(amountValue, slot, itemPath, silence)) isValid = false;
-		return isValid;
+		if (!ItemPropertyParser.isSkullOwnerValid(skullOwner, material, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isCustomModelDataValid(customModelData, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.areClickActionsValid(clickActions, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isUpdateItemIntervalValid(updateItemInterval, itemPath, silence)) errorsCount++;
+		if (!ItemPropertyParser.isAmountValueValid(amountValue, slot, itemPath, silence)) errorsCount++;
+		return errorsCount;
 	}
 
 

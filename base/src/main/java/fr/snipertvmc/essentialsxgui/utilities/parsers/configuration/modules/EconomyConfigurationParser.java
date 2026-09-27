@@ -10,11 +10,12 @@ public class EconomyConfigurationParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isEconomyModuleValid(ConfigurationSection economySection, boolean silence) {
+	public static int isEconomyModuleValid(ConfigurationSection economySection, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Validate the economy section
-		if (!ConfigurationPropertyParser.isSectionValid(economySection, "economy", silence)) return false;
+		if (!ConfigurationPropertyParser.isSectionValid(economySection, "economy", silence)) return 1;
 
 
 		// Get the economy sections
@@ -25,53 +26,52 @@ public class EconomyConfigurationParser {
 
 
 		// Validate the economy module properties
-		boolean isValid = true;
-		if (!isBalanceTopModuleValid(balanceTopSection, silence)) isValid = false;
-		if (!isWorthModuleValid(worthSection, silence)) isValid = false;
-		if (!isEcoModuleValid(ecoSection, silence)) isValid = false;
-		if (!isSellModuleValid(sellSection, silence)) isValid = false;
-		return isValid;
+		errorsCount += isBalanceTopModuleValid(balanceTopSection, silence);
+		errorsCount += isWorthModuleValid(worthSection, silence);
+		errorsCount += isEcoModuleValid(ecoSection, silence);
+		errorsCount += isSellModuleValid(sellSection, silence);
+		return errorsCount;
 	}
 
 
 	// -------------------------------------------------- //
 
 
-	private static boolean isBalanceTopModuleValid(ConfigurationSection balanceTopSection, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isSectionValid(balanceTopSection, "economy.balanceTop", silence)) return false;
-		if (!ConfigurationPropertyParser.isBooleanValid(balanceTopSection.get("enabled"), "economy.balanceTop.enabled", silence)) isValid = false;
-		if (!Main.getInstance().getConfiguration().isEconomyBalanceTopModuleEnabled()) return true;
-		if (!ConfigurationPropertyParser.isPositiveValueValid(balanceTopSection.get("updateInterval"), "economy.balanceTop.updateInterval", silence)) isValid = false;
-		return isValid;
+	private static int isBalanceTopModuleValid(ConfigurationSection balanceTopSection, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(balanceTopSection, "economy.balanceTop", silence)) return 1;
+		if (!ConfigurationPropertyParser.isBooleanValid(balanceTopSection.get("enabled"), "economy.balanceTop.enabled", silence)) errorsCount++;
+		if (!Main.getInstance().getConfiguration().isEconomyBalanceTopModuleEnabled()) return 0;
+		if (!ConfigurationPropertyParser.isPositiveValueValid(balanceTopSection.get("updateInterval"), "economy.balanceTop.updateInterval", silence)) errorsCount++;
+		return errorsCount;
 	}
 
 
-	private static boolean isWorthModuleValid(ConfigurationSection worthSection, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isSectionValid(worthSection, "economy.worth", silence)) return false;
-		if (!ConfigurationPropertyParser.isBooleanValid(worthSection.get("enabled"), "economy.worth.enabled", silence)) isValid = false;
-		if (!Main.getInstance().getConfiguration().isEconomyWorthModuleEnabled()) return true;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(worthSection.get("searchWorthEntryType"), "economy.worth.searchWorthEntryType", silence)) isValid = false;
-		return isValid;
+	private static int isWorthModuleValid(ConfigurationSection worthSection, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(worthSection, "economy.worth", silence)) return 1;
+		if (!ConfigurationPropertyParser.isBooleanValid(worthSection.get("enabled"), "economy.worth.enabled", silence)) errorsCount++;
+		if (!Main.getInstance().getConfiguration().isEconomyWorthModuleEnabled()) return 0;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(worthSection.get("searchWorthEntryType"), "economy.worth.searchWorthEntryType", silence)) errorsCount++;
+		return errorsCount;
 	}
 
 
-	private static boolean isEcoModuleValid(ConfigurationSection ecoSection, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isSectionValid(ecoSection, "economy.eco", silence)) return false;
-		if (!ConfigurationPropertyParser.isBooleanValid(ecoSection.get("enabled"), "economy.eco.enabled", silence)) isValid = false;
-		if (!Main.getInstance().getConfiguration().isEconomyEcoModuleEnabled()) return true;
-		return isValid;
+	private static int isEcoModuleValid(ConfigurationSection ecoSection, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(ecoSection, "economy.eco", silence)) return 1;
+		if (!ConfigurationPropertyParser.isBooleanValid(ecoSection.get("enabled"), "economy.eco.enabled", silence)) errorsCount++;
+		if (!Main.getInstance().getConfiguration().isEconomyEcoModuleEnabled()) return 0;
+		return errorsCount;
 	}
 
 
-	private static boolean isSellModuleValid(ConfigurationSection sellSection, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isSectionValid(sellSection, "economy.sell", silence)) return false;
-		if (!ConfigurationPropertyParser.isBooleanValid(sellSection.get("enabled"), "economy.sell.enabled", silence)) isValid = false;
-		if (!Main.getInstance().getConfiguration().isEconomySellModuleEnabled()) return true;
-		return isValid;
+	private static int isSellModuleValid(ConfigurationSection sellSection, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(sellSection, "economy.sell", silence)) return 1;
+		if (!ConfigurationPropertyParser.isBooleanValid(sellSection.get("enabled"), "economy.sell.enabled", silence)) errorsCount++;
+		if (!Main.getInstance().getConfiguration().isEconomySellModuleEnabled()) return 0;
+		return errorsCount;
 	}
 
 

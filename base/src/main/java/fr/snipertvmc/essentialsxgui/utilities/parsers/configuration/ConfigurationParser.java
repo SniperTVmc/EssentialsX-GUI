@@ -11,7 +11,8 @@ public class ConfigurationParser {
 
 
 
-	public static boolean isConfigurationValid(ConfigurationFile configuration, boolean silence) {
+	public static int isConfigurationValid(ConfigurationFile configuration, boolean silence) {
+		int errorsCount = 0;
 
 
 		// Get configuration sections
@@ -26,16 +27,15 @@ public class ConfigurationParser {
 
 
 		// Validate configuration properties
-		boolean isValid = true;
-		if (!GeneralConfigurationParser.isGeneralSectionValid(generalSection, silence)) isValid = false;
-		if (!HomesConfigurationParser.isHomesModuleValid(homesSection, silence)) isValid = false;
-		if (!KitsConfigurationParser.isKitsModuleValid(kitsSection, silence)) isValid = false;
-		if (!WarpsConfigurationParser.isWarpsModuleValid(warpsSection, silence)) isValid = false;
-		if (!WhoisConfigurationParser.isWhoisModuleValid(whoisSection, silence)) isValid = false;
-		if (!EconomyConfigurationParser.isEconomyModuleValid(economySection, silence)) isValid = false;
-		if (!SoundsConfigurationParser.isSoundsSectionValid(soundsSection, silence)) isValid = false;
-		if (!StorageConfigurationParser.isStorageSectionValid(storageSection, silence)) isValid = false;
-		return isValid;
+		errorsCount += GeneralConfigurationParser.isGeneralSectionValid(generalSection, silence);
+		errorsCount += HomesConfigurationParser.isHomesModuleValid(homesSection, silence);
+		errorsCount += KitsConfigurationParser.isKitsModuleValid(kitsSection, silence);
+		errorsCount += WarpsConfigurationParser.isWarpsModuleValid(warpsSection, silence);
+		errorsCount += WhoisConfigurationParser.isWhoisModuleValid(whoisSection, silence);
+		errorsCount += EconomyConfigurationParser.isEconomyModuleValid(economySection, silence);
+		errorsCount += SoundsConfigurationParser.isSoundsSectionValid(soundsSection, silence);
+		errorsCount += StorageConfigurationParser.isStorageSectionValid(storageSection, silence);
+		return errorsCount;
 	}
 
 

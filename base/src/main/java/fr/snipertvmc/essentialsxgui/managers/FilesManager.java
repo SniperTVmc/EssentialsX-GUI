@@ -36,23 +36,30 @@ public class FilesManager {
 	public void loadFiles() {
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Loading files...");
 
-		loadAndCheckConfiguration(false);
+		int errorsCount = 0;
+		errorsCount += loadAndCheckConfiguration(false);
 		loadAndCheckMessages(false);
-		loadAndCheckInventories(false);
+		errorsCount += loadAndCheckInventories(false);
 
-		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Files loading §fcompleted§7.");
+		String errorsMessage = errorsCount > 0 ? "§c" + errorsCount + " error(s)" : "§a0 errors";
+
+		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Files loading §fcompleted§7 with " + errorsMessage + ".");
 	}
 
 
-	public void reloadFiles() {
+	public int reloadFiles() {
 		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Reloading files...");
 
-		loadAndCheckConfiguration(true);
+		int errorsCount = 0;
+		errorsCount += loadAndCheckConfiguration(true);
 		loadAndCheckMessages(true);
 		inventoriesFiles = new HashSet<>();
-		loadAndCheckInventories(true);
+		errorsCount += loadAndCheckInventories(true);
 
-		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Files reloading §fcompleted§7.");
+		String errorsMessage = errorsCount > 0 ? "§c" + errorsCount + " error(s)" : "§a0 errors";
+
+		ConsoleLogger.console("\t§6EssentialsX-GUI: §7Files reloading §fcompleted§7 with " + errorsMessage + ".");
+		return errorsCount;
 	}
 
 
@@ -148,12 +155,13 @@ public class FilesManager {
 	// -------------------------------------------------- //
 
 
-	public void loadAndCheckConfiguration(boolean reload) {
+	public int loadAndCheckConfiguration(boolean reload) {
 		loadYAMLFile("configuration.yml");
 		checkUpdateForFile("configuration.yml");
-		ConfigurationParser.isConfigurationValid(configurationFile, false);
+		int errorsCount = ConfigurationParser.isConfigurationValid(configurationFile, false);
 		String label = reload ? "Reloaded" : "Loaded";
 		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fconfiguration.yml: §a" + label);
+		return errorsCount;
 	}
 
 
@@ -165,17 +173,19 @@ public class FilesManager {
 	}
 
 
-	public void loadAndCheckInventories(boolean reload) {
+	public int loadAndCheckInventories(boolean reload) {
+		int errorsCount = 0;
 
 		for (EXGInventory inventory : EXGInventory.values()) {
 			if (!loadYAMLFile(inventory.getFilePath())) continue;
 			checkUpdateForFile(inventory.getFilePath());
-			ConfigurableInventoryParser.isConfigurableInventoryValid(getInventoryFile(inventory));
+			errorsCount += ConfigurableInventoryParser.isConfigurableInventoryValid(getInventoryFile(inventory));
 			String label = reload ? "Reloaded" : "Loaded";
 			if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + inventory.getFileName() + ".yml: §a" + label);
 		}
 
 		Main.getInstance().getInventoriesManager().loadInventories();
+		return errorsCount;
 	}
 
 

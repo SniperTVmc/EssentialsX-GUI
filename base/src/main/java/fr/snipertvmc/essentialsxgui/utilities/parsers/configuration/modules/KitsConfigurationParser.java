@@ -10,24 +10,24 @@ public class KitsConfigurationParser {
 	// -------------------------------------------------- //
 
 
-	public static boolean isKitsModuleValid(ConfigurationSection kitsSection, boolean silence) {
-		boolean isValid = true;
-		if (!ConfigurationPropertyParser.isSectionValid(kitsSection, "kits", silence)) return false;
-		if (!ConfigurationPropertyParser.isBooleanValid(kitsSection.get("enabled"), "kits.enabled", silence)) isValid = false;
-		if (!Main.getInstance().getConfiguration().isKitsModuleEnabled()) return true;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("createNewKitNameEntryType"), "kits.createNewKitNameEntryType", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("createNewKitDelayEntryType"), "kits.createNewKitDelayEntryType", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("searchKitEntryType"), "kits.searchKitEntryType", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("changeKitDisplayNameEntryType"), "kits.changeKitDisplayNameEntryType", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("changeKitIconEntryType"), "kits.changeKitIconEntryType", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isMaterialsListValid(kitsSection.get("changeKitIconMaterialsList"), "kits.changeKitIconMaterialsList", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isCharactersListValid(kitsSection.get("changeKitDisplayNameCharactersList"), "kits.changeKitDisplayNameCharactersList", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("deleteKitEntryType"), "kits.deleteKitEntryType", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isBooleanValid(kitsSection.get("openKitAdminViewByDefault"), "kits.openKitAdminViewByDefault", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isElementsListValid(kitsSection.get("kitsVisibleWithoutPermission"), "kits.kitsVisibleWithoutPermission", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isElementsListValid(kitsSection.get("customKitsOrder"), "kits.customKitsOrder", silence)) isValid = false;
-		if (!ConfigurationPropertyParser.isDefaultIconValid(kitsSection.getConfigurationSection("defaultKitIcon"), "kits.defaultKitIcon", silence)) isValid = false;
-		return isValid;
+	public static int isKitsModuleValid(ConfigurationSection kitsSection, boolean silence) {
+		int errorsCount = 0;
+		if (!ConfigurationPropertyParser.isSectionValid(kitsSection, "kits", silence)) return 1;
+		if (!ConfigurationPropertyParser.isBooleanValid(kitsSection.get("enabled"), "kits.enabled", silence)) errorsCount++;
+		if (!Main.getInstance().getConfiguration().isKitsModuleEnabled()) return 0;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("createNewKitNameEntryType"), "kits.createNewKitNameEntryType", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("createNewKitDelayEntryType"), "kits.createNewKitDelayEntryType", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("searchKitEntryType"), "kits.searchKitEntryType", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("changeKitDisplayNameEntryType"), "kits.changeKitDisplayNameEntryType", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("changeKitIconEntryType"), "kits.changeKitIconEntryType", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isMaterialsListValid(kitsSection.get("changeKitIconMaterialsList"), "kits.changeKitIconMaterialsList", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isCharactersListValid(kitsSection.get("changeKitDisplayNameCharactersList"), "kits.changeKitDisplayNameCharactersList", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isMultipleChoiceValueValid(kitsSection.get("deleteKitEntryType"), "kits.deleteKitEntryType", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isBooleanValid(kitsSection.get("openKitAdminViewByDefault"), "kits.openKitAdminViewByDefault", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isElementsListValid(kitsSection.get("kitsVisibleWithoutPermission"), "kits.kitsVisibleWithoutPermission", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isElementsListValid(kitsSection.get("customKitsOrder"), "kits.customKitsOrder", silence)) errorsCount++;
+		if (!ConfigurationPropertyParser.isDefaultIconValid(kitsSection.getConfigurationSection("defaultKitIcon"), "kits.defaultKitIcon", silence)) errorsCount++;
+		return errorsCount;
 	}
 
 
