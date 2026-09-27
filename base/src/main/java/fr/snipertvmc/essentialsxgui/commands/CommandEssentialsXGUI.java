@@ -51,7 +51,7 @@ public class CommandEssentialsXGUI implements CommandExecutor, TabCompleter {
 			case "reload" -> reloadPlugin(commandSender);
 
 			// DEBUG ARGUMENT
-			case "debug" -> sendDebugLinkMessage(commandSender);
+			case "debug" -> sendDebugFileMessage(commandSender);
 
 			// NOT FOUND ARGUMENT
 			default -> TextUtils.sendMessageToCommandSender(
@@ -94,7 +94,7 @@ public class CommandEssentialsXGUI implements CommandExecutor, TabCompleter {
 	}
 
 
-	public void sendDebugLinkMessage(CommandSender commandSender) {
+	public void sendDebugFileMessage(CommandSender commandSender) {
 
 		if (!commandSender.hasPermission(EXGPermission.CMD_EXG_DEBUG.get())) {
 			TextUtils.sendMessageToCommandSender(commandSender, MessagesUtils.getString(EXGMessage.NO_PERMISSION));
@@ -102,12 +102,12 @@ public class CommandEssentialsXGUI implements CommandExecutor, TabCompleter {
 		}
 
 		if (!(commandSender instanceof Player player)) {
-			TextUtils.sendMessageToCommandSender(commandSender, MessagesUtils.getString(EXGMessage.ONLY_FOR_PLAYERS, null));
+			PluginDebugUtils.generateDebug(null);
 			return;
 		}
 
 		EXGPlayer exgPlayer = Main.getInstance().getPlayerManager().getPlayer(player);
-		PluginDebugUtils.sendDebugToPrivateBin(exgPlayer);
+		PluginDebugUtils.generateDebug(exgPlayer);
 	}
 
 
