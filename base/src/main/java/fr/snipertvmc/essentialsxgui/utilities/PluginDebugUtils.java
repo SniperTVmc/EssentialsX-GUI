@@ -129,6 +129,20 @@ public class PluginDebugUtils {
 		content.append("OS Architecture: ").append(osBean.getArch()).append("\n");
 		content.append("Available Processors: ").append(osBean.getAvailableProcessors()).append("\n");
 
+		// RAM information
+		long megabyte = 1024L * 1024L;
+		Runtime runtime = Runtime.getRuntime();
+
+		long maxMemory = runtime.maxMemory() / megabyte;
+		long totalMemory = runtime.totalMemory() / megabyte;
+		long freeMemory = runtime.freeMemory() / megabyte;
+		long usedMemory = totalMemory - freeMemory;
+
+		content.append("JVM RAM (Used/Allocated in MB/Max): ")
+				.append(usedMemory).append(" MB / ")
+				.append(totalMemory).append(" MB / ")
+				.append(maxMemory).append(" MB\n");
+
 		// Disk information
 		try {
 			FileStore store = Files.getFileStore(Paths.get("."));
