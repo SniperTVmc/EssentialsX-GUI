@@ -70,8 +70,11 @@ public final class FastInvManager {
 
     public static void closeAll() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.getOpenInventory().getTopInventory().getHolder() instanceof FastInv) {
-                player.closeInventory();
+            try {
+                if (player.getOpenInventory().getTopInventory().getHolder() instanceof FastInv) {
+                    player.closeInventory();
+                }
+            } catch (Throwable ignored) {
             }
         }
     }
