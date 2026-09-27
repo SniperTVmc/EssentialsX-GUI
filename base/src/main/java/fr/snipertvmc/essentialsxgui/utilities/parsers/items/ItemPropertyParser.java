@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XItemFlag;
 import com.cryptomorin.xseries.XMaterial;
 import com.earth2me.essentials.utils.VersionUtil;
+import fr.snipertvmc.essentialsxgui.libraries.fastinv.ItemBuilder;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.inventory.ClickType;
@@ -69,6 +70,14 @@ public class ItemPropertyParser {
 		if (isNotTypeRequired(material, itemPath, "material", silence, String.class)) return false;
 		if (material.toString().startsWith("{") && material.toString().endsWith("}")) return true;
 		if (XMaterial.matchXMaterial(material.toString()).isEmpty()) {
+			if (silence) return false;
+			ConsoleLogger.error("Invalid material for item '" + itemPath + "': '" + material + "' is not valid.");
+			return false;
+		}
+		try {
+			XMaterial xMaterial = XMaterial.matchXMaterial(material.toString()).orElse(XMaterial.BEDROCK);
+			new ItemBuilder(xMaterial.get());
+		} catch (Exception e) {
 			if (silence) return false;
 			ConsoleLogger.error("Invalid material for item '" + itemPath + "': '" + material + "' is not valid.");
 			return false;
