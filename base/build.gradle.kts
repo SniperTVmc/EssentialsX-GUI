@@ -64,7 +64,6 @@ dependencies {
     }
     compileOnly("com.squareup.moshi:moshi:1.15.2")
     compileOnly("com.zaxxer:HikariCP:7.1.0")
-    compileOnly("com.github.InstantlyMoist:privatebin-java-api:master")
     compileOnly("me.clip:placeholderapi:2.12.3")
     compileOnly("com.github.cryptomorin:XSeries:13.7.1")
     compileOnly("net.kyori:adventure-text-minimessage:4.26.1")

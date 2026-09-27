@@ -63,12 +63,6 @@ public class LibraryManager {
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
-				.groupId("com.github.InstantlyMoist")
-				.artifactId("privatebin-java-api")
-				.version("master-5625a57693-1")
-				.build());
-
-		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("org.json")
 				.artifactId("json")
 				.version("20250517")
