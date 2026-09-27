@@ -70,7 +70,7 @@ public class ConfigurationPropertyParser {
 		List<?> materialsList = (List<?>) value;
 		for (Object material : materialsList) {
 			if (isNotTypeRequired(material, configurationPath, silence, String.class)) return false;
-			if (isMaterialValid(material, configurationPath, true)) {
+			if (!isMaterialValid(material, configurationPath, true)) {
 				if (silence) return false;
 				ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property contains an invalid material '" + material + "'.");
 				return false;
@@ -86,8 +86,8 @@ public class ConfigurationPropertyParser {
 			ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property is missing.");
 			return false;
 		}
-		if (isNotTypeRequired(material, "material", true, String.class)) return false;
-		return XMaterial.matchXMaterial(material.toString()).isEmpty();
+		if (isNotTypeRequired(material, configurationPath, silence, String.class)) return false;
+		return XMaterial.matchXMaterial(material.toString()).isPresent();
 	}
 
 
@@ -123,7 +123,7 @@ public class ConfigurationPropertyParser {
 		}
 		Object material = defaultIcon.get("material");
 		Object data = defaultIcon.get("data");
-		return isMaterialValid(material, configurationPath, silence) && isDataValid(data, configurationPath + ".data", true);
+		return isMaterialValid(material, configurationPath, silence) && isDataValid(data, configurationPath + ".data", silence);
 	}
 
 
