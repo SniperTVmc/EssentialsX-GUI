@@ -35,55 +35,55 @@ public class LibraryManager {
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("com.squareup.okio")
 				.artifactId("okio")
-				.version("3.16.1")
+				.version("3.18.1")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("com.squareup.okhttp3")
 				.artifactId("okhttp")
-				.version("5.2.1")
+				.version("5.5.0")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("com.squareup.okio")
 				.artifactId("okio-jvm")
-				.version("3.16.0")
+				.version("3.18.2")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("org.jetbrains.kotlin")
 				.artifactId("kotlin-stdlib")
-				.version("2.3.0-Beta1")
+				.version("2.4.20")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("com.zaxxer")
 				.artifactId("HikariCP")
-				.version("7.0.2")
+				.version("7.1.0")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("org.json")
 				.artifactId("json")
-				.version("20250517")
+				.version("20260814")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
-				.groupId("io.github.almighty-satan")
+				.groupId("com.github.cryptomorin")
 				.artifactId("XSeries")
-				.version("13.6.0+26.1")
+				.version("13.7.1")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("org.slf4j")
 				.artifactId("slf4j-api")
-				.version("2.0.18")
+				.version("2.0.20")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("org.slf4j")
 				.artifactId("slf4j-simple")
-				.version("2.0.18")
+				.version("2.0.20")
 				.build());
 
 

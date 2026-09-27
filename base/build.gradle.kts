@@ -29,11 +29,6 @@ repositories {
         url = uri("https://repo.essentialsx.net/snapshots/")
     }
 
-    // PrivateBin Java API
-    maven {
-        url = uri("https://jitpack.io/")
-    }
-
     // PlaceholderAPI
     maven {
         url = uri("https://repo.extendedclip.com/releases/")
