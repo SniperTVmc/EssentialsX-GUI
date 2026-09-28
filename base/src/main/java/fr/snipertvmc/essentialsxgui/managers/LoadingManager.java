@@ -357,6 +357,14 @@ public class LoadingManager {
 			return;
 		}
 
+		if (currentVersion.contains("-beta") && !dontFlood) {
+			ConsoleLogger.console("\t§6EssentialsX-GUI: §9You are using a beta version of EssentialsX-GUI.");
+			ConsoleLogger.console("\t§6EssentialsX-GUI: §3All features should work as expected, but bugs may be present.");
+			ConsoleLogger.console("\t§6EssentialsX-GUI: §3Please report any bugs you find on the discord server or on the GitHub project.");
+			ConsoleLogger.console("\t§6EssentialsX-GUI: §3Don't forget to install the stable version of the plugin when it is released.");
+			return;
+		}
+
 		if (!Main.getInstance().getConfiguration().checkForUpdates()) {
 			return;
 		}
