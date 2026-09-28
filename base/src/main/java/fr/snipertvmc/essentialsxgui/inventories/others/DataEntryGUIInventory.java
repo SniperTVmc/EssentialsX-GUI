@@ -67,9 +67,9 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 	                              Consumer<Pair<String, EXGEntryResult>> onFailure) {
 
 
-		List<Pair<XMaterial, Integer>> materialList = Main.getInstance().getConfiguration().getMaterialsList(entrySettings.getMaterialListPath());
+		List<Pair<XMaterial, Integer>> materialsList = Main.getInstance().getConfiguration().getMaterialsList(entrySettings.getMaterialsListPath());
 
-		if (materialList.isEmpty()) {
+		if (materialsList.isEmpty()) {
 
 			addContent(new ItemBuilder(XMaterial.BARRIER.get())
 					.name("<dark_red><bold>No materials found")
@@ -77,13 +77,13 @@ public class DataEntryGUIInventory extends PaginatedFastInv {
 							"<red>Please contact an administrator and inform them of the following details:",
 							"",
 							"<dark_gray>No materials found in the config file for the entry type <white>" + entrySettings.getType().name() + "<dark_gray>.",
-							"<dark_gray>Path: " + entrySettings.getMaterialListPath())
+							"<dark_gray>Path: " + entrySettings.getMaterialsListPath())
 					.build()
 			);
 			return;
 		}
 
-		for (Pair<XMaterial, Integer> materialPair : materialList) {
+		for (Pair<XMaterial, Integer> materialPair : materialsList) {
 
 			ConfigurableItem materialIconItem = config.getMaterialIconItem();
 			materialIconItem.setMaterial(materialPair.getLeft().name());

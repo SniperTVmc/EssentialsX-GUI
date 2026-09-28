@@ -24,7 +24,7 @@ public class EXGEntrySettings {
 
 	// For Material
 	private Material[] acceptedMaterials;
-	private String materialListPath;
+	private String materialsListPath;
 
 
 	// -------------------------------------------------- //
@@ -67,8 +67,8 @@ public class EXGEntrySettings {
 	}
 
 	// For Material
-	public String getMaterialListPath() {
-		return materialListPath;
+	public String getMaterialsListPath() {
+		return materialsListPath;
 	}
 
 
@@ -110,8 +110,8 @@ public class EXGEntrySettings {
 
 
 	// For Material
-	public EXGEntrySettings setMaterialListPath(String materialListPath) {
-		this.materialListPath = materialListPath;
+	public EXGEntrySettings setMaterialsListPath(String materialsListPath) {
+		this.materialsListPath = materialsListPath;
 		return this;
 	}
 
