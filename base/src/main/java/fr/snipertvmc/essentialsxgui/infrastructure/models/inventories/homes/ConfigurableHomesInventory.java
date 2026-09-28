@@ -24,9 +24,9 @@ public class ConfigurableHomesInventory extends ConfigurablePaginatedInventory {
 
 	private final ConfigurableItem closeItem;
 
-	private final Pair<String, String> bedHomeItemOverworld;
-	private final Pair<String, String> bedHomeItemNether;
-	private final Pair<String, String> bedHomeItemNotSet;
+	private final Pair<String, String> bedHomeIconOverworld;
+	private final Pair<String, String> bedHomeIconNether;
+	private final Pair<String, String> bedHomeIconNotSet;
 
 
 	// -------------------------------------------------- //
@@ -35,7 +35,8 @@ public class ConfigurableHomesInventory extends ConfigurablePaginatedInventory {
 	public ConfigurableHomesInventory(InventoryFile inventoryFile) {
 		super(inventoryFile);
 
-		String name = inventoryFile.getFileName();
+
+		// Get the configuration
 		YamlConfiguration config = inventoryFile.getYamlConfiguration();
 
 
@@ -53,17 +54,17 @@ public class ConfigurableHomesInventory extends ConfigurablePaginatedInventory {
 
 
 		// Special settings
-		this.bedHomeItemNotSet = Pair.of(
-				config.getString("bedHomeItem.notSet.material", XMaterial.BARRIER.name()),
-				config.getString("bedHomeItem.notSet.displayName", "&cNot set")
+		this.bedHomeIconNotSet = Pair.of(
+				config.getString("bedHomeIcons.notSet.material", XMaterial.BARRIER.name()),
+				config.getString("bedHomeIcons.notSet.displayName", "&cNot set")
 		);
-		this.bedHomeItemOverworld = Pair.of(
-				config.getString("bedHomeItem.overworld.material", XMaterial.RED_BED.name()),
-				config.getString("bedHomeItem.overworld.displayName", "&aOverworld")
+		this.bedHomeIconOverworld = Pair.of(
+				config.getString("bedHomeIcons.overworld.material", XMaterial.RED_BED.name()),
+				config.getString("bedHomeIcons.overworld.displayName", "&aOverworld")
 		);
-		this.bedHomeItemNether = Pair.of(
-				config.getString("bedHomeItem.nether.material", XMaterial.RESPAWN_ANCHOR.name()),
-				config.getString("bedHomeItem.nether.displayName", "&5Nether")
+		this.bedHomeIconNether = Pair.of(
+				config.getString("bedHomeIcons.nether.material", XMaterial.RESPAWN_ANCHOR.name()),
+				config.getString("bedHomeIcons.nether.displayName", "&5Nether")
 		);
 	}
 
@@ -98,25 +99,25 @@ public class ConfigurableHomesInventory extends ConfigurablePaginatedInventory {
 		return closeItem;
 	}
 
-	public String getBedHomeItemNotSetMaterial() {
-		return bedHomeItemNotSet.getLeft();
+	public String getBedHomeIconNotSetMaterial() {
+		return bedHomeIconNotSet.getLeft();
 	}
-	public String getBedHomeItemNotSetDisplayName() {
-		return bedHomeItemNotSet.getRight();
-	}
-
-	public String getBedHomeItemOverworldMaterial() {
-		return bedHomeItemOverworld.getLeft();
-	}
-	public String getBedHomeItemOverworldDisplayName() {
-		return bedHomeItemOverworld.getRight();
+	public String getBedHomeIconNotSetDisplayName() {
+		return bedHomeIconNotSet.getRight();
 	}
 
-	public String getBedHomeItemNetherMaterial() {
-		return bedHomeItemNether.getLeft();
+	public String getBedHomeIconOverworldMaterial() {
+		return bedHomeIconOverworld.getLeft();
 	}
-	public String getBedHomeItemNetherDisplayName() {
-		return bedHomeItemNether.getRight();
+	public String getBedHomeIconOverworldDisplayName() {
+		return bedHomeIconOverworld.getRight();
+	}
+
+	public String getBedHomeIconNetherMaterial() {
+		return bedHomeIconNether.getLeft();
+	}
+	public String getBedHomeIconNetherDisplayName() {
+		return bedHomeIconNether.getRight();
 	}
 
 

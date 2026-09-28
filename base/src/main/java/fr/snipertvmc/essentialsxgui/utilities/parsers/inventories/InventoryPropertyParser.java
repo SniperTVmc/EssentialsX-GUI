@@ -1,6 +1,7 @@
 package fr.snipertvmc.essentialsxgui.utilities.parsers.inventories;
 
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -90,6 +91,27 @@ public class InventoryPropertyParser {
 			return true;
 		}
 		return false;
+	}
+
+
+	public static boolean isSectionValid(ConfigurationSection section, String inventoryName, String path, boolean silence) {
+		if (section != null) return true;
+		if (!silence) ConsoleLogger.error("Invalid section for inventory '" + inventoryName + "': '" + path + "' is missing.");
+		return false;
+	}
+
+
+	public static boolean isStringValid(Object value, String inventoryName, String propertyName, boolean silence) {
+		if (isMissing(value, inventoryName, propertyName, silence)) return false;
+		if (isNotTypeRequired(value, inventoryName, propertyName, String.class)) return false;
+		return true;
+	}
+
+
+	public static boolean isBooleanValid(Object value, String inventoryName, String propertyName, boolean silence) {
+		if (isMissing(value, inventoryName, propertyName, silence)) return false;
+		if (isNotTypeRequired(value, inventoryName, propertyName, Boolean.class)) return false;
+		return true;
 	}
 
 

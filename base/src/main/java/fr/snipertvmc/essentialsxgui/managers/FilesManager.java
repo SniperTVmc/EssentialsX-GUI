@@ -179,7 +179,7 @@ public class FilesManager {
 		for (EXGInventory inventory : EXGInventory.values()) {
 			if (!loadYAMLFile(inventory.getFilePath())) continue;
 			checkUpdateForFile(inventory.getFilePath());
-			errorsCount += ConfigurableInventoryParser.isConfigurableInventoryValid(getInventoryFile(inventory));
+			errorsCount += ConfigurableInventoryParser.isConfigurableInventoryValid(getInventoryFile(inventory), false);
 			String label = reload ? "Reloaded" : "Loaded";
 			if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + inventory.getFileName() + ".yml: §a" + label);
 		}

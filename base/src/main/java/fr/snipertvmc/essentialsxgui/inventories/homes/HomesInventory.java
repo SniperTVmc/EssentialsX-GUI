@@ -310,25 +310,25 @@ public class HomesInventory extends PaginatedFastInv {
 
 	private String getBedHomeMaterialAndData(Player player) {
 		if (player.getBedSpawnLocation() == null) {
-			return config.getBedHomeItemNotSetMaterial();
+			return config.getBedHomeIconNotSetMaterial();
 
 		} else if (player.getBedSpawnLocation().getWorld().getName().endsWith("_nether")) {
-			return config.getBedHomeItemNetherMaterial();
+			return config.getBedHomeIconNetherMaterial();
 		}
 
-		return config.getBedHomeItemOverworldMaterial();
+		return config.getBedHomeIconOverworldMaterial();
 	}
 
 
 	private String getBedHomeWorldDisplayName(Player player) {
 		if (player.getBedSpawnLocation() == null) {
-			return config.getBedHomeItemNotSetDisplayName();
+			return config.getBedHomeIconNotSetDisplayName();
 
 		} else if (player.getBedSpawnLocation().getWorld().getName().endsWith("_nether")) {
-			return config.getBedHomeItemNetherDisplayName();
+			return config.getBedHomeIconNetherDisplayName();
 		}
 
-		return config.getBedHomeItemOverworldDisplayName();
+		return config.getBedHomeIconOverworldDisplayName();
 	}
 
 

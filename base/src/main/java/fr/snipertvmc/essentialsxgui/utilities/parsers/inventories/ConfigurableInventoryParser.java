@@ -19,7 +19,7 @@ public class ConfigurableInventoryParser {
 	// -------------------------------------------------- //
 
 
-	public static int isConfigurableInventoryValid(InventoryFile inventoryFile) {
+	public static int isConfigurableInventoryValid(InventoryFile inventoryFile, boolean silence) {
 		int errorsCount = 0;
 
 
@@ -42,6 +42,7 @@ public class ConfigurableInventoryParser {
 		if (!InventoryPropertyParser.isTitleValid(title, inventoryFile.getFileName())) errorsCount++;
 		if (!InventoryPropertyParser.areRowsValid(rows, inventoryFile.getFileName())) errorsCount++;
 		if (!InventoryPropertyParser.isInventorySchemeValid(inventoryScheme, inventoryFile.getFileName(), rows)) errorsCount++;
+		errorsCount += CustomConfigurableInventoryParser.isCustomConfigurableInventoryValid(inventoryFile, silence);
 		return errorsCount;
 	}
 

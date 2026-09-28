@@ -2,6 +2,7 @@ package fr.snipertvmc.essentialsxgui.utilities.parsers.configuration;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.earth2me.essentials.utils.VersionUtil;
+import fr.snipertvmc.essentialsxgui.libraries.fastinv.ItemBuilder;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -87,7 +88,20 @@ public class ConfigurationPropertyParser {
 			return false;
 		}
 		if (isNotTypeRequired(material, configurationPath, silence, String.class)) return false;
-		return XMaterial.matchXMaterial(material.toString()).isPresent();
+		if (XMaterial.matchXMaterial(material.toString()).isEmpty()) {
+			if (silence) return false;
+			ConsoleLogger.error("Invalid configuration '" + configurationPath + "': '" + material + "' is not a valid material.");
+			return false;
+		}
+		try {
+			XMaterial xMaterial = XMaterial.matchXMaterial(material.toString()).orElse(XMaterial.BEDROCK);
+			new ItemBuilder(xMaterial.get());
+		} catch (Exception e) {
+			if (silence) return false;
+			ConsoleLogger.error("Invalid configuration '" + configurationPath + "': '" + material + "' is not a valid material.");
+			return false;
+		}
+		return true;
 	}
 
 

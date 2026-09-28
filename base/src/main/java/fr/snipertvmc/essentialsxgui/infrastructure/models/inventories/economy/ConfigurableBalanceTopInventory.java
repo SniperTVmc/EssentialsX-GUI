@@ -67,7 +67,10 @@ public class ConfigurableBalanceTopInventory extends ConfigurableInventory {
 
 
 	private Pair<Integer, Integer> getRankingRange(YamlConfiguration config) {
-		String range = config.getString("rankingRange", "1-10");
+		String range = config.getString("rankingRange", "1-28");
+		if (!range.matches("\\d+-\\d+")) {
+			range = "1-28";
+		}
 		String[] rangeSplit = range.split("-");
 		return Pair.of(Integer.parseInt(rangeSplit[0]), Integer.parseInt(rangeSplit[1]));
 	}

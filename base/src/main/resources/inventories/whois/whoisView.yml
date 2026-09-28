@@ -13,8 +13,8 @@
 # check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
 
 # Please do not change this value as it may cause the file to be reset.
-# Default: "1.1"
-config-version: "1.1"
+# Default: "2.0"
+fileVersion: "2.0"
 
 ############################################################
 # +------------------------------------------------------+ #

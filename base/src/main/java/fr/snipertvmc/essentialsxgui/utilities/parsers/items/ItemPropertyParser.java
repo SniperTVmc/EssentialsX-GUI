@@ -28,7 +28,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean isSlotValid(Object slot, String itemPath, int rows, boolean silence) {
+	public static boolean isSlotValid(Object slot, String itemPath, int rows, boolean silence) {
 		if (isIgnored(itemPath, "slot")) return true;
 		if (isMissing(slot, itemPath, "slot", false)) return false;
 		if (isNotTypeRequired(slot, itemPath, "slot", silence, Number.class, List.class)) return false;
@@ -64,7 +64,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean isMaterialValid(Object material, String itemPath, boolean silence) {
+	public static boolean isMaterialValid(Object material, String itemPath, boolean silence) {
 		boolean isRequired = isRequired(itemPath, "material");
 		if (isMissing(material, itemPath, "material", !isRequired)) return !isRequired;
 		if (isNotTypeRequired(material, itemPath, "material", silence, String.class)) return false;
@@ -86,7 +86,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean isDataValid(Object data, String itemPath, boolean silence) {
+	public static boolean isDataValid(Object data, String itemPath, boolean silence) {
 		// Data is not used in versions > 1.12.2
 		if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_12_2_R01)) return true;
 		boolean isRequired = isRequired(itemPath, "data");
@@ -103,7 +103,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean isAmountValid(Object amount, String itemPath, boolean silence) {
+	public static boolean isAmountValid(Object amount, String itemPath, boolean silence) {
 		boolean isRequired = isRequired(itemPath, "amount");
 		if (isMissing(amount, itemPath, "amount", !isRequired)) return !isRequired;
 		if (isNotTypeRequired(amount, itemPath, "amount", silence, Number.class)) return false;
@@ -117,7 +117,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean isDisplayNameValid(Object displayName, String itemPath, boolean silence) {
+	public static boolean isDisplayNameValid(Object displayName, String itemPath, boolean silence) {
 		boolean isRequired = isRequired(itemPath, "displayName");
 		if (isMissing(displayName, itemPath, "displayName", !isRequired)) return !isRequired;
 		if (isNotTypeRequired(displayName, itemPath, "displayName", silence, String.class)) return false;
@@ -125,7 +125,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean isLoreValid(Object lore, String itemPath, boolean silence) {
+	public static boolean isLoreValid(Object lore, String itemPath, boolean silence) {
 		boolean isRequired = isRequired(itemPath, "lore");
 		if (isMissing(lore, itemPath, "lore", !isRequired)) return !isRequired;
 		if (isNotTypeRequired(lore, itemPath, "lore", silence, List.class)) return false;
@@ -138,7 +138,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean areEnchantmentsValid(Object enchantments, String itemPath, boolean silence) {
+	public static boolean areEnchantmentsValid(Object enchantments, String itemPath, boolean silence) {
 		boolean isRequired = isRequired(itemPath, "enchantments");
 		if (isMissing(enchantments, itemPath, "enchantments", !isRequired)) return !isRequired;
 		if (isNotTypeRequired(enchantments, itemPath, "enchantments", silence, List.class)) return false;
@@ -174,7 +174,7 @@ public class ItemPropertyParser {
 	}
 
 
-	protected static boolean areItemFlagsValid(Object itemFlags, String itemPath, boolean silence) {
+	public static boolean areItemFlagsValid(Object itemFlags, String itemPath, boolean silence) {
 		boolean isRequired = isRequired(itemPath, "itemFlags");
 		if (isMissing(itemFlags, itemPath, "itemFlags", !isRequired)) return !isRequired;
 		if (isNotTypeRequired(itemFlags, itemPath, "itemFlags", silence, List.class)) return false;
