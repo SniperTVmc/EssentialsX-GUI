@@ -19,7 +19,7 @@ repositories {
     // Adventure
     mavenCentral()
 
-    // SpigotMC, Moshi, HikariCP, XSeries (v13.6.0+26.1)
+    // PaperMC, Moshi, HikariCP, XSeries
     maven {
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
@@ -53,7 +53,7 @@ repositories {
 dependencies {
     runtimeOnly(project(":v2_22_0"))
 
-    compileOnly("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("net.essentialsx:EssentialsX:2.22.0-SNAPSHOT") {
         exclude(group = "io.papermc.paper", module = "paper-api")
     }
