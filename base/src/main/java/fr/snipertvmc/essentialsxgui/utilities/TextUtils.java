@@ -1,6 +1,7 @@
 package fr.snipertvmc.essentialsxgui.utilities;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -8,6 +9,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class TextUtils {
@@ -40,6 +42,16 @@ public class TextUtils {
 	public static List<String> parseAsString(List<String> formattedMessages) {
 		if (formattedMessages == null) return List.of();
 		return formattedMessages.stream().map(TextUtils::parseAsString).toList();
+	}
+
+
+	public static String parseAsString(EXGMessage message) {
+		return parseAsString(MessagesUtils.getString(message));
+	}
+
+
+	public static String parseAsString(EXGMessage message, Map<String, String> variables) {
+		return parseAsString(MessagesUtils.getString(message, variables));
 	}
 
 

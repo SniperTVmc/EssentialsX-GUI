@@ -158,7 +158,7 @@ public class WarpsPlayerViewInventory extends PaginatedFastInv {
 		}
 
 		EXGEntrySettings entrySettings = new EXGEntrySettings(entryType)
-				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL))
+				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL, EXGEntryType.DIALOG))
 				.setEntryDisplayName(MessagesUtils.getString(EXGMessage.SEARCH_WARP))
 				.setMinLength(1)
 				.setMaxLength(Main.getInstance().getConfiguration().getMaxNameLength());

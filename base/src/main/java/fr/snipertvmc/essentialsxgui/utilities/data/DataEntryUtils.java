@@ -5,6 +5,7 @@ import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryResult;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGEntrySettings;
 import fr.snipertvmc.essentialsxgui.inventories.others.DataEntryAnvilInventory;
+import fr.snipertvmc.essentialsxgui.inventories.others.DataEntryDialogue;
 import fr.snipertvmc.essentialsxgui.inventories.others.DataEntryGUIInventory;
 import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 import fr.snipertvmc.essentialsxgui.utilities.type.TypeUtils;
@@ -50,6 +51,8 @@ public class DataEntryUtils {
 			case ANVIL -> new DataEntryAnvilInventory(player, entrySettings, onSuccess, onFailure);
 
 			case GUI -> new DataEntryGUIInventory(player, entrySettings, onSuccess, onFailure).open(player);
+
+			case DIALOG -> new DataEntryDialogue(player, entrySettings, onSuccess, onFailure);
 		}
 
 	}
@@ -155,6 +158,23 @@ public class DataEntryUtils {
 					materialPairResult -> onFailure.accept(new Pair<>(null, EXGEntryResult.CANCELED))
 
 			).open(player);
+
+			case DIALOG -> new DataEntryDialogue(player, entrySettings,
+
+					materialPairResult -> {
+
+						Pair<Pair<XMaterial, Byte>, EXGEntryResult> result = checkMaterialEntry(materialPairResult.getLeft());
+
+						if (result.getRight() == EXGEntryResult.SUCCESS) {
+							onSuccess.accept(result);
+						} else {
+							onFailure.accept(result);
+							result.getRight().playResult(player);
+						}
+
+					},
+					materialPairResult -> onFailure.accept(new Pair<>(null, EXGEntryResult.CANCELED))
+			);
 		}
 
 	}

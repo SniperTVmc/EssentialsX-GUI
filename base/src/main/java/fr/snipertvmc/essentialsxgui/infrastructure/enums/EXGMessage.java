@@ -101,6 +101,10 @@ public enum EXGMessage {
 	ACTION_CANCELED("general.actionCanceled"),
 	ACTION_EXPIRED("general.actionExpired"),
 	ONGOING_ACTION("general.ongoingAction"),
+	CONFIRM("general.confirm"),
+	CONFIRM_DESCRIPTION("general.confirmDescription"),
+	CANCEL("general.cancel"),
+	CANCEL_DESCRIPTION("general.cancelDescription"),
 
 
 	DISPLAY_NAME_CHANGED("general.displayNameChanged"),

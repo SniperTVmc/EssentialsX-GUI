@@ -2,6 +2,7 @@ package fr.snipertvmc.essentialsxgui.utilities.parsers.configuration;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.earth2me.essentials.utils.VersionUtil;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.ItemBuilder;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.ConfigurationSection;
@@ -221,6 +222,17 @@ public class ConfigurationPropertyParser {
 			ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property must be one of the following values: " + String.join(", ", possibleValuesList) + ".");
 			return false;
 		}
+		if (Arrays.stream(EXGEntryType.values()).anyMatch(v -> v.toString().equals(value.toString()))) {
+			EXGEntryType entryType = EXGEntryType.valueOf(value.toString());
+			if (entryType == EXGEntryType.DIALOG) {
+				try {
+					Class.forName("io.papermc.paper.dialog.Dialog");
+				} catch (ClassNotFoundException e) {
+					ConsoleLogger.error("Invalid configuration '" + configurationPath + "': the property value 'DIALOG' is not supported on this server.");
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
@@ -260,32 +272,32 @@ public class ConfigurationPropertyParser {
 
 
 		// Homes module
-		put("homes.createNewHomeEntryType", List.of("CHAT", "ANVIL"));
-		put("homes.searchHomeEntryType", List.of("CHAT", "ANVIL"));
-		put("homes.changeHomeDisplayNameEntryType", List.of("CHAT", "ANVIL"));
-		put("homes.changeHomeIconEntryType", List.of("CHAT", "ANVIL", "GUI", "ITEM_IN_HAND"));
-		put("homes.deleteHomeEntryType", List.of("CHAT", "ANVIL"));
+		put("homes.createNewHomeEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("homes.searchHomeEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("homes.changeHomeDisplayNameEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("homes.changeHomeIconEntryType", List.of("CHAT", "ANVIL", "GUI", "ITEM_IN_HAND", "DIALOG"));
+		put("homes.deleteHomeEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
 
 
 		// Kits module
-		put("kits.createNewKitNameEntryType", List.of("CHAT", "ANVIL"));
-		put("kits.createNewKitDelayEntryType", List.of("CHAT", "ANVIL"));
-		put("kits.searchKitEntryType", List.of("CHAT", "ANVIL"));
-		put("kits.changeKitDisplayNameEntryType", List.of("CHAT", "ANVIL"));
-		put("kits.changeKitIconEntryType", List.of("CHAT", "ANVIL", "GUI", "ITEM_IN_HAND"));
-		put("kits.deleteKitEntryType", List.of("CHAT", "ANVIL"));
+		put("kits.createNewKitNameEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("kits.createNewKitDelayEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("kits.searchKitEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("kits.changeKitDisplayNameEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("kits.changeKitIconEntryType", List.of("CHAT", "ANVIL", "GUI", "ITEM_IN_HAND", "DIALOG"));
+		put("kits.deleteKitEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
 
 
 		// Warps module
-		put("warps.createNewWarpEntryType", List.of("CHAT", "ANVIL"));
-		put("warps.searchWarpEntryType", List.of("CHAT", "ANVIL"));
-		put("warps.changeWarpDisplayNameEntryType", List.of("CHAT", "ANVIL"));
-		put("warps.changeWarpIconEntryType", List.of("CHAT", "ANVIL", "GUI", "ITEM_IN_HAND"));
-		put("warps.deleteWarpEntryType", List.of("CHAT", "ANVIL"));
+		put("warps.createNewWarpEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("warps.searchWarpEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("warps.changeWarpDisplayNameEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
+		put("warps.changeWarpIconEntryType", List.of("CHAT", "ANVIL", "GUI", "ITEM_IN_HAND", "DIALOG"));
+		put("warps.deleteWarpEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
 
 
 		// Economy Worth module
-		put("economy.worth.searchWorthEntryType", List.of("CHAT", "ANVIL"));
+		put("economy.worth.searchWorthEntryType", List.of("CHAT", "ANVIL", "DIALOG"));
 
 
 		// Storage module

@@ -31,6 +31,7 @@ public class GeneralConfigurationParser {
 		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("delayForTypingInChat"), "general.delayForTypingInChat", silence)) errorsCount++;
 		if (!ConfigurationPropertyParser.isBooleanValid(generalSection.get("skipDataEntryProcess"), "general.skipDataEntryProcess", silence)) errorsCount++;
 		errorsCount += areInstantCreationDefaultValuesValid(instantCreationDefaultValuesSection, generalSection.get("skipDataEntryProcess"), silence);
+		if (!ConfigurationPropertyParser.isPositiveValueValid(generalSection.get("dialogButtonsWidth"), "general.dialogButtonsWidth", silence)) errorsCount++;
 		return errorsCount;
 	}
 

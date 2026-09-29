@@ -84,7 +84,18 @@ public class ConfigurationFile extends BaseFile {
 	public EXGEntryType getEntryType(String module, String entry) {
 		String typeString = getYamlConfiguration().getString(module + "." + entry, "CHAT");
 		try {
-			return EXGEntryType.valueOf(typeString);
+			EXGEntryType entryType = EXGEntryType.valueOf(typeString);
+			if (entryType == EXGEntryType.DIALOG) {
+				try {
+					Class.forName("io.papermc.paper.dialog.Dialog");
+				} catch (ClassNotFoundException e) {
+					ConsoleLogger.warn("Using 'CHAT' entry type instead of 'DIALOG'. This server does not support dialogs.");
+					ConsoleLogger.warn("Please update your server or change the entry type to a supported one in the configuration file.");
+					return EXGEntryType.CHAT;
+				}
+			}
+			return entryType;
+
 		} catch (IllegalArgumentException exception) {
 			ConsoleLogger.warn("The entry type '" + typeString + "' is not valid for the entry '" + entry + "' in the module '" + module + "'. Using the default type 'CHAT' instead.");
 			return EXGEntryType.CHAT;
@@ -165,6 +176,11 @@ public class ConfigurationFile extends BaseFile {
 	}
 	public String getInstantCreationDefaultWarpName() {
 		return getYamlConfiguration().getString("general.instantCreationDefaultValues.warpName", "warp_%number%");
+	}
+
+
+	public int getDialogButtonsWidth() {
+		return getYamlConfiguration().getInt("general.dialogButtonsWidth", 150);
 	}
 
 

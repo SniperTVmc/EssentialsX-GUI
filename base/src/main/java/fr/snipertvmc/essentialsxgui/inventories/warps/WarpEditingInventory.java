@@ -149,7 +149,7 @@ public class WarpEditingInventory extends FastInv {
 		}
 
 		EXGEntrySettings entrySettings = new EXGEntrySettings(entryType)
-				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL))
+				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL, EXGEntryType.DIALOG))
 				.setEntryDisplayName(MessagesUtils.getString(EXGMessage.ENTER_NEW_DISPLAY_NAME))
 				.setCharactersListPath("warps.changeWarpDisplayNameCharactersList")
 				.setMinLength(Main.getInstance().getConfiguration().getMinNameLength())
@@ -201,7 +201,7 @@ public class WarpEditingInventory extends FastInv {
 		}
 
 		EXGEntrySettings entrySettings = new EXGEntrySettings(entryType)
-				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL, EXGEntryType.GUI))
+				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL, EXGEntryType.GUI, EXGEntryType.DIALOG))
 				.setEntryDisplayName(MessagesUtils.getString(EXGMessage.ENTER_NEW_ICON_NAME))
 				.setMaterialsListPath("warps.changeWarpIconMaterialList")
 				.setMinLength(Main.getInstance().getConfiguration().getMinNameLength())
@@ -237,7 +237,7 @@ public class WarpEditingInventory extends FastInv {
 		}
 
 		EXGEntrySettings entrySettings = new EXGEntrySettings(entryType)
-				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL))
+				.setAcceptedTypes(List.of(EXGEntryType.CHAT, EXGEntryType.ANVIL, EXGEntryType.DIALOG))
 				.setEntryDisplayName(MessagesUtils.getString(EXGMessage.CONFIRM_DELETE_WARP))
 				.setEqualsToSomething("confirm");
 

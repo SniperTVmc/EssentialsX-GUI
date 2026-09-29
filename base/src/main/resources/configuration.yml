@@ -71,6 +71,10 @@ general:
 
     warpName: "warp_%number%"
 
+  # Set the width of the dialog buttons in pixels. (This is used for the GUI dialogs that ask for confirmation)
+  # Default: 150
+  dialogButtonsWidth: 150
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Homes                         | #
@@ -85,19 +89,19 @@ homes:
   enabled: true
 
   # Decide how players can create a home.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   createNewHomeEntryType: "CHAT"
 
   # Decide how players can search for a home.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   searchHomeEntryType: "ANVIL"
 
   # Decide how players can change the display name of a home.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   changeHomeDisplayNameEntryType: "CHAT"
 
   # Decide how players can change the icon of a home.
-  # Ways available: "CHAT", "ANVIL", "GUI", "ITEM_IN_HAND"
+  # Ways available: "CHAT", "ANVIL", "GUI", "ITEM_IN_HAND", "DIALOG" (1.21.7+)
   changeHomeIconEntryType: "GUI"
 
   # If you set the changeHomeIconEntryType to "GUI", you must set the materials available in the GUI here.
@@ -114,7 +118,7 @@ homes:
   changeHomeDisplayNameCharactersList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a home.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   deleteHomeEntryType: "CHAT"
 
   # Set the default icon for homes when they are created.
@@ -138,23 +142,23 @@ kits:
   enabled: true
 
   # Decide how players can create a kit.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   createNewKitNameEntryType: "CHAT"
 
   # Decide how players can create a kit.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   createNewKitDelayEntryType: "CHAT"
 
   # Decide how players can search for a kit.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   searchKitEntryType: "ANVIL"
 
   # Decide how players can change the display name of a kit.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   changeKitDisplayNameEntryType: "CHAT"
 
   # Decide how players can change the icon of a kit.
-  # Ways available: "CHAT", "ANVIL", "GUI", "ITEM_IN_HAND"
+  # Ways available: "CHAT", "ANVIL", "GUI", "ITEM_IN_HAND", "DIALOG" (1.21.7+)
   changeKitIconEntryType: "GUI"
 
   # If you set the changeKitIconEntryType to "GUI", you must set the materials available in the GUI here.
@@ -171,7 +175,7 @@ kits:
   changeKitDisplayNameCharactersList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a kit.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   deleteKitEntryType: "CHAT"
 
   # Set this to true if you want to open the kit admin view by default when the /kit command is performed for players
@@ -218,19 +222,19 @@ warps:
   enabled: true
 
   # Decide how players can create a warp.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   createNewWarpEntryType: "CHAT"
 
   # Decide how players can search for a warp.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   searchWarpEntryType: "ANVIL"
 
   # Decide how players can change the display name of a warp.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   changeWarpDisplayNameEntryType: "CHAT"
 
   # Decide how players can change the icon of a warp.
-  # Ways available: "CHAT", "ANVIL", "GUI", "ITEM_IN_HAND"
+  # Ways available: "CHAT", "ANVIL", "GUI", "ITEM_IN_HAND", "DIALOG" (1.21.7+)
   changeWarpIconEntryType: "GUI"
 
   # If you set the changeWarpIconEntryType to "GUI", you must set the materials available in the GUI here.
@@ -247,7 +251,7 @@ warps:
   changeWarpDisplayNameCharactersList: "regex:^[a-zA-Z0-9_ ]+$"
 
   # Decide how players can delete a warp.
-  # Ways available: "CHAT", "ANVIL"
+  # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
   deleteWarpEntryType: "CHAT"
 
   # Set this to true if you want to open the warp admin view by default when the /warp command is performed for players
@@ -324,7 +328,7 @@ economy:
     enabled: true
 
     # Decide how players can search for a worth.
-    # Ways available: "CHAT", "ANVIL"
+    # Ways available: "CHAT", "ANVIL", "DIALOG" (1.21.7+)
     searchWorthEntryType: "ANVIL"
 
   eco:

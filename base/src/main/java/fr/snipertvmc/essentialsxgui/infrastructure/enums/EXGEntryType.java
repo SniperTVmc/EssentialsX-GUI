@@ -11,7 +11,8 @@ public enum EXGEntryType {
 	CHAT(String.class),
 	GUI(Material.class),
 	ANVIL(String.class),
-	ITEM_IN_HAND(Material.class);
+	ITEM_IN_HAND(Material.class),
+	DIALOG(String.class);
 
 
 	// -------------------------------------------------- //

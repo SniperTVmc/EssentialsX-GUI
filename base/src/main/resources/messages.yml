@@ -164,6 +164,10 @@ general:
   actionCanceled: "&6The action has been canceled."
   actionExpired: "&cThe action has expired. Please try again."
   ongoingAction: "&eAn action is already in progress. Please wait until it is completed or canceled."
+  confirm: "&aConfirm"
+  confirmDescription: "&7Click to confirm the action."
+  cancel: "&cCancel"
+  cancelDescription: "&7Click to cancel the action."
 
 
   # Placeholders available: {newDisplayName}
