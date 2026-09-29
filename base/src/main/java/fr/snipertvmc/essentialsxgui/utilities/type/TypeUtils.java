@@ -1,5 +1,7 @@
 package fr.snipertvmc.essentialsxgui.utilities.type;
 
+import java.util.Base64;
+
 public class TypeUtils {
 
 
@@ -77,6 +79,17 @@ public class TypeUtils {
 
 	public static boolean isBoolean(String value) {
 		return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+	}
+
+
+	public static boolean isBase64(String value) {
+		try {
+			Base64.getDecoder().decode(value);
+			return true;
+
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
 	}
 
 

@@ -1,5 +1,6 @@
 package fr.snipertvmc.essentialsxgui.utilities.serializers;
 
+import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -92,6 +93,10 @@ public class ItemStackSerializer {
 
 		} catch (ClassNotFoundException e) {
 			throw new IOException("Unable to decode class type.", e);
+		} catch (IllegalArgumentException e) {
+			ConsoleLogger.exception(e);
+			ConsoleLogger.error("Unable to decode item stacks from Base64 string. The data may be corrupted or invalid.");
+			return new ItemStack[0];
 		}
 	}
 

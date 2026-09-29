@@ -57,8 +57,11 @@ public class EXGServer {
 				put("displayName", kit.getDisplayName());
 				put("material", kit.getMaterial().toString());
 				put("data", kit.getData());
-				put("customItemStack", ItemStackSerializer.serialize(kit.getCustomItemStack()));
 			}});
+
+			if (kit.getCustomItemStack() != null) {
+				((Map<String, Object>) kits.get(kit.getName())).put("customItemStack", ItemStackSerializer.serialize(kit.getCustomItemStack()));
+			}
 		});
 
 		return kits;
@@ -80,7 +83,7 @@ public class EXGServer {
 			kit.setData(dataObject != null && TypeUtils.isByte(dataString) ? Byte.parseByte(dataString) : 0);
 
 			String serializedItemStack = (String) ((Map<String, Object>) kitData).get("customItemStack");
-			if (serializedItemStack != null) {
+			if (serializedItemStack != null && TypeUtils.isBase64(serializedItemStack)) {
 				kit.setCustomItemStack(ItemStackSerializer.deserialize(serializedItemStack)[0]);
 			} else {
 				kit.setCustomItemStack(null);
@@ -119,8 +122,11 @@ public class EXGServer {
 				put("displayName", warp.getDisplayName());
 				put("material", warp.getMaterial().toString());
 				put("data", warp.getData());
-				put("customItemStack", ItemStackSerializer.serialize(warp.getCustomItemStack()));
 			}});
+
+			if (warp.getCustomItemStack() != null) {
+				((Map<String, Object>) warps.get(warp.getName())).put("customItemStack", ItemStackSerializer.serialize(warp.getCustomItemStack()));
+			}
 		});
 
 		return warps;
@@ -142,7 +148,7 @@ public class EXGServer {
 			warp.setData(dataObject != null && TypeUtils.isByte(dataString) ? Byte.parseByte(dataString) : 0);
 
 			String serializedItemStack = (String) ((Map<String, Object>) warpData).get("customItemStack");
-			if (serializedItemStack != null) {
+			if (serializedItemStack != null && TypeUtils.isBase64(serializedItemStack)) {
 				warp.setCustomItemStack(ItemStackSerializer.deserialize(serializedItemStack)[0]);
 			} else {
 				warp.setCustomItemStack(null);

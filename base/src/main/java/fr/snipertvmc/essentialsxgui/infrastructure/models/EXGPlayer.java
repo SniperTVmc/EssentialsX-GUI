@@ -77,8 +77,11 @@ public class EXGPlayer {
 				put("displayName", home.getDisplayName());
 				put("material", home.getMaterial().toString());
 				put("data", home.getData());
-				put("customItemStack", ItemStackSerializer.serialize(home.getCustomItemStack()));
 			}});
+
+			if (home.getCustomItemStack() != null) {
+				((Map<String, Object>) homes.get(home.getName())).put("customItemStack", ItemStackSerializer.serialize(home.getCustomItemStack()));
+			}
 		});
 
 		return homes;
@@ -100,7 +103,7 @@ public class EXGPlayer {
 			home.setData(dataObject != null && TypeUtils.isByte(dataString) ? Byte.parseByte(dataString) : 0);
 
 			String serializedItemStack = (String) ((Map<String, Object>) homeData).get("customItemStack");
-			if (serializedItemStack != null) {
+			if (serializedItemStack != null && TypeUtils.isBase64(serializedItemStack)) {
 				home.setCustomItemStack(ItemStackSerializer.deserialize(serializedItemStack)[0]);
 			} else {
 				home.setCustomItemStack(null);
