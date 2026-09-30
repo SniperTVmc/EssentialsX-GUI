@@ -1,0 +1,258 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                    Informations                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Ceci est le fichier de messages en français pour EssentialsX-GUI.
+# Contributeurs :
+# - Sniper_TVmc
+
+# Si vous avez besoin d'aide avec la configuration du plugin,
+# vous pouvez rejoindre notre serveur Discord sur : https://discord.gg/fSzK79TAYf
+
+# Pour plus de traductions,
+# consultez notre Wiki sur : https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/messages
+
+# Note concernant PlaceholderAPI :
+#   EssentialsX-GUI prend en charge les placeholders PlaceholderAPI dans les messages.
+#   Vous pouvez utiliser n'importe quel placeholder PlaceholderAPI dans les messages, et ils seront analysés correctement.
+#   Par exemple, vous pouvez utiliser %player_name% pour afficher le nom du joueur dans un message.
+
+#   Une liste des placeholders officiellement pris en charge se trouve sur le wiki de PlaceholderAPI :
+#   - https://wiki.placeholderapi.com/users/placeholder-list/minecraft/
+#
+#   ⚠️ Ceci est différent des "placeholders" du plugin, qui ne sont disponibles que dans certains messages, lorsque spécifié.
+#     Les "placeholders" (variables) du plugin sont listés dans les commentaires au-dessus des messages concernés et
+#     doivent être utilisés avec la syntaxe {placeholderName}.
+
+# Veuillez ne pas modifier cette valeur car cela pourrait réinitialiser le fichier.
+# Valeur par défaut : "2.0"
+fileVersion: "2.0"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Général                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Modifie le préfixe envoyé au début de la plupart des messages.
+# CONSEIL : Utilisez {prefix} dans n'importe quel message pour inclure le préfixe.
+prefix: "&8[&6&LEXG&8]&7"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                Messages d'administration             | #
+# +------------------------------------------------------+ #
+############################################################
+
+admin:
+
+  # Placeholders disponibles : {currentVersion}, {latestVersion}
+  alertUpdateAvailable: "{prefix} &eUne mise à jour est disponible pour EssentialsX-GUI. &6Veuillez consulter la console pour plus d'informations."
+
+  pluginReloading: "{prefix} &eLe plugin est en cours de rechargement..."
+  # Placeholders disponibles : {errors}
+  pluginReloaded: "{prefix} &eLe plugin a été rechargé avec {errors} erreur(s)."
+  pluginReloadedWithErrors: "{prefix} &6Veuillez consulter la console pour plus d'informations."
+
+  filesReloading: "{prefix} &eLes fichiers sont en cours de rechargement..."
+  # Placeholders disponibles : {errors}
+  filesReloaded: "{prefix} &eLes fichiers ont été rechargés avec {errors} erreur(s)."
+
+  databaseReloading: "{prefix} &eLa base de données est en cours de rechargement..."
+  # Placeholders disponibles : {errors}
+  databaseReloaded: "{prefix} &eLa base de données a été rechargée avec {errors} erreur(s)."
+
+  tasksReloading: "{prefix} &eLes tâches sont en cours de rechargement..."
+  # Placeholders disponibles : {errors}
+  tasksReloaded: "{prefix} &eLes tâches ont été rechargées avec {errors} erreur(s)."
+
+  dataReloading: "{prefix} &eLes données sont en cours de rechargement..."
+  # Placeholders disponibles : {errors}
+  dataReloaded: "{prefix} &eLes données ont été rechargées avec {errors} erreur(s)."
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Messages d'erreur                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+errors:
+
+  invalidMaterial: "&cLe nom du matériau est invalide."
+  invalidNumber: "&cLa saisie n'est pas un nombre valide."
+  invalidCharacter: "&cLa saisie contient des caractères invalides. Veuillez supprimer les caractères spéciaux et réessayer."
+  # Placeholders disponibles : {min}, {max}
+  lengthLimit: "&cLa saisie doit contenir entre &f{min}&c et &f{max} &caractères."
+
+
+  # Placeholders disponibles : {argument}
+  argumentNotFound: "{prefix} &cL'argument &f{argument} &cn'a pas été trouvé."
+  noPermission: "{prefix} &cVous n'avez pas la permission d'exécuter cette action."
+  onlyForPlayers: "{prefix} &cCette commande ne peut être exécutée que par des joueurs."
+  # Placeholders disponibles : {player}
+  playerNotFound: "{prefix} &cLe joueur &f{player} &cn'a pas été trouvé."
+  invalidName: "&cLe nom que vous avez entré est invalide. Veuillez réessayer avec un autre nom. (Caractères autorisés : a-z, A-Z, 0-9, _, -)"
+  waitBeforeNextAction: "&cVeuillez patienter avant d'effectuer une autre action."
+
+  homeDeleteError: "&cUne erreur est survenue lors de la suppression du home. Veuillez contacter l'administrateur du serveur."
+  homeNameAlreadyExists: "&cUn home portant ce nom existe déjà."
+  homeLimitReached: "&cVous avez atteint le nombre maximal de homes autorisés."
+  noHomeFound: "&cAucun home trouvé avec ce nom."
+  itemCantBeAir: "&cL'objet ne peut pas être de l'air. Veuillez prendre un objet dans votre main et réessayer."
+
+  kitNameAlreadyExists: "&cUn kit portant ce nom existe déjà."
+  noKitFound: "&cAucun kit trouvé avec ce nom."
+  noKitAccess: "&cVous ne pouvez pas utiliser ce kit."
+
+  warpCreationError: "&cUne erreur est survenue lors de la création du warp. Veuillez contacter l'administrateur du serveur."
+  warpDeleteError: "&cUne erreur est survenue lors de la suppression du warp. Veuillez contacter l'administrateur du serveur."
+  warpNameAlreadyExists: "&cUn warp portant ce nom existe déjà."
+  noWarpFound: "&cAucun warp trouvé avec ce nom."
+  noWarpAccess: "&cVous ne pouvez pas accéder à ce warp."
+
+  noWorthFound: "&cAucun objet avec une valeur n'a été trouvé avec ce nom."
+  amountMustBePositive: "&cLe montant doit être un nombre positif."
+  # Placeholders disponibles : {maxAmount}
+  maxAmountLimit: "&cImpossible d'avoir un solde supérieur à &f{maxAmount}&c."
+  # Placeholders disponibles : {minAmount}
+  minAmountLimit: "&cImpossible d'avoir un solde inférieur à &f{minAmount}&c."
+  cantHaveNegativeBalance: "&cLe joueur cible ne peut pas avoir un solde négatif."
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Messages généraux                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+general:
+
+  enterNewDisplayNameInChat: "&eVeuillez entrer le nouveau &fnom affiché &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  enterNewIconNameInChat: "&eVeuillez entrer le nouveau &fnom d'icône &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  enterNewDisplayName: "Entrer un nouveau nom affiché"
+  enterNewIconName: "Entrer un nouveau nom d'icône"
+
+  enterNewHomeNameInChat: "&eVeuillez entrer le nouveau &fnom de home &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  enterNewHomeName: "Entrer un nouveau nom de home"
+  searchHomeInChat: "&eVeuillez entrer les premières lettres du &fnom de home &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  searchHome: "Rechercher un home"
+  # Placeholders disponibles : {homeName}
+  confirmDeleteHomeInChat: "&6Voulez-vous vraiment supprimer ce home ? ({homeName}) &7Tapez &f'confirm' &7pour confirmer ou &f'cancel' &7pour annuler."
+  confirmDeleteHome: "Tapez 'confirm' pour confirmer la suppression"
+
+  enterNewKitNameInChat: "&eVeuillez entrer le nouveau &fnom de kit &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  enterNewKitDelayInChat: "&eVeuillez entrer le nouveau &fdélai du kit &o(secondes) &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  enterNewKitName: "Entrer un nouveau nom de kit"
+  enterNewKitDelay: "Entrer un nouveau délai de kit (secondes)"
+  searchKitInChat: "&eVeuillez entrer les premières lettres du &fnom de kit &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  searchKit: "Rechercher un kit"
+  # Placeholders disponibles : {kitName}
+  confirmDeleteKitInChat: "&6Voulez-vous vraiment supprimer le kit '({kitName})' ? &7Tapez &f'confirm' &7pour confirmer ou &f'cancel' &7pour annuler."
+  confirmDeleteKit: "Tapez 'confirm' pour confirmer la suppression"
+
+  enterNewWarpNameInChat: "&eVeuillez entrer le nouveau &fnom de warp &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  enterNewWarpName: "Entrer un nouveau nom de warp"
+  searchWarpInChat: "&eVeuillez entrer les premières lettres du &fnom de warp &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  searchWarp: "Rechercher un warp"
+  # Placeholders disponibles : {warpName}
+  confirmDeleteWarpInChat: "&6Voulez-vous vraiment supprimer ce warp ? ({warpName}) &7Tapez &f'confirm' &7pour confirmer ou &f'cancel' &7pour annuler."
+  confirmDeleteWarp: "Tapez 'confirm' pour confirmer la suppression"
+
+  balanceTopDataUpdated: "&aLes données du classement des soldes ont été mises à jour."
+  searchWorthInChat: "&eVeuillez entrer les premières lettres du &fnom d'objet &edans le chat. &7&oÉcrivez 'cancel' pour annuler l'action."
+  searchWorth: "Rechercher la valeur d'un objet"
+
+
+  actionCanceled: "&6L'action a été annulée."
+  actionExpired: "&cL'action a expiré. Veuillez réessayer."
+  ongoingAction: "&eUne action est déjà en cours. Veuillez attendre qu'elle soit terminée ou annulée."
+  confirm: "&aConfirmer"
+  confirmDescription: "&7Cliquez pour confirmer l'action."
+  cancel: "&cAnnuler"
+  cancelDescription: "&7Cliquez pour annuler l'action."
+
+
+  # Placeholders disponibles : {newDisplayName}
+  displayNameChanged: "&7Le nom affiché a été changé en &f{newDisplayName}&7."
+  # Placeholders disponibles : {newIcon}
+  iconChanged: "&7L'icône a été changée en &f{newIcon}&7."
+
+  # Placeholders disponibles : {homeName}
+  homeCreated: "&7Le home &f{homeName} &7a été créé."
+  # Placeholders disponibles : {homeName}
+  homeDeleted: "&7Le home &f{homeName} &7a été supprimé."
+
+  # Placeholders disponibles : {kitName}
+  kitDeleted: "&7Le kit &f{kitName} &7a été supprimé."
+  # Placeholders disponibles : {kitName}, {kitDelay}
+  kitCreated: "&7Le kit &f{kitName} &7a été créé avec un délai de &f{kitDelay} secondes&7."
+
+  # Placeholders disponibles : {warpName}
+  warpCreated: "&7Le warp &f{warpName} &7a été créé."
+  # Placeholders disponibles : {warpName}
+  warpDeleted: "&7Le warp &f{warpName} &7a été supprimé."
+
+
+  openingHomesInventory: "&aOuverture de l'inventaire des homes..."
+
+  openingAdminKitsInventory: "&aOuverture de l'inventaire des kits (mode admin)..."
+  openingPlayerKitsInventory: "&aOuverture de l'inventaire des kits (mode joueur)..."
+
+  openingAdminWarpsInventory: "&aOuverture de l'inventaire des warps (mode admin)..."
+  openingPlayerWarpsInventory: "&aOuverture de l'inventaire des warps (mode joueur)..."
+
+  openingWhoisInventory: "&aOuverture de l'inventaire whois..."
+
+  openingBalanceTopInventory: "&aOuverture de l'inventaire du classement des soldes..."
+  openingWorthInventory: "&aOuverture de l'inventaire des valeurs..."
+  openingEcoInventory: "&aOuverture de l'inventaire de l'économie..."
+  openingSellInventory: "&aOuverture de l'inventaire de vente..."
+
+
+  yes_value: "&aOui"
+  no_value: "&cNon"
+  flying: "&aEn vol"
+  notFlying: "&cNe vole pas"
+  gamemodeSurvival: "Survie"
+  gamemodeCreative: "Créatif"
+  gamemodeAdventure: "Aventure"
+  gamemodeSpectator: "Spectateur"
+  hidden: "&cMasqué"
+  disabled: "&cDésactivé"
+  noNickname: "&cAucun surnom"
+  notAfk: "&cNon AFK"
+  notJailed: "&cNon emprisonné"
+  notMuted: "&cNon muté"
+  noMuteReason: "&cAucune raison de mute"
+  notBanned: "&cNon banni"
+  noBanReason: "&cAucune raison de ban"
+  permanent: "&cPermanent"
+  # Placeholders disponibles : {x}, {y}, {z}, {yaw}, {pitch}, {world}
+  locationFormat: "{x}, {y}, {z} dans {world}"
+  unknown: "&cInconnu"
+  typeHere: "Écrivez ici"
+  nobody: "&cPersonne"
+  notRanked: "&cNon classé"
+  rankFormat: "#{rank}"
+  noWorthAvailable: "&cAucune valeur disponible"
+  noItemInHand: "&cAucun objet en main"
+  give: "donner"
+  take: "retirer"
+  set: "définir"
+  reset: "réinitialiser"
+  available: "&aDisponible"
+  # Placeholders disponibles : {worth}
+  worthFormat: "&a{worth}"
+  # Placeholders disponibles : {multiplier}
+  # Remarque : si le multiplicateur est de 1, il ne sera pas affiché.
+  multiplierFormat: "&7&o(&2&ox{multiplier}&7&o)"
+
+
+  days: "{days}j"
+  hours: "{hours}h"
+  minutes: "{minutes}m"
+  seconds: "{seconds}s"
+  agoTimeFormat: "&fIl y a {time}"
+  inTimeFormat: "&fDans {time}"
+  sinceTimeFormat: "&fDepuis {time}"

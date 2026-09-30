@@ -1,5 +1,6 @@
 package fr.snipertvmc.essentialsxgui.infrastructure.models.files;
 
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGLang;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class MessagesFile extends BaseFile {
@@ -8,8 +9,8 @@ public class MessagesFile extends BaseFile {
 	// -------------------------------------------------- //
 
 
-	public MessagesFile(YamlConfiguration yamlConfiguration) {
-		super(yamlConfiguration, "messages.yml");
+	public MessagesFile(YamlConfiguration yamlConfiguration, EXGLang lang) {
+		super(yamlConfiguration, "lang/messages_" + lang.getKey() + ".yml");
 	}
 
 

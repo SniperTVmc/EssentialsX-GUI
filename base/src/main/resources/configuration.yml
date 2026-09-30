@@ -32,6 +32,15 @@ general:
   # Default: true
   checkForUpdates: true
 
+  # Language used for the plugin messages.
+  # Available translations:
+  # - English (en)
+  # - Français (fr)
+  # You can also create your own translation by creating a new file in the 'lang' folder,
+  # following the same format as the existing translation files. (e.g., 'lang_es.yml' for Spanish)
+  # Default: "en"
+  lang: "en"
+
   # Time zone ID used for displaying time-related information in the plugin.
   # Leave this blank to use the server's default time zone.
   # Example values: "America/New_York", "Europe/Paris", "Asia/Tokyo"

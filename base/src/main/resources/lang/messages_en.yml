@@ -4,7 +4,9 @@
 # +------------------------------------------------------+ #
 ############################################################
 
-# This is the messages file for EssentialsX-GUI.
+# This is the English messages file for EssentialsX-GUI.
+# Contributors:
+# - Sniper_TVmc
 
 # If you need help with the configuration of the plugin,
 # you can join our discord server at: https://discord.gg/fSzK79TAYf
@@ -21,7 +23,8 @@
 #   - https://wiki.placeholderapi.com/users/placeholder-list/minecraft/
 #
 #   ⚠️ This is different from the plugin's "placeholders," which are only available in certain messages, when specified.
-#      The plugin's “placeholders” are listed in the comments above the relevant messages and should be used with the syntax {placeholderName}.
+#     The plugin's “placeholders” (variables) are listed in the comments above the relevant messages and
+#     should be used with the syntax {placeholderName}.
 
 # Please do not change this value as it may cause the file to be reset.
 # Default: "2.0"

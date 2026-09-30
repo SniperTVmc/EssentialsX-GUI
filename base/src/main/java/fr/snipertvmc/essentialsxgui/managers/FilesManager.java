@@ -2,6 +2,7 @@ package fr.snipertvmc.essentialsxgui.managers;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGLang;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.ConfigurationFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.MessagesFile;
@@ -11,6 +12,8 @@ import fr.snipertvmc.essentialsxgui.utilities.parsers.inventories.ConfigurableIn
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -73,16 +76,30 @@ public class FilesManager {
 
 			if (!file.exists()) {
 				file.getParentFile().mkdirs();
-				Main.getInstance().saveResource(filePath, false);
+
+				if (!filePath.startsWith("lang/messages_")) {
+					Main.getInstance().saveResource(filePath, false);
+
+				} else {
+					if (Main.getInstance().getResource(filePath) != null) {
+						Main.getInstance().saveResource(filePath, false);
+
+					} else {
+						try (InputStream in = Main.getInstance().getResource("lang/messages_en.yml")) {
+							if (in != null) {
+								Files.copy(in, file.toPath());
+							}
+						}
+						if ((configurationFile.isDetailedLoading())) ConsoleLogger.console("\t§6EssentialsX-GUI: §7Creating " + filePath + " file with default English language file...");
+					}
+				}
 			}
 
 			YamlConfiguration yamlFile = YamlConfiguration.loadConfiguration(file);
 
-			switch (filePath) {
-				case "configuration.yml" -> configurationFile = new ConfigurationFile(yamlFile);
-				case "messages.yml" -> messagesFile = new MessagesFile(yamlFile);
-				default -> inventoriesFiles.add(new InventoryFile(yamlFile, filePath));
-			}
+			if (filePath.equals("configuration.yml")) configurationFile = new ConfigurationFile(yamlFile);
+			else if (filePath.startsWith("lang/messages_")) messagesFile = new MessagesFile(yamlFile, configurationFile.getLang());
+			else inventoriesFiles.add(new InventoryFile(yamlFile, filePath));
 			return true;
 
 		} catch (Exception e) {
@@ -130,21 +147,19 @@ public class FilesManager {
 		String fileVersion;
 		String latestVersion;
 
-		switch (filePath) {
-			case "configuration.yml" -> {
-				fileVersion = getConfigurationFile().getFileVersion();
-				latestVersion = configurationFileVersion;
-			}
-			case "messages.yml" -> {
-				fileVersion = getMessagesFile().getFileVersion();
-				latestVersion = messagesFileVersion;
-			}
-			default -> {
-				EXGInventory inventory = EXGInventory.getByPath(filePath);
-				fileVersion = getInventoryFile(inventory).getFileVersion();
-				latestVersion = inventory.getFileVersion();
-			}
-		};
+		if (filePath.equals("configuration.yml")) {
+			fileVersion = getConfigurationFile().getFileVersion();
+			latestVersion = configurationFileVersion;
+
+		} else if (filePath.startsWith("lang/messages_")) {
+			fileVersion = getMessagesFile().getFileVersion();
+			latestVersion = messagesFileVersion;
+
+		} else {
+			EXGInventory inventory = EXGInventory.getByPath(filePath);
+			fileVersion = getInventoryFile(inventory).getFileVersion();
+			latestVersion = inventory.getFileVersion();
+		}
 
 		if (!fileVersion.equals(latestVersion)) {
 			Main.getInstance().getFilesManager().createBackupYAMLFile(filePath);
@@ -166,10 +181,12 @@ public class FilesManager {
 
 
 	public void loadAndCheckMessages(boolean reload) {
-		loadYAMLFile("messages.yml");
-		checkUpdateForFile("messages.yml");
+		EXGLang lang = configurationFile.getLang();
+		String langFileName = "messages_" + lang.getKey() + ".yml";
+		loadYAMLFile("lang/" + langFileName);
+		checkUpdateForFile("lang/" + langFileName);
 		String label = reload ? "Reloaded" : "Loaded";
-		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §fmessages.yml: §a" + label);
+		if (configurationFile.isDetailedLoading()) ConsoleLogger.console("\t§6EssentialsX-GUI: §8- §f" + langFileName + ": §a" + label);
 	}
 
 

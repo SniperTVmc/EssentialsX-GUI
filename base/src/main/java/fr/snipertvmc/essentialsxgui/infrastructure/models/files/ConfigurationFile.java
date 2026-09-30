@@ -2,6 +2,7 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.files;
 
 import com.cryptomorin.xseries.XMaterial;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEntryType;
+import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGLang;
 import fr.snipertvmc.essentialsxgui.libraries.exglib.Pair;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,6 +32,11 @@ public class ConfigurationFile extends BaseFile {
 
 	public boolean checkForUpdates() {
 		return getYamlConfiguration().getBoolean("general.checkForUpdates", true);
+	}
+
+	public EXGLang getLang() {
+		String langString = getYamlConfiguration().getString("general.lang", EXGLang.ENGLISH.getKey());
+		return EXGLang.getByKey(langString.toLowerCase());
 	}
 
 	public ZoneId getDateTimezone() {
