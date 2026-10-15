@@ -87,7 +87,7 @@ public class CommandEssentialsXGUI implements CommandExecutor, TabCompleter {
 		commandSender.sendMessage("    §8■ §7§oEssentialsX-GUI is an addon for EssentialsX that adds some GUIs to the plugin.");
 		commandSender.sendMessage("");
 		commandSender.sendMessage("    §8■ §7Version: §b" + Main.getInstance().getDescription().getVersion());
-		commandSender.sendMessage("    §8■ §7Modrinth: §ahttps://modrinth.com/plugin/essentialsx-gui");
+		commandSender.sendMessage("    §8■ §7Modrinth: §amodrinth.com/plugin/essentialsx-gui");
 		commandSender.sendMessage("    §8■ §7GitHub: §fgithub.com/SniperTVmc/EssentialsX-GUI");
 		commandSender.sendMessage("    §8■ §7Discord: §3discord.gg/fSzK79TAYf");
 		commandSender.sendMessage("");
