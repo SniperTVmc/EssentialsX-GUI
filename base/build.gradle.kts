@@ -60,7 +60,7 @@ dependencies {
     compileOnly("com.squareup.moshi:moshi:1.15.2")
     compileOnly("com.zaxxer:HikariCP:7.1.0")
     compileOnly("me.clip:placeholderapi:2.12.3")
-    compileOnly("com.github.cryptomorin:XSeries:13.7.1")
+    compileOnly("com.github.cryptomorin:XSeries:14.0.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.26.1")
     compileOnly("net.kyori:adventure-platform-bukkit:4.4.1")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.17")
@@ -111,7 +111,7 @@ val copyJar = tasks.register<Copy>("copyJar") {
 tasks {
     runServer {
         downloadPlugins {
-            url("https://github.com/EssentialsX/Essentials/releases/download/2.21.2/EssentialsX-2.21.2.jar")
+            url("https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar")
         }
         minecraftVersion("1.21.11")
     }

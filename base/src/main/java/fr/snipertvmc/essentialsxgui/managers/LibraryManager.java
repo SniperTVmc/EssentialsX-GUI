@@ -35,7 +35,7 @@ public class LibraryManager {
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("com.squareup.okio")
 				.artifactId("okio")
-				.version("3.18.1")
+				.version("3.18.2")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
@@ -53,7 +53,7 @@ public class LibraryManager {
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("org.jetbrains.kotlin")
 				.artifactId("kotlin-stdlib")
-				.version("2.4.20")
+				.version("2.4.21")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
@@ -71,7 +71,7 @@ public class LibraryManager {
 		bukkitLibraryManager.loadLibrary(Library.builder()
 				.groupId("com.github.cryptomorin")
 				.artifactId("XSeries")
-				.version("13.7.1")
+				.version("14.0.0")
 				.build());
 
 		bukkitLibraryManager.loadLibrary(Library.builder()
@@ -115,19 +115,19 @@ public class LibraryManager {
 			case "SQLite" -> bukkitLibraryManager.loadLibrary(Library.builder()
 					.groupId("org.xerial")
 					.artifactId("sqlite-jdbc")
-					.version("3.50.3.0")
+					.version("3.53.4.0")
 					.build());
 
 			case "MariaDB" -> bukkitLibraryManager.loadLibrary(Library.builder()
 					.groupId("org.mariadb.jdbc")
 					.artifactId("mariadb-java-client")
-					.version("3.5.6")
+					.version("3.5.10")
 					.build());
 
 			case "MySQL" -> bukkitLibraryManager.loadLibrary(Library.builder()
 					.groupId("com.mysql")
 					.artifactId("mysql-connector-j")
-					.version("9.4.0")
+					.version("26.7.0")
 					.build());
 		}
 	}
