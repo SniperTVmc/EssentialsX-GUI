@@ -1,4 +1,4 @@
-package fr.snipertvmc.essentialsxgui.events.player;
+package fr.snipertvmc.essentialsxgui.events.command;
 
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEcoAction;
@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerCommandPreprocess implements Listener {
+public class EssentialsCommandListener implements Listener {
 
 
 	// -------------------------------------------------- //

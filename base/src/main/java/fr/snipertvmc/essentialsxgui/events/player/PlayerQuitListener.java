@@ -1,27 +1,25 @@
 package fr.snipertvmc.essentialsxgui.events.player;
 
 import fr.snipertvmc.essentialsxgui.Main;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerChat implements Listener {
+public class PlayerQuitListener implements Listener {
 
 
 	// -------------------------------------------------- //
 
 
 	@EventHandler
-	public void onChat(AsyncPlayerChatEvent event) {
+	public void onPlayerQuit(PlayerQuitEvent event) {
 
 		Player player = event.getPlayer();
-		String message = event.getMessage();
 
-		if (Main.getInstance().getChatManager().isTyping(player.getUniqueId())) {
-			Main.getInstance().getChatManager().accept(player, message);
-			event.setCancelled(true);
-		}
+		EXGPlayer exgPlayer = Main.getInstance().getPlayerManager().getPlayer(player);
+		Main.getInstance().getPlayerManager().save(exgPlayer);
 	}
 
 
