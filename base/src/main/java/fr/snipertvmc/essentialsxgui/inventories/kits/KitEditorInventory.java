@@ -13,6 +13,7 @@ import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -26,6 +27,9 @@ public class KitEditorInventory extends FastInv {
 	private final ConfigurableKitEditorInventory config = (ConfigurableKitEditorInventory) Main.getInstance().getInventory(EXGInventory.KIT_EDITOR);
 
 	private final Set<Integer> reservedSlots = new HashSet<>(config.getBorderSlots());
+
+	private boolean isEditing = false;
+	private String kitName = "";
 
 
 	// -------------------------------------------------- //
@@ -66,6 +70,7 @@ public class KitEditorInventory extends FastInv {
 					}
 				}
 
+				isEditing = true;
 				saveKit(player, kit, kitItems);
 			});
 		}
@@ -88,11 +93,13 @@ public class KitEditorInventory extends FastInv {
 					}
 				}
 
+				isEditing = true;
 				cancelChanges(player, kit, kitItems);
 			});
 		}
 
 
+		kitName = kit.getName();
 		List<ItemStack> kitItems = Main.getInstance().getEssentialsManager().getKitItems(kit.getName());
 
 		for (ItemStack item : kitItems) {
@@ -150,6 +157,37 @@ public class KitEditorInventory extends FastInv {
 		if (reservedSlots.contains(event.getRawSlot())) {
 			event.setCancelled(true);
 		}
+	}
+
+
+	@Override
+	public void onClose(InventoryCloseEvent event) {
+
+		if (isEditing) return;
+
+		Player player = (Player) event.getPlayer();
+		List<ItemStack> kitItems = new ArrayList<>();
+
+		for (int i = 0; i < event.getInventory().getSize(); i++) {
+			if (reservedSlots.contains(i)) continue;
+			ItemStack itemStack = event.getInventory().getItem(i);
+			if (itemStack != null && itemStack.getType() != Material.AIR) {
+				kitItems.add(itemStack);
+			}
+		}
+
+		List<ItemStack> originalKitItems = Main.getInstance().getEssentialsManager().getKitItems(kitName);
+
+		for (ItemStack kitItem : kitItems) {
+			if (kitItem != null && kitItem.getType() != Material.AIR) {
+				if (!originalKitItems.contains(kitItem)) {
+					HashMap<Integer, ItemStack> dontFitItems = player.getInventory().addItem(kitItem);
+					dontFitItems.forEach((integer, itemStack) -> player.getWorld().dropItem(player.getLocation(), itemStack));
+				}
+			}
+		}
+
+		SoundsUtils.playSound(player, EXGSound.ACTION_CANCELED);
 	}
 
 
