@@ -59,5 +59,4 @@ kitEditor:
       displayName: "&cCancel changes"
       lore:
         - "&7Click to cancel all the changes made to this kit."
-        - ""
-        - "&4&lWarning: &cAll changes, and your items, will be lost!"
+        - "&7&oYou will get back your items."
