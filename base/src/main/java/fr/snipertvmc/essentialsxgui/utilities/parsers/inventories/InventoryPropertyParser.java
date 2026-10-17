@@ -140,7 +140,9 @@ public class InventoryPropertyParser {
 				"ecoAction",
 				"ecoAmount",
 				"sell",
-				"worth"
+				"worth",
+
+				"condense"
 		));
 	}};
 

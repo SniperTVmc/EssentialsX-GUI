@@ -44,4 +44,10 @@ public interface EssentialsManager {
 
 
 	// -------------------------------------------------- //
+
+
+	boolean condenseItems(final Player player, final List<ItemStack> items);
+
+
+	// -------------------------------------------------- //
 }

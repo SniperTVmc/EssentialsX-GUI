@@ -10,6 +10,7 @@ import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.EXGPlayer;
 import fr.snipertvmc.essentialsxgui.managers.EssentialsManager;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
+import fr.snipertvmc.essentialsxgui.v2_22_0.utilities.CondenseUtils;
 import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.provider.SerializationProvider;
@@ -213,6 +214,23 @@ public class Essentials_v2_22_0 implements EssentialsManager {
 		));
 
 		return result;
+	}
+
+
+	// -------------------------------------------------- //
+
+
+	private final CondenseUtils condenseUtils = new CondenseUtils(essentials);
+
+
+	@Override
+	public boolean condenseItems(Player player, List<ItemStack> items) {
+		final User user = essentials.getUser(player);
+		try {
+			return condenseUtils.condenseItems(user, items, true);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 

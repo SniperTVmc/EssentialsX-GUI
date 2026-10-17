@@ -135,6 +135,8 @@ public enum EXGMessage {
 	OPENING_ECO_INVENTORY("general.openingEcoInventory"),
 	OPENING_SELL_INVENTORY("general.openingSellInventory"),
 
+	OPENING_CONDENSE_INVENTORY("general.openingCondenseInventory"),
+
 
 	YES("general.yes_value"),
 	NO("general.no_value"),

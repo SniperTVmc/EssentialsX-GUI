@@ -5,6 +5,7 @@ import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGEcoAction;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGPermission;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
+import fr.snipertvmc.essentialsxgui.inventories.CondenseInventory;
 import fr.snipertvmc.essentialsxgui.inventories.economy.*;
 import fr.snipertvmc.essentialsxgui.inventories.homes.HomesInventory;
 import fr.snipertvmc.essentialsxgui.inventories.kits.KitsAdminViewInventory;
@@ -55,7 +56,10 @@ public class EssentialsCommandListener implements Listener {
 			"eco", "economy", "eeco", "eeconomy",
 
 			// SELL
-			"sell", "esell"
+			"sell", "esell",
+
+			// CONDENSE
+			"condense", "econdense"
 	);
 
 
@@ -280,6 +284,23 @@ public class EssentialsCommandListener implements Listener {
 
 				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_SELL_INVENTORY, null));
 				new SellInventory(player).open(player);
+				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+			}
+
+
+			//
+			// CONDENSE
+			//
+
+			case "condense", "econdense" -> {
+
+				if (!player.hasPermission("essentials.condense")) return;
+				if (!Main.getInstance().getConfiguration().isOthersCondenseModuleEnabled()) return;
+
+				event.setCancelled(true);
+
+				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_CONDENSE_INVENTORY, null));
+				new CondenseInventory(player).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
 			}
 		}

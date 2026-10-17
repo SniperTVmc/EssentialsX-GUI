@@ -37,7 +37,9 @@ public enum EXGInventory {
 	WARPS_PLAYER_VIEW("warps/warpsPlayerView.yml", "2.0"),
 
 	WHOIS_PLAYERS("whois/whoisPlayers.yml", "2.0"),
-	WHOIS_VIEW("whois/whoisView.yml", "2.0");
+	WHOIS_VIEW("whois/whoisView.yml", "2.0"),
+
+	CONDENSE("condense.yml", "2.0");
 
 
 	// -------------------------------------------------- //
@@ -55,7 +57,7 @@ public enum EXGInventory {
 
 	EXGInventory(String filePath, String fileVersion) {
 		this.filePath = "inventories/" + filePath;
-		this.fileName = filePath.split("/")[filePath.split("/").length - 1].replace(".yml", "");;
+		this.fileName = filePath.split("/")[filePath.split("/").length - 1].replace(".yml", "");
 
 		this.fileVersion = fileVersion;
 	}

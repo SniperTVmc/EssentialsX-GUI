@@ -82,6 +82,9 @@ public class ConfigurationFile extends BaseFile {
 	public boolean isEconomySellModuleEnabled() {
 		return getYamlConfiguration().getBoolean("economy.sell.enabled", false);
 	}
+	public boolean isOthersCondenseModuleEnabled() {
+		return getYamlConfiguration().getBoolean("others.condense.enabled", false);
+	}
 
 
 	// -------------------------------------------------- //

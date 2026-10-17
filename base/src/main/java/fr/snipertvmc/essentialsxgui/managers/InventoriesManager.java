@@ -3,6 +3,7 @@ package fr.snipertvmc.essentialsxgui.managers;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.ConfigurableCondenseInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.economy.*;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.ConfigurableHomeEditingInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.ConfigurableHomesInventory;
@@ -66,6 +67,8 @@ public class InventoriesManager {
 
 		inventories.put(EXGInventory.WHOIS_PLAYERS, new ConfigurableWhoisPlayersInventory(getInventoryFile(EXGInventory.WHOIS_PLAYERS)));
 		inventories.put(EXGInventory.WHOIS_VIEW, new ConfigurableWhoisViewInventory(getInventoryFile(EXGInventory.WHOIS_VIEW)));
+
+		inventories.put(EXGInventory.CONDENSE, new ConfigurableCondenseInventory(getInventoryFile(EXGInventory.CONDENSE)));
 	}
 
 

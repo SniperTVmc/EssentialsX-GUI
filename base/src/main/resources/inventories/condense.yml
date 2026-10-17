@@ -1,0 +1,56 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      Information                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This is the condense inventory file for EssentialsX-GUI.
+
+# If you need help with the configuration of the GUI,
+# you can join our discord server at: https://discord.gg/fSzK79TAYf
+
+# For more information about how to configure EssentialsX-GUI,
+# check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
+
+# Please do not change this value as it may cause the file to be reset.
+# Default: "2.0"
+fileVersion: "2.0"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       Inventory                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+condense:
+
+  title: "&6Condense your items"
+  rows: 6
+
+  borderItem:
+    enabled: true
+    slot: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    material: "BLACK_STAINED_GLASS_PANE"
+    data: 15
+    displayName: "&8- &6&lEssentialsX-GUI"
+
+  items:
+
+    condenseItem:
+      enabled: true
+      slot: 47
+      material: "LIME_DYE"
+      data: 10
+      displayName: "&aCondense items"
+      lore:
+        - "&7Click to condense your items."
+
+    cancelItem:
+      enabled: true
+      slot: 51
+      material: "RED_DYE"
+      data: 1
+      displayName: "&cCancel"
+      lore:
+        - "&7Click to cancel the condense process."
+        - "&7&oYou will get back your items."

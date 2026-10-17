@@ -209,6 +209,8 @@ general:
   openingEcoInventory: "&aOuverture de l'inventaire de l'économie..."
   openingSellInventory: "&aOuverture de l'inventaire de vente..."
 
+  openingCondenseInventory: "&aOuverture de l'inventaire de transformation d'objets..."
+
 
   yes_value: "&aOui"
   no_value: "&cNon"

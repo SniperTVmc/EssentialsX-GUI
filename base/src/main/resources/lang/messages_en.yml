@@ -209,6 +209,8 @@ general:
   openingEcoInventory: "&aOpening economy inventory..."
   openingSellInventory: "&aOpening sell inventory..."
 
+  openingCondenseInventory: "&aOpening condense inventory..."
+
 
   yes_value: "&aYes"
   no_value: "&cNo"
