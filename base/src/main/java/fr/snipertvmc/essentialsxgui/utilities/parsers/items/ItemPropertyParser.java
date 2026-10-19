@@ -400,6 +400,7 @@ public class ItemPropertyParser {
 				"kitsPlayerView.items.noKitsItem",
 				"kitsPlayerView.items.noSearchKitResultsItem",
 				"kitPlayerGive.items.playerItem",
+				"kitPlayerGive.items.noPlayersItem",
 
 				// WARPS
 				"warpsAdminView.items.warpItem",
@@ -409,9 +410,11 @@ public class ItemPropertyParser {
 				"warpsPlayerView.items.noWarpsItem",
 				"warpsPlayerView.items.noSearchWarpResultsItem",
 				"warpPlayerTeleport.items.playerItem",
+				"warpPlayerTeleport.items.noPlayersItem",
 
 				// WHOIS
 				"whoisPlayers.items.playerItem",
+				"whoisPlayers.items.noPlayersItem",
 
 				// ECONOMY
 				"rankingItems",
@@ -422,6 +425,7 @@ public class ItemPropertyParser {
 				"ecoAmount.items.addItem",
 				"ecoAmount.items.removeItem",
 				"ecoPlayers.items.playerItem",
+				"ecoPlayers.items.noPlayersItem",
 
 				// PUNISHMENT
 				"kickPlayers.items.kickAllItem",
