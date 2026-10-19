@@ -10,7 +10,6 @@ import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
