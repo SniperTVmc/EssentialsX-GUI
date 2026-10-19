@@ -44,12 +44,16 @@ public class WarpPlayerTeleportInventory extends PaginatedFastInv {
 
 		Main.getInstance().getServerDataManager().updateServerWarps();
 
-		List<Player> targets = Bukkit.getOnlinePlayers().stream()
+		List<Player> onlinePlayers = Bukkit.getOnlinePlayers().stream()
 				.map(p -> (Player) p)
 				.sorted(Comparator.comparing(Player::getName))
 				.toList();
 
-		for (Player target : targets) {
+		if (onlinePlayers.isEmpty() && config.getNoPlayersItem().isEnabled()) {
+			addContent(config.getNoPlayersItem().build(player));
+		}
+
+		for (Player target : onlinePlayers) {
 
 			ConfigurableItem playerItem = config.getPlayerItem().get();
 			addContent(playerItem

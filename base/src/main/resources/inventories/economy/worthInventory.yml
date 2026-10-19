@@ -58,8 +58,8 @@ worthInventory:
         - "&7Total worth: &a{itemTotalWorth}"
         - "&7Amount: &a{itemAmount}"
 
-    # 'slot' value will be ignored in this section. The item will be placed in the first slot like a worth item.
-    # The item will be displayed if the player has no items in his inventory.
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
     emptyInventoryItem:
       enabled: true
       material: "BARRIER"

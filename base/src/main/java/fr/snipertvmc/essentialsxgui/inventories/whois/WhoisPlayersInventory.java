@@ -45,6 +45,10 @@ public class WhoisPlayersInventory extends PaginatedFastInv {
 				.sorted(Comparator.comparing(Player::getName))
 				.toList();
 
+		if (onlinePlayers.isEmpty() && config.getNoPlayersItem().isEnabled()) {
+			addContent(config.getNoPlayersItem().build(player));
+		}
+
 		for (Player onlinePlayer : onlinePlayers) {
 
 			ConfigurableItem playerItem = config.getPlayerItem().get();

@@ -109,8 +109,8 @@ homes:
         - "&7Click to teleport to your bed home."
         - "&7Current Bed Home World: &f{bedHomeWorldDisplayName}"
 
-    # 'slot' value will be ignored in this section. The item will be placed in the first slot like a kit item.
-    # The item will be displayed if the player doesn't have any homes set.
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
     noHomesItem:
       enabled: true
       material: "BARRIER"

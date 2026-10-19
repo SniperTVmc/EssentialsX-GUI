@@ -72,8 +72,8 @@ kitsAdminView:
           editKit: "RIGHT"
           deleteKit: "DROP"
 
-    # 'slot' value will be ignored in this section. The item will be placed in the first slot like a kit item.
-    # The item will be displayed if the server has no kits available.
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
     noKitsItem:
       enabled: true
       material: "BARRIER"

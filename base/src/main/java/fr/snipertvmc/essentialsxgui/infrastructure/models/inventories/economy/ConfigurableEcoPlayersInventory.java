@@ -10,6 +10,8 @@ public class ConfigurableEcoPlayersInventory extends ConfigurablePaginatedInvent
 	// -------------------------------------------------- //
 
 
+	private final ConfigurableItem noPlayersItem;
+
 	private final ConfigurableItem playerItem;
 
 	private final ConfigurableItem closeItem;
@@ -23,6 +25,8 @@ public class ConfigurableEcoPlayersInventory extends ConfigurablePaginatedInvent
 
 
 		// Items
+		this.noPlayersItem = inventoryFile.getItem("noPlayersItem");
+
 		this.playerItem = inventoryFile.getItem("playerItem");
 
 		this.closeItem = inventoryFile.getItem("closeItem");
@@ -31,6 +35,10 @@ public class ConfigurableEcoPlayersInventory extends ConfigurablePaginatedInvent
 
 	// -------------------------------------------------- //
 
+
+	public ConfigurableItem getNoPlayersItem() {
+		return noPlayersItem;
+	}
 
 	public ConfigurableItem getPlayerItem() {
 		return playerItem;

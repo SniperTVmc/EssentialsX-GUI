@@ -63,6 +63,15 @@ kitPlayerGive:
       extra:
         skullOwner: "{targetName}"
 
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
+    noPlayersItem:
+      enabled: true
+      material: "BARRIER"
+      displayName: "&cNo players online"
+      lore:
+        - "&7There are no players online to give this kit to."
+
     # Placeholders available: {currentPage}, {previousPage}
     previousPageItem:
       enabled: true

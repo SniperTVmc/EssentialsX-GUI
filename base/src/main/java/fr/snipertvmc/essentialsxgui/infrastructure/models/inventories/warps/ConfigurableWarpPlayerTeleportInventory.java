@@ -10,6 +10,8 @@ public class ConfigurableWarpPlayerTeleportInventory extends ConfigurablePaginat
 	// -------------------------------------------------- //
 
 
+	private final ConfigurableItem noPlayersItem;
+
 	private final ConfigurableItem playerItem;
 
 	private final ConfigurableItem backItem;
@@ -23,6 +25,8 @@ public class ConfigurableWarpPlayerTeleportInventory extends ConfigurablePaginat
 
 
 		// Items
+		this.noPlayersItem = inventoryFile.getItem("noPlayersItem");
+
 		this.playerItem = inventoryFile.getItem("playerItem");
 
 		this.backItem = inventoryFile.getItem("backItem");
@@ -31,6 +35,10 @@ public class ConfigurableWarpPlayerTeleportInventory extends ConfigurablePaginat
 
 	// -------------------------------------------------- //
 
+
+	public ConfigurableItem getNoPlayersItem() {
+		return noPlayersItem;
+	}
 
 	public ConfigurableItem getPlayerItem() {
 		return playerItem;

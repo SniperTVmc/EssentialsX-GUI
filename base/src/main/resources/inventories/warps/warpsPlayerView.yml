@@ -61,8 +61,8 @@ warpsPlayerView:
         - ""
         - "&7Warp Name: &f&o{warpName}"
 
-    # 'slot' value will be ignored in this section. The item will be placed in the first slot like a warp item.
-    # The item will be displayed if the player has no access to any warp.
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
     noWarpsItem:
       enabled: true
       material: "BARRIER"

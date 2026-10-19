@@ -59,16 +59,6 @@ kickPlayers:
         - "&7Click to kick all &f{playersCount} players&7."
 
     # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
-    # This item will be place in first position of the inventory scheme.
-    noPlayersItem:
-      enabled: true
-      material: "BARRIER"
-      data: 3
-      displayName: "&cNo players online"
-      lore:
-        - "&7There are no players online to kick."
-
-    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
     # Placeholders available: {targetName}
     playerItem:
       enabled: true
@@ -79,6 +69,15 @@ kickPlayers:
         - "&7Click to choose a kick reason for &f{targetName}&7."
       extra:
         skullOwner: "{targetName}"
+
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
+    noPlayersItem:
+      enabled: true
+      material: "BARRIER"
+      displayName: "&cNo players online"
+      lore:
+        - "&7There are no players online to kick."
 
     # Placeholders available: {currentPage}, {previousPage}
     previousPageItem:

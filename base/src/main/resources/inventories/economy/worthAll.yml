@@ -56,8 +56,8 @@ worthAll:
       lore:
         - "&7Worth &7&o(per item, no multiplier)&r&7: &a{itemWorth}"
 
-    # 'slot' value will be ignored in this section. The item will be placed in the first slot like a worth item.
-    # The item will be displayed if the server has no items with worth.
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
     noWorthItem:
       enabled: true
       material: "BARRIER"

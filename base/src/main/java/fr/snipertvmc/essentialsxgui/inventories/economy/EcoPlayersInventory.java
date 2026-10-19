@@ -46,6 +46,10 @@ public class EcoPlayersInventory extends PaginatedFastInv {
 				.sorted(Comparator.comparing(Player::getName))
 				.toList();
 
+		if (onlinePlayers.isEmpty() && config.getNoPlayersItem().isEnabled()) {
+			addContent(config.getNoPlayersItem().build(player));
+		}
+
 		for (Player onlinePlayer : onlinePlayers) {
 
 			BigDecimal targetBalanceValue = Main.getInstance().getEssentials().getUser(onlinePlayer).getMoney();
