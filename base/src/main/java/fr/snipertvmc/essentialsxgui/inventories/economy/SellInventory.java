@@ -11,6 +11,8 @@ import fr.snipertvmc.essentialsxgui.utilities.other.SoundsUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -24,6 +26,8 @@ public class SellInventory extends FastInv {
 	private final ConfigurableSellInventory config = (ConfigurableSellInventory) Main.getInstance().getInventory(EXGInventory.SELL);
 
 	private final Set<Integer> reservedSlots = new HashSet<>(config.getBorderSlots());
+
+	private boolean isSelling = false;
 
 
 	// -------------------------------------------------- //
@@ -69,24 +73,7 @@ public class SellInventory extends FastInv {
 			setItem(config.getCancelSellItem().getSlot(), config.getCancelSellItem()
 					.build(player), e -> {
 
-				List<ItemStack> sellItems = new ArrayList<>();
-
-				for (int i = 0; i < e.getInventory().getSize(); i++) {
-					if (reservedSlots.contains(i)) continue;
-
-					ItemStack itemStack = e.getInventory().getItem(i);
-					if (itemStack != null && itemStack.getType() != Material.AIR) {
-						sellItems.add(itemStack);
-					}
-				}
-
-				for (ItemStack sellItem : sellItems) {
-					HashMap<Integer, ItemStack> dontFitItems = player.getInventory().addItem(sellItem);
-					dontFitItems.forEach((integer, itemStack) -> player.getWorld().dropItem(player.getLocation(), itemStack));
-				}
-
-				player.closeInventory();
-				SoundsUtils.playSound(player, EXGSound.ACTION_CANCELED);
+				cancelSelling(player, e.getInventory());
 			});
 		}
 	}
@@ -112,8 +99,32 @@ public class SellInventory extends FastInv {
 		HashMap<Integer, ItemStack> dontFitItems = player.getInventory().addItem(notSoldItems.toArray(new ItemStack[0]));
 		dontFitItems.forEach((integer, itemStack) -> player.getWorld().dropItem(player.getLocation(), itemStack));
 
+		isSelling = true;
 		player.closeInventory();
-		SoundsUtils.playSound(player, EXGSound.ACTION_SUCCESS);
+	}
+
+
+	public void cancelSelling(Player player, Inventory inventory) {
+
+		List<ItemStack> sellItems = new ArrayList<>();
+
+		for (int i = 0; i < inventory.getSize(); i++) {
+			if (reservedSlots.contains(i)) continue;
+
+			ItemStack itemStack = inventory.getItem(i);
+			if (itemStack != null && itemStack.getType() != Material.AIR) {
+				sellItems.add(itemStack);
+			}
+		}
+
+		for (ItemStack sellItem : sellItems) {
+			HashMap<Integer, ItemStack> dontFitItems = player.getInventory().addItem(sellItem);
+			dontFitItems.forEach((integer, itemStack) -> player.getWorld().dropItem(player.getLocation(), itemStack));
+		}
+
+		isSelling = true;
+		player.closeInventory();
+		SoundsUtils.playSound(player, EXGSound.ACTION_CANCELED);
 	}
 
 
@@ -126,6 +137,14 @@ public class SellInventory extends FastInv {
 		if (reservedSlots.contains(event.getRawSlot())) {
 			event.setCancelled(true);
 		}
+	}
+
+
+	@Override
+	public void onClose(InventoryCloseEvent event) {
+
+		if (isSelling) return;
+		cancelSelling((Player) event.getPlayer(), event.getInventory());
 	}
 
 
