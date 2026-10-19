@@ -423,6 +423,12 @@ public class ItemPropertyParser {
 				"ecoAmount.items.removeItem",
 				"ecoPlayers.items.playerItem",
 
+				// PUNISHMENT
+				"kickPlayers.items.kickAllItem",
+				"kickPlayers.items.noPlayersItem",
+				"kickPlayers.items.playerItem",
+				"kickReasons.items.reasonItem",
+
 				// OTHERS
 				"dataEntryGUI.items.materialIconItem"
 		));

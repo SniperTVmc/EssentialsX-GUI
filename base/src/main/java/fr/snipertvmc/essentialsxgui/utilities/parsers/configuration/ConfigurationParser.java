@@ -22,6 +22,7 @@ public class ConfigurationParser {
 		ConfigurationSection warpsSection = configuration.getYamlConfiguration().getConfigurationSection("warps");
 		ConfigurationSection whoisSection = configuration.getYamlConfiguration().getConfigurationSection("whois");
 		ConfigurationSection economySection = configuration.getYamlConfiguration().getConfigurationSection("economy");
+		ConfigurationSection punishmentSection = configuration.getYamlConfiguration().getConfigurationSection("punishment");
 		ConfigurationSection othersSection = configuration.getYamlConfiguration().getConfigurationSection("others");
 		ConfigurationSection soundsSection = configuration.getYamlConfiguration().getConfigurationSection("sounds");
 		ConfigurationSection storageSection = configuration.getYamlConfiguration().getConfigurationSection("storage");
@@ -34,6 +35,7 @@ public class ConfigurationParser {
 		errorsCount += WarpsConfigurationParser.isWarpsModuleValid(warpsSection, silence);
 		errorsCount += WhoisConfigurationParser.isWhoisModuleValid(whoisSection, silence);
 		errorsCount += EconomyConfigurationParser.isEconomyModuleValid(economySection, silence);
+		errorsCount += PunishmentConfigurationParser.isPunishmentModuleValid(punishmentSection, silence);
 		errorsCount += OthersConfigurationParser.isOthersModuleValid(othersSection, silence);
 		errorsCount += SoundsConfigurationParser.isSoundsSectionValid(soundsSection, silence);
 		errorsCount += StorageConfigurationParser.isStorageSectionValid(storageSection, silence);

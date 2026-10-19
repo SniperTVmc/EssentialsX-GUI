@@ -137,6 +137,8 @@ public enum EXGMessage {
 
 	OPENING_CONDENSE_INVENTORY("general.openingCondenseInventory"),
 
+	OPENING_KICK_INVENTORY("general.openingKickInventory"),
+
 
 	YES("general.yes_value"),
 	NO("general.no_value"),
@@ -171,6 +173,7 @@ public enum EXGMessage {
 	AVAILABLE("general.available"),
 	WORTH_FORMAT("general.worthFormat"),
 	MULTIPLIER_FORMAT("general.multiplierFormat"),
+	ALL_PLAYERS("general.allPlayers"),
 
 
 	DAYS("general.days"),

@@ -1,0 +1,141 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      Information                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This is the kick reasons inventory file for EssentialsX-GUI.
+
+# If you need help with the configuration of the GUI,
+# you can join our discord server at: https://discord.gg/fSzK79TAYf
+
+# For more information about how to configure EssentialsX-GUI,
+# check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
+
+# Please do not change this value as it may cause the file to be reset.
+# Default: "2.0"
+fileVersion: "2.0"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        General                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+reasons:
+
+  1:
+    material: "CLOCK"
+    name: "AFK / Inactive"
+    description: "Kicked to free up server slots or prevent idle squatter."
+
+  2:
+    material: "ENDER_PEARL"
+    name: "Teleport Request Spam"
+    description: "Spamming teleportation requests (TPA) to players."
+
+  3:
+    material: "REDSTONE"
+    name: "Anti-AFK Machine"
+    description: "Using a mechanism to bypass the AFK kick timer."
+
+  4:
+    material: "COMPASS"
+    name: "Refusal to Cooperate"
+    description: "Deliberately ignoring staff instructions or warnings."
+
+  5:
+    material: "LEATHER_CHESTPLATE"
+    name: "Inappropriate Skin/Cape"
+    description: "Please change your skin or cape before reconnecting."
+
+  6:
+    material: "NAME_TAG"
+    name: "Inappropriate Username"
+    description: "Username violates rules. Please change it to rejoin."
+
+  7:
+    material: "PLAYER_HEAD"
+    name: "Alt Account Abusing"
+    description: "Unauthorized multiple logins to farm or bypass limits."
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       Inventory                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+kickReasons:
+
+  # Placeholders available: {targetName}
+  title: "&cChose a kick reason"
+  rows: 6
+
+  # The inventory scheme defines the layout of the inventory.
+  # " " means an empty slot.
+  # "1" means a slot with an item.
+  # Here "1" is used to indicate where the home items will be placed.
+  inventoryScheme:
+    - "         "
+    - "         "
+    - "  11111  "
+    - "  11111  "
+    - "         "
+    - "         "
+
+  borderItem:
+    enabled: true
+    slot: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    material: "BLACK_STAINED_GLASS_PANE"
+    data: 15
+    displayName: "&8- &6&lEssentialsX-GUI"
+
+  items:
+
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # Placeholders available: {reasonMaterial}, {reasonName}, {reasonDescription}, {targetName}
+    reasonItem:
+      enabled: true
+      material: "{reasonMaterial}"
+      displayName: "&f{reasonName}"
+      lore:
+        - "&7Reason: &f&o{reasonDescription}"
+        - ""
+        - "&7Click to kick &f{targetName} &7for &f{reasonName}."
+
+    # Placeholders available: {currentPage}, {previousPage}
+    previousPageItem:
+      enabled: true
+      slot: 47
+      material: "STONE_BUTTON"
+      displayName: "&6Previous page: &e{previousPage}"
+      lore:
+        - "&7Click to go to the previous page."
+
+    # Placeholders available: {currentPage}, {nextPage}
+    nextPageItem:
+      enabled: true
+      slot: 51
+      material: "STONE_BUTTON"
+      displayName: "&6Next page: &e{nextPage}"
+      lore:
+        - "&7Click to go to the next page."
+
+    # Placeholders available: {currentPage}, {totalPages}
+    currentPageItem:
+      enabled: true
+      slot: 4
+      material: "PAPER"
+      displayName: "&2Page: &a{currentPage}/{totalPages}"
+      lore:
+        - "&7Previous page: &f{previousPage}"
+        - "&7Next page: &f{nextPage}"
+
+    backItem:
+      enabled: true
+      slot: 49
+      material: "ARROW"
+      displayName: "&cBack"
+      lore:
+        - "&7Click to go back to the players menu."

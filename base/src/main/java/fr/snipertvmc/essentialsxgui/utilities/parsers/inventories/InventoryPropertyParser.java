@@ -142,6 +142,8 @@ public class InventoryPropertyParser {
 				"sell",
 				"worth",
 
+				"kickConfirmation",
+
 				"condense"
 		));
 	}};

@@ -1,0 +1,117 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      Information                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This is the kick player choice inventory file for EssentialsX-GUI.
+
+# If you need help with the configuration of the GUI,
+# you can join our discord server at: https://discord.gg/fSzK79TAYf
+
+# For more information about how to configure EssentialsX-GUI,
+# check our Wiki at: https://sniper-tvmc.gitbook.io/essentialsx-gui/configuration/inventories
+
+# Please do not change this value as it may cause the file to be reset.
+# Default: "2.0"
+fileVersion: "2.0"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       Inventory                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+kickPlayers:
+
+  title: "&cChoose a player to kick"
+  rows: 6
+
+  # The inventory scheme defines the layout of the inventory.
+  # " " means an empty slot.
+  # "1" means a slot with an item.
+  # Here "1" is used to indicate where the home items will be placed.
+  inventoryScheme:
+    - "         "
+    - "         "
+    - "  11111  "
+    - "  11111  "
+    - "         "
+    - "         "
+
+  borderItem:
+    enabled: true
+    slot: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    material: "BLACK_STAINED_GLASS_PANE"
+    data: 15
+    displayName: "&8- &6&lEssentialsX-GUI"
+
+  items:
+
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
+    # Placeholders available: {playersCount}
+    kickAllItem:
+      enabled: true
+      material: "REDSTONE_BLOCK"
+      displayName: "&cKick all players"
+      lore:
+        - "&7Click to kick all &f{playersCount} players&7."
+
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # This item will be place in first position of the inventory scheme.
+    noPlayersItem:
+      enabled: true
+      material: "BARRIER"
+      data: 3
+      displayName: "&cNo players online"
+      lore:
+        - "&7There are no players online to kick."
+
+    # 'slot' value will be ignored in this section. Use the 'inventoryScheme' section to set the slots.
+    # Placeholders available: {targetName}
+    playerItem:
+      enabled: true
+      material: "PLAYER_HEAD"
+      data: 3
+      displayName: "&f{targetName}"
+      lore:
+        - "&7Click to choose a kick reason for &f{targetName}&7."
+      extra:
+        skullOwner: "{targetName}"
+
+    # Placeholders available: {currentPage}, {previousPage}
+    previousPageItem:
+      enabled: true
+      slot: 47
+      material: "STONE_BUTTON"
+      displayName: "&6Previous page: &e{previousPage}"
+      lore:
+        - "&7Click to go to the previous page."
+
+    # Placeholders available: {currentPage}, {nextPage}
+    nextPageItem:
+      enabled: true
+      slot: 51
+      material: "STONE_BUTTON"
+      displayName: "&6Next page: &e{nextPage}"
+      lore:
+        - "&7Click to go to the next page."
+
+    # Placeholders available: {currentPage}, {totalPages}
+    currentPageItem:
+      enabled: true
+      slot: 4
+      material: "PAPER"
+      displayName: "&2Page: &a{currentPage}/{totalPages}"
+      lore:
+        - "&7Previous page: &f{previousPage}"
+        - "&7Next page: &f{nextPage}"
+
+    closeItem:
+      enabled: true
+      slot: 49
+      material: "BARRIER"
+      displayName: "&cClose"
+      lore:
+        - "&7Click to close the inventory."

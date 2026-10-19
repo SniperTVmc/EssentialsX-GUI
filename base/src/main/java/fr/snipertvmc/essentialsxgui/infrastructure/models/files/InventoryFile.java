@@ -1,6 +1,7 @@
 package fr.snipertvmc.essentialsxgui.infrastructure.models.files;
 
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGKick;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.InventoryScheme;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.ConfigurationSection;
@@ -175,6 +176,39 @@ public class InventoryFile extends BaseFile {
 		}
 
 		return slotsItems;
+	}
+
+
+	// -------------------------------------------------- //
+
+
+	public Set<EXGKick> getKickReasons() {
+
+		Set<EXGKick> kickReasons = new HashSet<>();
+
+		ConfigurationSection kickReasonsSection = getYamlConfiguration().getConfigurationSection("reasons");
+		if (kickReasonsSection == null) return kickReasons;
+
+		for (String key : kickReasonsSection.getKeys(false)) {
+			String reasonPath = "reasons." + key;
+			String reasonMaterial = getYamlConfiguration().getString(reasonPath + ".material", "PAPER");
+			String reasonName = getYamlConfiguration().getString(reasonPath + ".name", "Unknown");
+			String reasonDescription = getYamlConfiguration().getString(reasonPath + ".description", "No description.");
+
+			int id = -1;
+			try {
+				id = Integer.parseInt(key);
+			} catch (NumberFormatException e) {
+				ConsoleLogger.error("Invalid ID format for kick reason '" + key + "' in inventory '" + getFileName() + "'. Skipping this reason.");
+			}
+
+			if (id == -1) continue;
+
+			EXGKick exgKick = new EXGKick(id, reasonMaterial, reasonName, reasonDescription);
+			kickReasons.add(exgKick);
+		}
+
+		return kickReasons;
 	}
 
 

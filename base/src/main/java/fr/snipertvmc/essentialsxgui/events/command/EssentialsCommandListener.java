@@ -10,6 +10,8 @@ import fr.snipertvmc.essentialsxgui.inventories.economy.*;
 import fr.snipertvmc.essentialsxgui.inventories.homes.HomesInventory;
 import fr.snipertvmc.essentialsxgui.inventories.kits.KitsAdminViewInventory;
 import fr.snipertvmc.essentialsxgui.inventories.kits.KitsPlayerViewInventory;
+import fr.snipertvmc.essentialsxgui.inventories.punishment.kick.KickPlayersInventory;
+import fr.snipertvmc.essentialsxgui.inventories.punishment.kick.KickReasonsInventory;
 import fr.snipertvmc.essentialsxgui.inventories.warps.WarpsAdminViewInventory;
 import fr.snipertvmc.essentialsxgui.inventories.warps.WarpsPlayerViewInventory;
 import fr.snipertvmc.essentialsxgui.inventories.whois.WhoisPlayersInventory;
@@ -57,6 +59,10 @@ public class EssentialsCommandListener implements Listener {
 
 			// SELL
 			"sell", "esell",
+
+			// KICK
+			"kick", "ekick",
+			"kickall", "ekickall",
 
 			// CONDENSE
 			"condense", "econdense"
@@ -284,6 +290,51 @@ public class EssentialsCommandListener implements Listener {
 
 				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_SELL_INVENTORY, null));
 				new SellInventory(player).open(player);
+				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+			}
+
+
+			//
+			// KICK
+			//
+
+			case "kick", "ekick" -> {
+
+				if (!player.hasPermission("essentials.kick")) return;
+				if (!Main.getInstance().getConfiguration().isPunishmentKickModuleEnabled()) return;
+
+				event.setCancelled(true);
+
+				if (args.length > 1) {
+					String targetPlayerName = args[1];
+
+					Player targetPlayer = Main.getInstance().getServer().getPlayerExact(targetPlayerName);
+					if (targetPlayer == null) {
+						TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.PLAYER_NOT_FOUND, Map.of("player", targetPlayerName)));
+						return;
+					}
+
+					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_KICK_INVENTORY));
+					new KickReasonsInventory(player, targetPlayer).open(player);
+					SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+					return;
+				}
+
+				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_KICK_INVENTORY));
+				new KickPlayersInventory(player).open(player);
+				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+			}
+
+			case "kickall", "ekickall" -> {
+
+				if (args.length > 1) return;
+				if (!player.hasPermission("essentials.kickall")) return;
+				if (!Main.getInstance().getConfiguration().isPunishmentKickModuleEnabled()) return;
+
+				event.setCancelled(true);
+
+				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_KICK_INVENTORY, null));
+				new KickReasonsInventory(player, null).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
 			}
 

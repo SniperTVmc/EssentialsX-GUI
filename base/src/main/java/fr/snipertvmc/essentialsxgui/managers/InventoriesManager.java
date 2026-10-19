@@ -9,6 +9,9 @@ import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.Conf
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.ConfigurableHomesInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.*;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.others.ConfigurableDataEntryGUI;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickConfirmationInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickPlayersInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickReasonsInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurableInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpEditingInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.warps.ConfigurableWarpPlayerTeleportInventory;
@@ -67,6 +70,10 @@ public class InventoriesManager {
 
 		inventories.put(EXGInventory.WHOIS_PLAYERS, new ConfigurableWhoisPlayersInventory(getInventoryFile(EXGInventory.WHOIS_PLAYERS)));
 		inventories.put(EXGInventory.WHOIS_VIEW, new ConfigurableWhoisViewInventory(getInventoryFile(EXGInventory.WHOIS_VIEW)));
+
+		inventories.put(EXGInventory.KICK_CONFIRMATION, new ConfigurableKickConfirmationInventory(getInventoryFile(EXGInventory.KICK_CONFIRMATION)));
+		inventories.put(EXGInventory.KICK_PLAYERS, new ConfigurableKickPlayersInventory(getInventoryFile(EXGInventory.KICK_PLAYERS)));
+		inventories.put(EXGInventory.KICK_REASONS, new ConfigurableKickReasonsInventory(getInventoryFile(EXGInventory.KICK_REASONS)));
 
 		inventories.put(EXGInventory.CONDENSE, new ConfigurableCondenseInventory(getInventoryFile(EXGInventory.CONDENSE)));
 	}

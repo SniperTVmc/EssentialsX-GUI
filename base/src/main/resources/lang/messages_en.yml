@@ -211,6 +211,8 @@ general:
 
   openingCondenseInventory: "&aOpening condense inventory..."
 
+  openingKickInventory: "&aOpening kick inventory..."
+
 
   yes_value: "&aYes"
   no_value: "&cNo"
@@ -249,6 +251,7 @@ general:
   # Placeholders available: {multiplier}
   # Note: if the multiplier is 1, it will not be displayed.
   multiplierFormat: "&7&o(&2&ox{multiplier}&7&o)"
+  allPlayers: "All players"
 
 
   days: "{days}d"

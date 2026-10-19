@@ -211,6 +211,8 @@ general:
 
   openingCondenseInventory: "&aOuverture de l'inventaire de transformation d'objets..."
 
+  openingKickInventory: "&aOuverture de l'inventaire de kick..."
+
 
   yes_value: "&aOui"
   no_value: "&cNon"
@@ -249,6 +251,7 @@ general:
   # Placeholders disponibles : {multiplier}
   # Remarque : si le multiplicateur est de 1, il ne sera pas affiché.
   multiplierFormat: "&7&o(&2&ox{multiplier}&7&o)"
+  allPlayers: "Tous les joueurs"
 
 
   days: "{days}j"
