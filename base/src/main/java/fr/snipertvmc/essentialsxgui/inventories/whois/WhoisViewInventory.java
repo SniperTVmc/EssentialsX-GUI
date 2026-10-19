@@ -290,7 +290,7 @@ public class WhoisViewInventory extends FastInv {
 				? TimeUtils.formatInTime((int) user.getMuteTimeout() / 1000)
 				: MessagesUtils.getString(EXGMessage.NOT_MUTED));
 
-		BanEntry banEntry = Bukkit.getServer()
+		BanEntry banEntry = Main.getInstance().getServer()
 				.getBanList(BanList.Type.NAME)
 				.getBanEntry(player.getName());
 
