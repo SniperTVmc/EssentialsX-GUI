@@ -53,18 +53,7 @@ public class SellInventory extends FastInv {
 			setItem(config.getConfirmSellItem().getSlot(), config.getConfirmSellItem()
 					.build(player), e -> {
 
-				List<ItemStack> sellItems = new ArrayList<>();
-
-				for (int i = 0; i < e.getInventory().getSize(); i++) {
-					if (reservedSlots.contains(i)) continue;
-
-					ItemStack itemStack = e.getInventory().getItem(i);
-					if (itemStack != null && itemStack.getType() != Material.AIR) {
-						sellItems.add(itemStack);
-					}
-				}
-
-				sellItems(player, sellItems);
+				sellItems(player, e.getInventory());
 			});
 		}
 
@@ -82,8 +71,25 @@ public class SellInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private void sellItems(Player player, List<ItemStack> sellItems) {
+	private List<ItemStack> getSellItems(Inventory inventory) {
+		List<ItemStack> sellItems = new ArrayList<>();
 
+		for (int i = 0; i < inventory.getSize(); i++) {
+			if (reservedSlots.contains(i)) continue;
+
+			ItemStack itemStack = inventory.getItem(i);
+			if (itemStack != null && itemStack.getType() != Material.AIR) {
+				sellItems.add(itemStack);
+			}
+		}
+
+		return sellItems;
+	}
+
+
+	private void sellItems(Player player, Inventory inventory) {
+
+		List<ItemStack> sellItems = getSellItems(inventory);
 		List<ItemStack> notSoldItems;
 		try {
 			notSoldItems = Main.getInstance().getEssentialsManager().sellItems(player, sellItems);
@@ -104,18 +110,9 @@ public class SellInventory extends FastInv {
 	}
 
 
-	public void cancelSelling(Player player, Inventory inventory) {
+	private void cancelSelling(Player player, Inventory inventory) {
 
-		List<ItemStack> sellItems = new ArrayList<>();
-
-		for (int i = 0; i < inventory.getSize(); i++) {
-			if (reservedSlots.contains(i)) continue;
-
-			ItemStack itemStack = inventory.getItem(i);
-			if (itemStack != null && itemStack.getType() != Material.AIR) {
-				sellItems.add(itemStack);
-			}
-		}
+		List<ItemStack> sellItems = getSellItems(inventory);
 
 		for (ItemStack sellItem : sellItems) {
 			HashMap<Integer, ItemStack> dontFitItems = player.getInventory().addItem(sellItem);
@@ -142,7 +139,6 @@ public class SellInventory extends FastInv {
 
 	@Override
 	public void onClose(InventoryCloseEvent event) {
-
 		if (isSelling) return;
 		cancelSelling((Player) event.getPlayer(), event.getInventory());
 	}

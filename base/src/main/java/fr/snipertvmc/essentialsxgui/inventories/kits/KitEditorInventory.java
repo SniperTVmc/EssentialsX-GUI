@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -57,21 +58,7 @@ public class KitEditorInventory extends FastInv {
 			setItem(config.getSaveKitItem().getSlot(), config.getSaveKitItem()
 					.build(player), e -> {
 
-				e.setCancelled(true);
-
-				List<ItemStack> kitItems = new ArrayList<>();
-
-				for (int i = 0; i < e.getInventory().getSize(); i++) {
-					if (reservedSlots.contains(i)) continue;
-
-					ItemStack itemStack = e.getInventory().getItem(i);
-					if (itemStack != null && itemStack.getType() != Material.AIR) {
-						kitItems.add(itemStack);
-					}
-				}
-
-				isEditing = true;
-				saveKit(player, kit, kitItems);
+				saveKit(player, e.getInventory(), kit);
 			});
 		}
 
@@ -80,21 +67,7 @@ public class KitEditorInventory extends FastInv {
 			setItem(config.getCancelChangesItem().getSlot(), config.getCancelChangesItem()
 					.build(player), e -> {
 
-				e.setCancelled(true);
-
-				List<ItemStack> kitItems = new ArrayList<>();
-
-				for (int i = 0; i < e.getInventory().getSize(); i++) {
-					if (reservedSlots.contains(i)) continue;
-
-					ItemStack itemStack = e.getInventory().getItem(i);
-					if (itemStack != null && itemStack.getType() != Material.AIR) {
-						kitItems.add(itemStack);
-					}
-				}
-
-				isEditing = true;
-				cancelChanges(player, kit, kitItems);
+				cancelChanges(player, e.getInventory());
 			});
 		}
 
@@ -113,8 +86,25 @@ public class KitEditorInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private void saveKit(Player player, EXGKit kit, List<ItemStack> kitItems) {
+	private List<ItemStack> getKitItems(Inventory inventory) {
+		List<ItemStack> kitItems = new ArrayList<>();
 
+		for (int i = 0; i < inventory.getSize(); i++) {
+			if (reservedSlots.contains(i)) continue;
+
+			ItemStack itemStack = inventory.getItem(i);
+			if (itemStack != null && itemStack.getType() != Material.AIR) {
+				kitItems.add(itemStack);
+			}
+		}
+
+		return kitItems;
+	}
+
+
+	private void saveKit(Player player, Inventory inventory, EXGKit kit) {
+
+		List<ItemStack> kitItems = getKitItems(inventory);
 		long delay = ((Number) Main.getInstance().getEssentials().getKits().getKit(kit.getName()).get("delay")).longValue();
 
 		EXGPlayerInventoryData inventoryBackup = InventoryBackupUtils.createPlayerInventoryBackup(player);
@@ -125,14 +115,16 @@ public class KitEditorInventory extends FastInv {
 
 		InventoryBackupUtils.loadPlayerInventoryBackup(player, inventoryBackup);
 
-		new KitEditingInventory(player, kit).open(player);
+		isEditing = true;
+		player.closeInventory();
 		SoundsUtils.playSound(player, EXGSound.ACTION_SUCCESS);
 	}
 
 
-	private void cancelChanges(Player player,  EXGKit kit, List<ItemStack> kitItems) {
+	private void cancelChanges(Player player, Inventory inventory) {
 
-		List<ItemStack> originalKitItems = Main.getInstance().getEssentialsManager().getKitItems(kit.getName());
+		List<ItemStack> kitItems = getKitItems(inventory);
+		List<ItemStack> originalKitItems = Main.getInstance().getEssentialsManager().getKitItems(kitName);
 
 		for (ItemStack kitItem : kitItems) {
 			if (kitItem != null && kitItem.getType() != Material.AIR) {
@@ -143,7 +135,8 @@ public class KitEditorInventory extends FastInv {
 			}
 		}
 
-		new KitEditingInventory(player, kit).open(player);
+		isEditing = true;
+		player.closeInventory();
 		SoundsUtils.playSound(player, EXGSound.ACTION_CANCELED);
 	}
 
@@ -162,32 +155,8 @@ public class KitEditorInventory extends FastInv {
 
 	@Override
 	public void onClose(InventoryCloseEvent event) {
-
 		if (isEditing) return;
-
-		Player player = (Player) event.getPlayer();
-		List<ItemStack> kitItems = new ArrayList<>();
-
-		for (int i = 0; i < event.getInventory().getSize(); i++) {
-			if (reservedSlots.contains(i)) continue;
-			ItemStack itemStack = event.getInventory().getItem(i);
-			if (itemStack != null && itemStack.getType() != Material.AIR) {
-				kitItems.add(itemStack);
-			}
-		}
-
-		List<ItemStack> originalKitItems = Main.getInstance().getEssentialsManager().getKitItems(kitName);
-
-		for (ItemStack kitItem : kitItems) {
-			if (kitItem != null && kitItem.getType() != Material.AIR) {
-				if (!originalKitItems.contains(kitItem)) {
-					HashMap<Integer, ItemStack> dontFitItems = player.getInventory().addItem(kitItem);
-					dontFitItems.forEach((integer, itemStack) -> player.getWorld().dropItem(player.getLocation(), itemStack));
-				}
-			}
-		}
-
-		SoundsUtils.playSound(player, EXGSound.ACTION_CANCELED);
+		cancelChanges((Player) event.getPlayer(), event.getInventory());
 	}
 
 
