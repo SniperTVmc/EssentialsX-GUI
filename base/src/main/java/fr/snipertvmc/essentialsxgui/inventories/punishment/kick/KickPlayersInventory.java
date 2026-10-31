@@ -52,7 +52,7 @@ public class KickPlayersInventory extends PaginatedFastInv {
 			)), e -> {
 
 				new KickReasonsInventory(player, null).open(player);
-				SoundsUtils.playSound(player, EXGSound.GUI_BACK);
+				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 			});
 		}
 
