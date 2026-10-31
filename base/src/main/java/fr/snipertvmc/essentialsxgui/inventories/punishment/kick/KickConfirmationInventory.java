@@ -50,7 +50,7 @@ public class KickConfirmationInventory extends FastInv {
 				} else {
 					player.performCommand("essentials:kickall " + kickReason.getReason());
 				}
-				SoundsUtils.playSound(player, EXGSound.ACTION_SUCCESS);
+				SoundsUtils.playSound(player, EXGSound.GUI_CLICK);
 				player.closeInventory();
 			});
 		}
