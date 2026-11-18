@@ -1,6 +1,6 @@
 package fr.snipertvmc.essentialsxgui.infrastructure.models.punishment;
 
-public class EXGKick {
+public class EXGPunishment {
 
 
 	// -------------------------------------------------- //
@@ -15,7 +15,7 @@ public class EXGKick {
 	// -------------------------------------------------- //
 
 
-	public EXGKick(int id, String material, String reason, String description) {
+	public EXGPunishment(int id, String material, String reason, String description) {
 		this.id = id;
 		this.material = material;
 		this.reason = reason;

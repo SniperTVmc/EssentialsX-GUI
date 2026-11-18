@@ -10,6 +10,8 @@ import fr.snipertvmc.essentialsxgui.inventories.economy.*;
 import fr.snipertvmc.essentialsxgui.inventories.homes.HomesInventory;
 import fr.snipertvmc.essentialsxgui.inventories.kits.KitsAdminViewInventory;
 import fr.snipertvmc.essentialsxgui.inventories.kits.KitsPlayerViewInventory;
+import fr.snipertvmc.essentialsxgui.inventories.punishment.ban.BanPlayersInventory;
+import fr.snipertvmc.essentialsxgui.inventories.punishment.ban.BanReasonsInventory;
 import fr.snipertvmc.essentialsxgui.inventories.punishment.kick.KickPlayersInventory;
 import fr.snipertvmc.essentialsxgui.inventories.punishment.kick.KickReasonsInventory;
 import fr.snipertvmc.essentialsxgui.inventories.warps.WarpsAdminViewInventory;
@@ -63,6 +65,12 @@ public class EssentialsCommandListener implements Listener {
 			// KICK
 			"kick", "ekick",
 			"kickall", "ekickall",
+
+			// BAN
+			"ban", "eban",
+			"tempban", "etempban",
+			"banip", "ebanip",
+			"tempbanip", "etempbanip",
 
 			// CONDENSE
 			"condense", "econdense"
@@ -335,6 +343,49 @@ public class EssentialsCommandListener implements Listener {
 
 				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_KICK_INVENTORY, null));
 				new KickReasonsInventory(player, null).open(player);
+				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+			}
+
+
+			//
+			// KICK
+			//
+
+			case "ban", "eban", "tempban", "etempban", "banip", "ebanip", "tempbanip", "etempbanip" -> {
+
+				if (!player.hasPermission("essentials.ban")) return;
+				if (!Main.getInstance().getConfiguration().isPunishmentBanModuleEnabled()) return;
+
+				event.setCancelled(true);
+
+				boolean isBanIP = command.contains("banip");
+
+				if (args.length > 1) {
+					String targetPlayerName = args[1];
+					Player targetPlayer = Main.getInstance().getServer().getPlayerExact(targetPlayerName);
+					if (targetPlayer == null) {
+						TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.PLAYER_NOT_FOUND, Map.of("player", targetPlayerName)));
+						return;
+					}
+
+					String playerIP = player.getAddress().getAddress().getHostAddress();
+					String targetPlayerIP = targetPlayer.getAddress().getAddress().getHostAddress();
+					if (targetPlayer.hasPermission("essentials.exempt")
+							|| targetPlayer.hasPermission("essentials.ban.exempt")
+							|| targetPlayer.getName().equals(player.getName())
+							|| (isBanIP && targetPlayerIP.equals(playerIP))) {
+						TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.CANT_PUNISH_THIS_PLAYER, Map.of("player", targetPlayerName)));
+						return;
+					}
+
+					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_BAN_INVENTORY));
+					new BanReasonsInventory(player, targetPlayer, isBanIP).open(player);
+					SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+					return;
+				}
+
+				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_BAN_INVENTORY));
+				new BanPlayersInventory(player, isBanIP).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
 			}
 

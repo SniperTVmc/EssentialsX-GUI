@@ -9,6 +9,7 @@ public class ConfigurableKickConfirmationInventory extends ConfigurableInventory
 
 	// -------------------------------------------------- //
 
+
 	private final ConfigurableItem confirmItem;
 
 	private final ConfigurableItem cancelItem;
@@ -29,6 +30,7 @@ public class ConfigurableKickConfirmationInventory extends ConfigurableInventory
 
 
 	// -------------------------------------------------- //
+
 
 	public ConfigurableItem getConfirmItem() {
 		return confirmItem;

@@ -9,6 +9,10 @@ import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.Conf
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.homes.ConfigurableHomesInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.kits.*;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.others.ConfigurableDataEntryGUI;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.ban.ConfigurableBanConfirmationInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.ban.ConfigurableBanDurationsInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.ban.ConfigurableBanPlayersInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.ban.ConfigurableBanReasonsInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickConfirmationInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickPlayersInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickReasonsInventory;
@@ -71,6 +75,10 @@ public class InventoriesManager {
 		inventories.put(EXGInventory.WHOIS_PLAYERS, new ConfigurableWhoisPlayersInventory(getInventoryFile(EXGInventory.WHOIS_PLAYERS)));
 		inventories.put(EXGInventory.WHOIS_VIEW, new ConfigurableWhoisViewInventory(getInventoryFile(EXGInventory.WHOIS_VIEW)));
 
+		inventories.put(EXGInventory.BAN_CONFIRMATION, new ConfigurableBanConfirmationInventory(getInventoryFile(EXGInventory.BAN_CONFIRMATION)));
+		inventories.put(EXGInventory.BAN_DURATIONS, new ConfigurableBanDurationsInventory(getInventoryFile(EXGInventory.BAN_DURATIONS)));
+		inventories.put(EXGInventory.BAN_PLAYERS, new ConfigurableBanPlayersInventory(getInventoryFile(EXGInventory.BAN_PLAYERS)));
+		inventories.put(EXGInventory.BAN_REASONS, new ConfigurableBanReasonsInventory(getInventoryFile(EXGInventory.BAN_REASONS)));
 		inventories.put(EXGInventory.KICK_CONFIRMATION, new ConfigurableKickConfirmationInventory(getInventoryFile(EXGInventory.KICK_CONFIRMATION)));
 		inventories.put(EXGInventory.KICK_PLAYERS, new ConfigurableKickPlayersInventory(getInventoryFile(EXGInventory.KICK_PLAYERS)));
 		inventories.put(EXGInventory.KICK_REASONS, new ConfigurableKickReasonsInventory(getInventoryFile(EXGInventory.KICK_REASONS)));

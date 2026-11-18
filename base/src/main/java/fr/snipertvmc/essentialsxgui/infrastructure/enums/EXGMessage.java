@@ -64,6 +64,8 @@ public enum EXGMessage {
 	MIN_AMOUNT_LIMIT("errors.minAmountLimit"),
 	CANT_HAVE_NEGATIVE_BALANCE("errors.cantHaveNegativeBalance"),
 
+	CANT_PUNISH_THIS_PLAYER("errors.cantPunishThisPlayer"),
+
 
 	// GENERAL
 	ENTER_NEW_DISPLAY_NAME_CHAT("general.enterNewDisplayNameInChat"),
@@ -137,6 +139,7 @@ public enum EXGMessage {
 
 	OPENING_CONDENSE_INVENTORY("general.openingCondenseInventory"),
 
+	OPENING_BAN_INVENTORY("general.openingBanInventory"),
 	OPENING_KICK_INVENTORY("general.openingKickInventory"),
 
 

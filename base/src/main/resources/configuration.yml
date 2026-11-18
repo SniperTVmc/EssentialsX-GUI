@@ -369,6 +369,13 @@ punishment:
     # Default: true
     enabled: true
 
+  ban:
+
+    # Set this to true if you want to use the ban features.
+    # This will allow players to access the ban GUI.
+    # Default: true
+    enabled: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Others                        | #

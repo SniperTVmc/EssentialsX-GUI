@@ -39,6 +39,10 @@ public enum EXGInventory {
 	WHOIS_PLAYERS("whois/whoisPlayers.yml", "2.0"),
 	WHOIS_VIEW("whois/whoisView.yml", "2.0"),
 
+	BAN_CONFIRMATION("punishment/ban/banConfirmation.yml", "2.0"),
+	BAN_DURATIONS("punishment/ban/banDurations.yml", "2.0"),
+	BAN_PLAYERS("punishment/ban/banPlayers.yml", "2.0"),
+	BAN_REASONS("punishment/ban/banReasons.yml", "2.0"),
 	KICK_CONFIRMATION("punishment/kick/kickConfirmation.yml", "2.0"),
 	KICK_PLAYERS("punishment/kick/kickPlayers.yml", "2.0"),
 	KICK_REASONS("punishment/kick/kickReasons.yml", "2.0"),

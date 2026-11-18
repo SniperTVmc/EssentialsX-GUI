@@ -142,6 +142,7 @@ public class InventoryPropertyParser {
 				"sell",
 				"worth",
 
+				"banConfirmation",
 				"kickConfirmation",
 
 				"condense"

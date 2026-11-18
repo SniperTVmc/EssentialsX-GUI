@@ -6,7 +6,7 @@ import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickReasonsInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGKick;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGPunishment;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.PaginatedFastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -41,7 +41,7 @@ public class KickReasonsInventory extends PaginatedFastInv {
 
 
 		// Kick reasons items
-		for (EXGKick kickReason : config.getKickReasons()) {
+		for (EXGPunishment kickReason : config.getKickReasons()) {
 
 			ConfigurableItem reasonItem = config.getReasonItem().get();
 

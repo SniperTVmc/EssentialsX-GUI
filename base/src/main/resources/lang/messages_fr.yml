@@ -120,6 +120,9 @@ errors:
   minAmountLimit: "&cImpossible d'avoir un solde inférieur à &f{minAmount}&c."
   cantHaveNegativeBalance: "&cLe joueur cible ne peut pas avoir un solde négatif."
 
+  # Placeholders available: {player}
+  cantPunishThisPlayer: "&cVous ne pouvez pas punir ce joueur."
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   Messages généraux                  | #
@@ -211,6 +214,7 @@ general:
 
   openingCondenseInventory: "&aOuverture de l'inventaire de transformation d'objets..."
 
+  openingBanInventory: "&aOuverture de l'inventaire de ban..."
   openingKickInventory: "&aOuverture de l'inventaire de kick..."
 
 

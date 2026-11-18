@@ -428,6 +428,11 @@ public class ItemPropertyParser {
 				"ecoPlayers.items.noPlayersItem",
 
 				// PUNISHMENT
+				"banPlayers.items.playerItem",
+				"banPlayers.items.ipItem",
+				"banPlayers.items.noPlayersItem",
+				"banReasons.items.reasonPlayerItem",
+				"banReasons.items.reasonIPItem",
 				"kickPlayers.items.kickAllItem",
 				"kickPlayers.items.noPlayersItem",
 				"kickPlayers.items.playerItem",
@@ -473,7 +478,10 @@ public class ItemPropertyParser {
 
 		put("extra.amountValue", List.of(
 				"ecoAmount.items.addItem",
-				"ecoAmount.items.removeItem"
+				"ecoAmount.items.removeItem",
+
+				"banDurations.items.durationPlayerItem",
+				"banDurations.items.durationIPItem"
 		));
 	}};
 

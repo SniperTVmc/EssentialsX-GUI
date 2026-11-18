@@ -3,7 +3,7 @@ package fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishmen
 import fr.snipertvmc.essentialsxgui.infrastructure.models.files.InventoryFile;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.ConfigurablePaginatedInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGKick;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGPunishment;
 
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public class ConfigurableKickReasonsInventory extends ConfigurablePaginatedInven
 	// -------------------------------------------------- //
 
 
-	private final Set<EXGKick> kickReasons;
+	private final Set<EXGPunishment> kickReasons;
 
 	private final ConfigurableItem reasonItem;
 
@@ -28,7 +28,7 @@ public class ConfigurableKickReasonsInventory extends ConfigurablePaginatedInven
 
 
 		// Items
-		this.kickReasons = inventoryFile.getKickReasons();
+		this.kickReasons = inventoryFile.getPunishmentReasons();
 
 		this.reasonItem = inventoryFile.getItem("reasonItem");
 
@@ -39,7 +39,7 @@ public class ConfigurableKickReasonsInventory extends ConfigurablePaginatedInven
 	// -------------------------------------------------- //
 
 
-	public Set<EXGKick> getKickReasons() {
+	public Set<EXGPunishment> getKickReasons() {
 		return kickReasons;
 	}
 

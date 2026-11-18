@@ -5,7 +5,7 @@ import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGMessage;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickConfirmationInventory;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGKick;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGPunishment;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
 import fr.snipertvmc.essentialsxgui.utilities.MessagesUtils;
@@ -26,7 +26,7 @@ public class KickConfirmationInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	public KickConfirmationInventory(Player player, Player target, EXGKick kickReason) {
+	public KickConfirmationInventory(Player player, Player target, EXGPunishment kickReason) {
 		super(
 				Main.getInstance().getInventory(EXGInventory.KICK_CONFIRMATION).getRows() * 9,
 				Main.getInstance().getInventory(EXGInventory.KICK_CONFIRMATION).getTitle()

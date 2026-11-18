@@ -120,6 +120,9 @@ errors:
   minAmountLimit: "&cImpossible to have a balance lower than &f{minAmount}&c."
   cantHaveNegativeBalance: "&cThe target player cannot have a negative balance."
 
+  # Placeholders available: {player}
+  cantPunishThisPlayer: "&cYou cannot punish this player."
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   General Messages                   | #
@@ -211,6 +214,7 @@ general:
 
   openingCondenseInventory: "&aOpening condense inventory..."
 
+  openingBanInventory: "&aOpening ban inventory..."
   openingKickInventory: "&aOpening kick inventory..."
 
 

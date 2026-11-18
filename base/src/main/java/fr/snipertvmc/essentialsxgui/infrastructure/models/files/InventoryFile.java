@@ -1,7 +1,7 @@
 package fr.snipertvmc.essentialsxgui.infrastructure.models.files;
 
 import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.structure.items.ConfigurableItem;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGKick;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGPunishment;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.InventoryScheme;
 import fr.snipertvmc.essentialsxgui.utilities.ConsoleLogger;
 import org.bukkit.configuration.ConfigurationSection;
@@ -182,14 +182,14 @@ public class InventoryFile extends BaseFile {
 	// -------------------------------------------------- //
 
 
-	public Set<EXGKick> getKickReasons() {
+	public Set<EXGPunishment> getPunishmentReasons() {
 
-		Set<EXGKick> kickReasons = new HashSet<>();
+		Set<EXGPunishment> punishmentReasons = new HashSet<>();
 
-		ConfigurationSection kickReasonsSection = getYamlConfiguration().getConfigurationSection("reasons");
-		if (kickReasonsSection == null) return kickReasons;
+		ConfigurationSection punishmentReasonsSection = getYamlConfiguration().getConfigurationSection("reasons");
+		if (punishmentReasonsSection == null) return punishmentReasons;
 
-		for (String key : kickReasonsSection.getKeys(false)) {
+		for (String key : punishmentReasonsSection.getKeys(false)) {
 			String reasonPath = "reasons." + key;
 			String reasonMaterial = getYamlConfiguration().getString(reasonPath + ".material", "PAPER");
 			String reasonName = getYamlConfiguration().getString(reasonPath + ".name", "Unknown");
@@ -199,16 +199,16 @@ public class InventoryFile extends BaseFile {
 			try {
 				id = Integer.parseInt(key);
 			} catch (NumberFormatException e) {
-				ConsoleLogger.error("Invalid ID format for kick reason '" + key + "' in inventory '" + getFileName() + "'. Skipping this reason.");
+				ConsoleLogger.error("Invalid ID format for punishment reason '" + key + "' in inventory '" + getFileName() + "'. Skipping this reason.");
 			}
 
 			if (id == -1) continue;
 
-			EXGKick exgKick = new EXGKick(id, reasonMaterial, reasonName, reasonDescription);
-			kickReasons.add(exgKick);
+			EXGPunishment exgPunishment = new EXGPunishment(id, reasonMaterial, reasonName, reasonDescription);
+			punishmentReasons.add(exgPunishment);
 		}
 
-		return kickReasons;
+		return punishmentReasons;
 	}
 
 
