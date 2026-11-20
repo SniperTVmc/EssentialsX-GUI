@@ -42,7 +42,7 @@ kickConfirmation:
       enabled: true
       slot: 21
       material: "LIME_DYE"
-      displayName: "&aConfirm Kick"
+      displayName: "&aConfirm kick"
       lore:
         - "&7Player: &f{targetName}"
         - "&7Reason: &f{reasonName}"
@@ -54,6 +54,6 @@ kickConfirmation:
       enabled: true
       slot: 23
       material: "RED_DYE"
-      displayName: "&cCancel Kick"
+      displayName: "&cCancel kick"
       lore:
         - "&7Click to cancel the kick."

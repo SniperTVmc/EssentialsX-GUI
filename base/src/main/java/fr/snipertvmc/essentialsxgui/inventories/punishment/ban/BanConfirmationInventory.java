@@ -3,7 +3,7 @@ package fr.snipertvmc.essentialsxgui.inventories.punishment.ban;
 import fr.snipertvmc.essentialsxgui.Main;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.enums.EXGSound;
-import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.kick.ConfigurableKickConfirmationInventory;
+import fr.snipertvmc.essentialsxgui.infrastructure.models.inventories.punishment.ban.ConfigurableBanConfirmationInventory;
 import fr.snipertvmc.essentialsxgui.infrastructure.models.punishment.EXGPunishment;
 import fr.snipertvmc.essentialsxgui.libraries.fastinv.FastInv;
 import fr.snipertvmc.essentialsxgui.utilities.InventoriesUtils;
@@ -18,7 +18,7 @@ public class BanConfirmationInventory extends FastInv {
 	// -------------------------------------------------- //
 
 
-	private final ConfigurableKickConfirmationInventory config = (ConfigurableKickConfirmationInventory) Main.getInstance().getInventory(EXGInventory.KICK_CONFIRMATION);
+	private final ConfigurableBanConfirmationInventory config = (ConfigurableBanConfirmationInventory) Main.getInstance().getInventory(EXGInventory.BAN_CONFIRMATION);
 
 
 	// -------------------------------------------------- //
@@ -26,8 +26,8 @@ public class BanConfirmationInventory extends FastInv {
 
 	public BanConfirmationInventory(Player player, Player target, EXGPunishment banReason, long durationSeconds, boolean isBanIP) {
 		super(
-				Main.getInstance().getInventory(EXGInventory.KICK_CONFIRMATION).getRows() * 9,
-				Main.getInstance().getInventory(EXGInventory.KICK_CONFIRMATION).getTitle()
+				Main.getInstance().getInventory(EXGInventory.BAN_CONFIRMATION).getRows() * 9,
+				Main.getInstance().getInventory(EXGInventory.BAN_CONFIRMATION).getTitle()
 						.build(player, Map.of(
 								"targetName", target.getName()))
 		);
@@ -38,8 +38,8 @@ public class BanConfirmationInventory extends FastInv {
 
 		if (isBanIP) {
 			String targetIP = target.getAddress().getAddress().getHostAddress();
-			if (config.getConfirmItem().isEnabled()) {
-				setItem(config.getConfirmItem().getSlot(), config.getConfirmItem().build(player, Map.of(
+			if (config.getConfirmIPItem().isEnabled()) {
+				setItem(config.getConfirmIPItem().getSlot(), config.getConfirmIPItem().build(player, Map.of(
 						"targetIP", targetIP,
 						"reasonName", banReason.getReason(),
 						"reasonDescription", banReason.getDescription()
@@ -57,8 +57,8 @@ public class BanConfirmationInventory extends FastInv {
 			}
 
 		} else {
-			if (config.getConfirmItem().isEnabled()) {
-				setItem(config.getConfirmItem().getSlot(), config.getConfirmItem().build(player, Map.of(
+			if (config.getConfirmPlayerItem().isEnabled()) {
+				setItem(config.getConfirmPlayerItem().getSlot(), config.getConfirmPlayerItem().build(player, Map.of(
 						"targetName", target.getName(),
 						"reasonName", banReason.getReason(),
 						"reasonDescription", banReason.getDescription()

@@ -37,12 +37,12 @@ banConfirmation:
 
   items:
 
-    # Placeholders available: {targetName}, {reasonName}, {reasonDescription}
+    # Placeholders available: {targetName}, {reasonName}, {reasonDescription}, {banDuration}
     confirmPlayerItem:
       enabled: true
       slot: 21
       material: "LIME_DYE"
-      displayName: "&aConfirm Ban"
+      displayName: "&aConfirm ban"
       lore:
         - "&7Player: &f{targetName}"
         - "&7Reason: &f{reasonName}"
@@ -51,12 +51,12 @@ banConfirmation:
         - ""
         - "&7Click to confirm the ban."
 
-    # Placeholders available: {targetName}, {targetIP}, {reasonName}, {reasonDescription}
+    # Placeholders available: {targetName}, {targetIP}, {reasonName}, {reasonDescription}, {banDuration}
     confirmIPItem:
       enabled: true
       slot: 21
       material: "LIME_DYE"
-      displayName: "&aConfirm Ban"
+      displayName: "&aConfirm ban"
       lore:
         - "&7IP: &f{targetIP} ({targetName})"
         - "&7Reason: &f{reasonName}"
@@ -69,6 +69,6 @@ banConfirmation:
       enabled: true
       slot: 23
       material: "RED_DYE"
-      displayName: "&cCancel Ban"
+      displayName: "&cCancel ban"
       lore:
         - "&7Click to cancel the ban."
