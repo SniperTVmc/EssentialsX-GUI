@@ -376,6 +376,13 @@ punishment:
     # Default: true
     enabled: true
 
+  mute:
+
+    # Set this to true if you want to use the mute features.
+    # This will allow players to access the mute GUI.
+    # Default: true
+    enabled: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Others                        | #

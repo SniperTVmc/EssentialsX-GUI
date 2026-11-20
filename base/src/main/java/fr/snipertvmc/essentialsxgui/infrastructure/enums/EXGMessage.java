@@ -141,6 +141,7 @@ public enum EXGMessage {
 
 	OPENING_BAN_INVENTORY("general.openingBanInventory"),
 	OPENING_KICK_INVENTORY("general.openingKickInventory"),
+	OPENING_MUTE_INVENTORY("general.openingMuteInventory"),
 
 
 	YES("general.yes_value"),

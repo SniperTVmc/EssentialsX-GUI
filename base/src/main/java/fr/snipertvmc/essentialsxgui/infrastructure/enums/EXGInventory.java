@@ -46,6 +46,10 @@ public enum EXGInventory {
 	KICK_CONFIRMATION("punishment/kick/kickConfirmation.yml", "2.0"),
 	KICK_PLAYERS("punishment/kick/kickPlayers.yml", "2.0"),
 	KICK_REASONS("punishment/kick/kickReasons.yml", "2.0"),
+	MUTE_CONFIRMATION("punishment/mute/muteConfirmation.yml", "2.0"),
+	MUTE_DURATIONS("punishment/mute/muteDurations.yml", "2.0"),
+	MUTE_PLAYERS("punishment/mute/mutePlayers.yml", "2.0"),
+	MUTE_REASONS("punishment/mute/muteReasons.yml", "2.0"),
 
 	CONDENSE("condense.yml", "2.0");
 

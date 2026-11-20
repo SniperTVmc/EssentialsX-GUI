@@ -144,6 +144,7 @@ public class InventoryPropertyParser {
 
 				"banConfirmation",
 				"kickConfirmation",
+				"muteConfirmation",
 
 				"condense"
 		));

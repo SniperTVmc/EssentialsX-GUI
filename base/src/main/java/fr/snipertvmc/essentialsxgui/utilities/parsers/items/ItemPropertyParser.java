@@ -437,6 +437,9 @@ public class ItemPropertyParser {
 				"kickPlayers.items.noPlayersItem",
 				"kickPlayers.items.playerItem",
 				"kickReasons.items.reasonItem",
+				"mutePlayers.items.playerItem",
+				"mutePlayers.items.noPlayersItem",
+				"muteReasons.items.reasonItem",
 
 				// OTHERS
 				"dataEntryGUI.items.materialIconItem"
@@ -481,7 +484,8 @@ public class ItemPropertyParser {
 				"ecoAmount.items.removeItem",
 
 				"banDurations.items.durationPlayerItem",
-				"banDurations.items.durationIPItem"
+				"banDurations.items.durationIPItem",
+				"muteDurations.items.durationItem"
 		));
 	}};
 

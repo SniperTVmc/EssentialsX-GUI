@@ -88,6 +88,9 @@ public class ConfigurationFile extends BaseFile {
 	public boolean isPunishmentBanModuleEnabled() {
 		return getYamlConfiguration().getBoolean("punishment.ban.enabled", false);
 	}
+	public boolean isPunishmentMuteModuleEnabled() {
+		return getYamlConfiguration().getBoolean("punishment.mute.enabled", false);
+	}
 	public boolean isOthersCondenseModuleEnabled() {
 		return getYamlConfiguration().getBoolean("others.condense.enabled", false);
 	}

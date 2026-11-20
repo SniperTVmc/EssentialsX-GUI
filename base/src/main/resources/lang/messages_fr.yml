@@ -216,6 +216,7 @@ general:
 
   openingBanInventory: "&aOuverture de l'inventaire de ban..."
   openingKickInventory: "&aOuverture de l'inventaire de kick..."
+  openingMuteInventory: "&aOuverture de l'inventaire de mute..."
 
 
   yes_value: "&aOui"

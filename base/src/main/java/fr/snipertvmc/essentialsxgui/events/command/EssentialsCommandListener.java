@@ -14,6 +14,8 @@ import fr.snipertvmc.essentialsxgui.inventories.punishment.ban.BanPlayersInvento
 import fr.snipertvmc.essentialsxgui.inventories.punishment.ban.BanReasonsInventory;
 import fr.snipertvmc.essentialsxgui.inventories.punishment.kick.KickPlayersInventory;
 import fr.snipertvmc.essentialsxgui.inventories.punishment.kick.KickReasonsInventory;
+import fr.snipertvmc.essentialsxgui.inventories.punishment.mute.MutePlayersInventory;
+import fr.snipertvmc.essentialsxgui.inventories.punishment.mute.MuteReasonsInventory;
 import fr.snipertvmc.essentialsxgui.inventories.warps.WarpsAdminViewInventory;
 import fr.snipertvmc.essentialsxgui.inventories.warps.WarpsPlayerViewInventory;
 import fr.snipertvmc.essentialsxgui.inventories.whois.WhoisPlayersInventory;
@@ -71,6 +73,9 @@ public class EssentialsCommandListener implements Listener {
 			"tempban", "etempban",
 			"banip", "ebanip",
 			"tempbanip", "etempbanip",
+
+			// MUTE
+			"mute", "emute",
 
 			// CONDENSE
 			"condense", "econdense"
@@ -348,7 +353,7 @@ public class EssentialsCommandListener implements Listener {
 
 
 			//
-			// KICK
+			// BAN
 			//
 
 			case "ban", "eban", "tempban", "etempban", "banip", "ebanip", "tempbanip", "etempbanip" -> {
@@ -386,6 +391,44 @@ public class EssentialsCommandListener implements Listener {
 
 				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_BAN_INVENTORY));
 				new BanPlayersInventory(player, isBanIP).open(player);
+				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+			}
+
+
+			//
+			// MUTE
+			//
+
+			case "mute", "emute" -> {
+
+				if (!player.hasPermission("essentials.mute")) return;
+				if (!Main.getInstance().getConfiguration().isPunishmentMuteModuleEnabled()) return;
+
+				event.setCancelled(true);
+
+				if (args.length > 1) {
+					String targetPlayerName = args[1];
+					Player targetPlayer = Main.getInstance().getServer().getPlayerExact(targetPlayerName);
+					if (targetPlayer == null) {
+						TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.PLAYER_NOT_FOUND, Map.of("player", targetPlayerName)));
+						return;
+					}
+
+					if (targetPlayer.hasPermission("essentials.exempt")
+							|| targetPlayer.hasPermission("essentials.mute.exempt")
+							|| targetPlayer.getName().equals(player.getName())) {
+						TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.CANT_PUNISH_THIS_PLAYER, Map.of("player", targetPlayerName)));
+						return;
+					}
+
+					TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_MUTE_INVENTORY));
+					new MuteReasonsInventory(player, targetPlayer).open(player);
+					SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
+					return;
+				}
+
+				TextUtils.sendMessageToCommandSender(player, MessagesUtils.getString(EXGMessage.OPENING_MUTE_INVENTORY));
+				new MutePlayersInventory(player).open(player);
 				SoundsUtils.playSound(player, EXGSound.GUI_OPEN);
 			}
 
